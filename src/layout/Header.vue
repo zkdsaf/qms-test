@@ -3,18 +3,12 @@
   <n-layout-header bordered class="px-6 py-2">
     <div class="flex items-center justify-between w-full">
       <!-- 左侧Logo -->
-      <div class="text-nowrap text-xl font-bold cursor-pointer">
-        <n-gradient-text type="info"> 质量管理系统 </n-gradient-text>
+      <div class="text-nowrap text-xl font-bold cursor-pointer" @click="goHome">
+        <n-gradient-text> 质量管理系统 </n-gradient-text>
       </div>
 
       <!-- 中间菜单 -->
-      <n-menu
-        :options="menuOptions"
-        mode="horizontal"
-        responsive
-        class="font-bold text-xl"
-        @update:value="handleUpdateValue"
-      />
+      <n-menu :options="menuOptions" mode="horizontal" responsive class="font-bold text-xl" @update:value="handleUpdateValue" :value="currentPath" />
 
       <!-- 右侧操作 -->
       <div class="flex items-center space-x-2">
@@ -23,15 +17,8 @@
           <template #trigger>
             <n-button text @click="toggleFullscreen">
               <n-icon size="26" depth="1">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"
-                  />
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
                 </svg>
               </n-icon>
             </n-button>
@@ -43,15 +30,8 @@
         <n-dropdown :options="languageOptions" @select="handleLanguageChange">
           <n-button text>
             <n-icon size="26">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  d="M12 2a10 10 0 0 0-7 17.76M12 2a10 10 0 0 1 7 17.76M12 2v20"
-                />
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2a10 10 0 0 0-7 17.76M12 2a10 10 0 0 1 7 17.76M12 2v20" />
                 <path d="M2 12h20" />
               </svg>
             </n-icon>
@@ -60,24 +40,14 @@
 
         <!-- 退出登录 -->
 
-        <n-popconfirm
-          @positive-click="handleLogout"
-          @negative-click="handleNegativeClick"
-        >
+        <n-popconfirm @positive-click="handleLogout" @negative-click="handleNegativeClick">
           <template #trigger>
             <n-tooltip placement="bottom" trigger="hover">
               <template #trigger>
                 <n-button text>
                   <n-icon size="26" depth="1">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14 5-5-5-5m5 5H11"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14 5-5-5-5m5 5H11" />
                     </svg>
                   </n-icon>
                 </n-button>
@@ -104,7 +74,7 @@ const menuOptions = ref([
     key: 'home',
     children: [
       { label: 'EQUAL', key: 'equal' },
-      { label: 'ECOA', key: 'ecoa' },
+      { label: 'ECOA', key: '/pages/coa/todo', path: '/pages/coa/todo', systemCode: 'COA' },
       { label: 'SPC', key: 'spc' },
       { label: 'BarCode', key: 'barCode', isShow: false },
       { label: 'EIQA', key: 'eiqa' },
@@ -113,7 +83,7 @@ const menuOptions = ref([
   {
     label: '规格管理',
     key: 'manage',
-    children: [{ label: 'SPEC', key: 'spec' }],
+    children: [{ label: 'SPEC', key: '/pages/spec/todo', path: '/pages/spec/todo', systemCode: 'SPEC' }],
   },
   {
     label: '生产商管理',
@@ -173,11 +143,32 @@ const route = useRoute()
 const authStore = useAuthStore()
 const message = useMessage()
 
+const currentPath = ref(route.path)
+watch(
+  () => route.path,
+  (newPath) => {
+    currentPath.value = newPath
+  },
+  { immediate: true }
+)
+
+const goHome = () => {
+  router.push('/')
+}
 //菜单选中
 const handleUpdateValue = (key, item) => {
   if (item.isShow !== undefined && !item.isShow) {
     message.warning(`${item.label}开发中,敬请期待`)
     return
+  }
+  if (item.path) {
+    authStore.setSystemName(item.systemCode)
+    router.push({
+      path: item.path,
+      query: {
+        t: new Date().getTime(),
+      },
+    })
   }
   message.success(item.label)
 }

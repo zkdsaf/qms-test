@@ -1,7 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { authGuard } from './authGuard'
-
+import { authGuard, progressGuard } from './authGuard'
+import { allRoutes } from './systemRoutes'
 const routes = [
+  {
+    path: '/pages',
+    name: 'Pages',
+    component: () => import('@/layout/DefaultLayout.vue'),
+    children: [...allRoutes],
+  },
   {
     path: '/',
     name: 'Home',
@@ -24,5 +30,13 @@ const router = createRouter({
   routes,
 })
 
+// 暴露切换系统的方法（仅更新系统状态并跳转）
+export const switchSystem = (system) => {
+  // 跳转到新系统的默认页面
+  const defaultRoute = `/pages/${system.toLowerCase()}/todo` || '/'
+  router.push(defaultRoute)
+}
+
 router.beforeEach(authGuard)
+router.afterEach(progressGuard)
 export default router
