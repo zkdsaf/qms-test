@@ -1,12 +1,13 @@
-import { UserOutlined } from '@vicons/antd'
-import { renderIcon } from '@/utils'
+import { FileSearchOutlined } from '@vicons/antd'
+import { CreateOutline } from '@vicons/ionicons5'
+import { renderIcon } from '@/utils/icon.js'
 
 export default [
   {
     path: 'spec',
     meta: {
       title: '申请创建',
-      icon: renderIcon(UserOutlined),
+      icon: renderIcon(CreateOutline),
       show: true,
       role: ['admin', 'user'],
       system: 'SPEC',
@@ -68,7 +69,7 @@ export default [
     component: () => import('@/views/spec/find/index.vue'),
     meta: {
       title: '查找中心',
-      icon: renderIcon(UserOutlined),
+      icon: renderIcon(FileSearchOutlined),
       show: true,
       role: ['admin', 'user'],
       system: 'SPEC',

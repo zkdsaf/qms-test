@@ -8,6 +8,7 @@ export const useAuthStore = defineStore(
     const user = ref(null)
     const isLoggedIn = ref(false)
     const systemName = ref('')
+    const language = ref('zh')
 
     // 登录方法
     const login = async (username, password) => {
@@ -34,7 +35,12 @@ export const useAuthStore = defineStore(
       systemName.value = name
     }
 
-    return { user, isLoggedIn, login, logout, systemName, setSystemName }
+    // 设置语言
+    const setLanguage = (lang) => {
+      language.value = lang
+    }
+
+    return { user, isLoggedIn, login, logout, systemName, setSystemName, language, setLanguage }
   },
   {
     // 添加持久化配置

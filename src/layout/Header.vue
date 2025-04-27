@@ -4,11 +4,18 @@
     <div class="flex items-center justify-between w-full">
       <!-- 左侧Logo -->
       <div class="text-nowrap text-xl font-bold cursor-pointer" @click="goHome">
-        <n-gradient-text> 质量管理系统 </n-gradient-text>
+        <n-gradient-text> {{ $t('common.systemName') }} </n-gradient-text>
       </div>
 
       <!-- 中间菜单 -->
-      <n-menu :options="menuOptions" mode="horizontal" responsive class="font-bold text-xl" @update:value="handleUpdateValue" :value="currentPath" />
+      <n-menu
+        :options="menuOptions"
+        mode="horizontal"
+        responsive
+        class="font-bold text-xl"
+        @update:value="handleUpdateValue"
+        :value="currentPath"
+      />
 
       <!-- 右侧操作 -->
       <div class="flex items-center space-x-2">
@@ -17,8 +24,15 @@
           <template #trigger>
             <n-button text @click="toggleFullscreen">
               <n-icon size="26" depth="1">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"
+                  />
                 </svg>
               </n-icon>
             </n-button>
@@ -30,8 +44,15 @@
         <n-dropdown :options="languageOptions" @select="handleLanguageChange">
           <n-button text>
             <n-icon size="26">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2a10 10 0 0 0-7 17.76M12 2a10 10 0 0 1 7 17.76M12 2v20" />
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M12 2a10 10 0 0 0-7 17.76M12 2a10 10 0 0 1 7 17.76M12 2v20"
+                />
                 <path d="M2 12h20" />
               </svg>
             </n-icon>
@@ -40,14 +61,24 @@
 
         <!-- 退出登录 -->
 
-        <n-popconfirm @positive-click="handleLogout" @negative-click="handleNegativeClick">
+        <n-popconfirm
+          @positive-click="handleLogout"
+          @negative-click="handleNegativeClick"
+        >
           <template #trigger>
             <n-tooltip placement="bottom" trigger="hover">
               <template #trigger>
                 <n-button text>
                   <n-icon size="26" depth="1">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14 5-5-5-5m5 5H11" />
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14 5-5-5-5m5 5H11"
+                      />
                     </svg>
                   </n-icon>
                 </n-button>
@@ -66,6 +97,7 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useI18n } from 'vue-i18n'
 import { useMessage } from 'naive-ui'
 // 菜单选项
 const menuOptions = ref([
@@ -74,7 +106,12 @@ const menuOptions = ref([
     key: 'home',
     children: [
       { label: 'EQUAL', key: 'equal' },
-      { label: 'ECOA', key: '/pages/coa/todo', path: '/pages/coa/todo', systemCode: 'COA' },
+      {
+        label: 'ECOA',
+        key: '/pages/coa/todo',
+        path: '/pages/coa/todo',
+        systemCode: 'COA',
+      },
       { label: 'SPC', key: 'spc' },
       { label: 'BarCode', key: 'barCode', isShow: false },
       { label: 'EIQA', key: 'eiqa' },
@@ -83,7 +120,14 @@ const menuOptions = ref([
   {
     label: '规格管理',
     key: 'manage',
-    children: [{ label: 'SPEC', key: '/pages/spec/todo', path: '/pages/spec/todo', systemCode: 'SPEC' }],
+    children: [
+      {
+        label: 'SPEC',
+        key: '/pages/spec/todo',
+        path: '/pages/spec/todo',
+        systemCode: 'SPEC',
+      },
+    ],
   },
   {
     label: '生产商管理',
@@ -142,15 +186,12 @@ const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
 const message = useMessage()
+const { t, locale } = useI18n()
 
-const currentPath = ref(route.path)
-watch(
-  () => route.path,
-  (newPath) => {
-    currentPath.value = newPath
-  },
-  { immediate: true }
-)
+const currentPath = computed(() => {
+  const setSystemName = authStore.systemName
+  return `/pages/${setSystemName.toLowerCase()}/todo`
+})
 
 const goHome = () => {
   router.push('/')
@@ -202,8 +243,9 @@ const toggleFullscreen = () => {
 
 // 切换语言
 const handleLanguageChange = (key) => {
-  console.log('语言切换为:', key)
-  // 这里可以添加语言切换的逻辑
+  authStore.setLanguage(key)
+  locale.value = key
+  message.info(`语言切换为:${key === 'zh' ? '中文' : '英文'}`)
 }
 </script>
 

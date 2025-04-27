@@ -1,12 +1,13 @@
-import { UserOutlined } from '@vicons/antd'
-import { renderIcon } from '@/utils'
+import { FileSearchOutlined } from '@vicons/antd'
+import { CreateOutline } from '@vicons/ionicons5'
+import { renderIcon } from '@/utils/icon.js'
 
 export default [
   {
     path: 'coa',
     meta: {
       title: '申请创建',
-      icon: renderIcon(UserOutlined),
+      icon: renderIcon(CreateOutline),
       show: true,
       role: ['admin', 'user'],
       system: 'COA',
