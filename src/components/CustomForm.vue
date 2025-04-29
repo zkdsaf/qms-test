@@ -15,23 +15,31 @@
       item-responsive
     >
       <n-grid-item v-for="field in fields" :key="field.key" :span="field.span">
-        <n-form-item :label="field.label" :path="field.key">
-          <component
-            :is="getComponent(field.type)"
-            v-model:value="formModel[field.key]"
-            v-bind="field.props"
-            @update:value="
-              field.listenChange ? handleFieldChange(field.key, $event) : null
-            "
-          >
-            <!-- 动态插槽支持 -->
-            <template
-              v-for="slotName in Object.keys(field.slots || {})"
-              #[slotName]="slotProps"
+        <n-form-item
+          :label="field.label"
+          :path="field.key"
+          :ref="`formItem-${field.key}`"
+        >
+          <!-- 优先使用插槽 -->
+          <slot :name="field.key" :field="field" :formModel="formModel">
+            <!-- 默认使用配置化的组件 -->
+            <component
+              :is="getComponent(field.type)"
+              :value="formModel[field.key]"
+              v-bind="field.props"
+              @update:value="
+                field.listenChange ? handleFieldChange(field.key, $event) : null
+              "
             >
-              <slot :name="`${field.key}-${slotName}`" v-bind="slotProps" />
-            </template>
-          </component>
+              <!-- 动态插槽支持，例如 FileUpload 的 default 插槽 -->
+              <template
+                v-for="slotName in Object.keys(field.slots || {})"
+                #[slotName]="slotProps"
+              >
+                <slot :name="`${field.key}-${slotName}`" v-bind="slotProps" />
+              </template>
+            </component>
+          </slot>
         </n-form-item>
       </n-grid-item>
     </n-grid>
@@ -48,8 +56,10 @@ import {
   NInput,
   NSelect,
   NDatePicker,
+  NUpload, // 新增 NUpload
+  NDataTable,
 } from 'naive-ui'
-
+import FileUpload from './CustomUpload.vue'
 // Props
 const props = defineProps({
   fields: {
@@ -63,7 +73,7 @@ const props = defineProps({
   },
   cols: {
     type: Number,
-    default: '3 ',
+    default: 3,
   },
   xGap: {
     type: Number,
@@ -90,7 +100,7 @@ const props = defineProps({
 // Emits
 const emit = defineEmits(['fieldChange'])
 
-//// 初始化表单数据
+// 初始化表单数据
 const formModel = computed(() => props.formData)
 
 // 表单校验规则
@@ -112,6 +122,8 @@ const componentMap = {
   input: NInput,
   select: NSelect,
   datePicker: NDatePicker,
+  upload: FileUpload, // 新增 upload 类型
+  table: NDataTable, // 新增 table 类型
 }
 
 // 获取控件组件
@@ -121,12 +133,14 @@ const getComponent = (type) => {
 
 // 字段值变更处理
 const handleFieldChange = (key, value) => {
+  console.log('🚀 ~ key, value:', key, value)
   emit('fieldChange', { key, value })
 }
 
 // 暴露方法给父组件
 defineExpose({
-  validate: (callback) => formRef.value?.validate(callback),
+  validate: (callback, othersProps) =>
+    formRef.value?.validate(callback, othersProps),
   restoreValidation: () => formRef.value?.restoreValidation(),
   formModel,
 })

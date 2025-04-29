@@ -30,7 +30,12 @@ import { filterMenuOptions } from '@/utils/menuUtils'
 
 const router = useRouter()
 const route = useRoute()
-const defaultPath = ref(route.path)
+
+const defaultPath = computed(() => {
+  const { meta, path } = route
+  if (meta.activeMenu) return meta.activeMenu
+  return path
+})
 
 // 所有系统路由
 const rawMenuOptions = ref(allRoutes)
@@ -54,14 +59,14 @@ const handleUpdateValue = (path) => {
   router.push(path)
 }
 
-watch(
-  () => route.path,
-  (newPath) => {
-    defaultPath.value = newPath
-    menuInstRef.value?.showOption(newPath)
-  },
-  { immediate: true }
-)
+// watch(
+//   () => route.path,
+//   (newPath) => {
+//     defaultPath.value = newPath
+//     menuInstRef.value?.showOption(newPath)
+//   },
+//   { immediate: true }
+// )
 </script>
 
 <style scoped></style>

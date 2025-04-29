@@ -33,7 +33,7 @@ const router = createRouter({
 // 暴露切换系统的方法（仅更新系统状态并跳转）
 export const switchSystem = (system) => {
   // 跳转到新系统的默认页面
-  const defaultRoute = `/pages/${system.toLowerCase()}/todo` || '/'
+  const defaultRoute = `/pages/${system.toLowerCase()}/todo`
   router.push(defaultRoute)
 }
 

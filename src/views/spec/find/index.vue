@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-4 md:p-6">
     <!-- 查询部分 -->
-    <n-card class="mb-6 shadow-lg rounded-lg" title="查询条件">
+    <n-card class="mb-6 shadow-lg rounded-lg" title="配置化表单">
       <div>
         <custom-form
           ref="customFormRef"
@@ -16,6 +16,10 @@
           <!-- 下拉框的 插槽 -->
           <template #category-header> 头部插槽 </template>
           <template #category-action> 操作插槽 </template>
+          <!-- 上传组件的自定义按钮插槽 -->
+          <template #file-default>
+            <n-button type="primary">选择文件</n-button>
+          </template>
         </custom-form>
         <!-- 搜索和重置按钮 -->
         <div class="flex justify-end mt-6 space-x-2">
@@ -62,6 +66,7 @@ const formData = ref({
   category: null,
   dateRange: null,
   description: '', // 新增文本域字段
+  file: [],
 })
 
 // 表单布局
@@ -127,6 +132,35 @@ const formFields = [
     },
     listenChange: true,
     span: '3 m:3 l:3 xl:3',
+  },
+  {
+    key: 'file',
+    label: '上传文件',
+    type: 'upload',
+    rules: [
+      {
+        key: 'file',
+        required: true,
+        validator: (rule, value) => {
+          // value 是 formData.file，类型为文件列表数组
+          if (!value || value.length === 0) {
+            return new Error('请至少上传一个文件')
+          }
+          return true
+        },
+        trigger: ['change'],
+      },
+    ],
+    props: {
+      action: '/api/upload', // 后端上传接口地址
+      accept: '.jpg,.png,.pdf', // 允许的文件类型
+      max: 3, // 最大上传文件数量
+      listType: 'text', // 文件列表类型：text、picture、picture-card
+      multiple: true, // 是否允许多文件上传
+    },
+    listenChange: true,
+    span: '3 m:3 l:3 xl:3',
+    slots: { default: true }, // 启用 default 插槽
   },
 ]
 
@@ -304,6 +338,18 @@ const customFormRef = ref(null)
 const handleFieldChange = ({ key, value }) => {
   console.log(`字段变更: ${key} =`, value)
   formData.value[key] = value
+  if (key === 'file') {
+    customFormRef.value?.validate(
+      (errors) => {
+        if (errors) {
+          console.error(errors)
+        }
+      },
+      (rule) => {
+        return rule?.key === 'file'
+      }
+    )
+  }
 }
 
 // 查询处理

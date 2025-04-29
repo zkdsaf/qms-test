@@ -6,6 +6,7 @@ const whiteList = ['/login', '/404']
 export const authGuard = (to, from) => {
   const authStore = useAuthStore()
   NProgress.start()
+
   if (authStore.isLoggedIn && to.path === '/login') {
     return '/'
   }
