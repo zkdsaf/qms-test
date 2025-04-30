@@ -18,7 +18,7 @@
         <n-form-item
           :label="field.label"
           :path="field.key"
-          :ref="`formItem-${field.key}`"
+          v-if="!field.visibleWhen || field.visibleWhen(formModel)"
         >
           <!-- 优先使用插槽 -->
           <slot :name="field.key" :field="field" :formModel="formModel">
@@ -30,6 +30,7 @@
               @update:value="
                 field.listenChange ? handleFieldChange(field.key, $event) : null
               "
+              v-if="field.type !== 'radio'"
             >
               <!-- 动态插槽支持，例如 FileUpload 的 default 插槽 -->
               <template
@@ -39,6 +40,23 @@
                 <slot :name="`${field.key}-${slotName}`" v-bind="slotProps" />
               </template>
             </component>
+
+            <!-- 特殊处理 radio 类型，使用 NRadioGroup -->
+            <n-radio-group
+              v-else
+              :value="formModel[field.key]"
+              v-bind="field.props"
+              @update:value="
+                field.listenChange ? handleFieldChange(field.key, $event) : null
+              "
+            >
+              <n-radio
+                v-for="option in field.props.options"
+                :key="option.value"
+                :value="option.value"
+                :label="option.label"
+              />
+            </n-radio-group>
           </slot>
         </n-form-item>
       </n-grid-item>
@@ -49,15 +67,13 @@
 <script setup>
 import { ref, computed, defineEmits, defineExpose, defineProps } from 'vue'
 import {
-  NForm,
-  NFormItem,
-  NGrid,
-  NGridItem,
   NInput,
   NSelect,
   NDatePicker,
   NUpload, // 新增 NUpload
   NDataTable,
+  NInputNumber,
+  NRadioGroup,
 } from 'naive-ui'
 import FileUpload from './CustomUpload.vue'
 // Props
@@ -122,8 +138,10 @@ const componentMap = {
   input: NInput,
   select: NSelect,
   datePicker: NDatePicker,
-  upload: FileUpload, // 新增 upload 类型
-  table: NDataTable, // 新增 table 类型
+  upload: FileUpload,
+  table: NDataTable,
+  'input-number': NInputNumber,
+  radio: NRadioGroup,
 }
 
 // 获取控件组件
@@ -133,7 +151,6 @@ const getComponent = (type) => {
 
 // 字段值变更处理
 const handleFieldChange = (key, value) => {
-  console.log('🚀 ~ key, value:', key, value)
   emit('fieldChange', { key, value })
 }
 

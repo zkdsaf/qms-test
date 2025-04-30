@@ -4,7 +4,7 @@
       <n-grid cols="1 m:3" :x-gap="12" :y-gap="12" responsive="screen">
         <n-gi v-for="item in list" :key="item.id">
           <div
-            :class="`flex flex-col rounded-lg p-10 items-center bg-red-50 text-center ${item.bgColor} transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-blue-50`"
+            :class="`flex flex-col rounded-lg p-10 items-center  text-center ${item.bgColor} transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-blue-50`"
           >
             <n-icon size="45" :component="item.icon" />
             <div class="flex-1 mt-2">
