@@ -34,6 +34,9 @@ const router = createRouter({
 export const switchSystem = (system) => {
   // 跳转到新系统的默认页面
   const defaultRoute = `/pages/${system.toLowerCase()}/todo`
+
+  console.log(router.getRoutes())
+
   router.push(defaultRoute)
 }
 

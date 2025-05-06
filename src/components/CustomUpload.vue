@@ -15,7 +15,6 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps, defineEmits, defineModel } from 'vue'
 import { NUpload, NButton, useMessage } from 'naive-ui'
 
 const message = useMessage()

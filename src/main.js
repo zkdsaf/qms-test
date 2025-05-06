@@ -7,39 +7,38 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import i18n from './i18n'
 
 import naive from 'naive-ui'
-import './assets/tailwind.css'
+import './styles/index.css'
 
 import router from './router'
 
 import { useAuthStore } from './stores/auth'
 
 async function bootstrap() {
-    const app = createApp(App)
+  const app = createApp(App)
 
-    // 调用 setupApp 函数，注册插件、状态管理等
-    setupApp(app)
+  // 调用 setupApp 函数，注册插件、状态管理等
+  setupApp(app)
 
-    // 设置 i18n 初始语言
-    setI18nLanguage()
+  // 设置 i18n 初始语言
+  setI18nLanguage()
 
-    // 挂载应用
-    await router.isReady()
-    app.mount('#app')
+  // 挂载应用
+  await router.isReady()
+  app.mount('#app')
 }
 
 function setupApp(app) {
-    const pinia = createPinia()
-    pinia.use(piniaPluginPersistedstate)
-    app.use(pinia)
-    app.use(i18n)
-    app.use(naive)
-    app.use(router)
+  const pinia = createPinia()
+  pinia.use(piniaPluginPersistedstate)
+  app.use(pinia)
+  app.use(i18n)
+  app.use(naive)
+  app.use(router)
 }
 
 function setI18nLanguage() {
-    const authStore = useAuthStore()
-    i18n.global.locale.value = authStore.language || zh // 设置初始语言
+  const authStore = useAuthStore()
+  i18n.global.locale.value = authStore.language || zh // 设置初始语言
 }
-
 
 bootstrap()

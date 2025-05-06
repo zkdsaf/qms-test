@@ -1,5 +1,5 @@
 <template>
-  <n-card class="h-full">
+  <n-card class="h-[calc(100vh-72px)]">
     <div class="p-6">
       <n-grid cols="1 m:3" :x-gap="12" :y-gap="12" responsive="screen">
         <n-gi v-for="item in list" :key="item.id">

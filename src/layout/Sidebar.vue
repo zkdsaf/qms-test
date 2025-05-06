@@ -5,6 +5,7 @@
     :collapsed-width="64"
     :width="240"
     :collapsed="collapsed"
+    :native-scrollbar="false"
     show-trigger
     @collapse="collapsed = true"
     @expand="collapsed = false"

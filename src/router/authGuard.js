@@ -19,6 +19,12 @@ export const authGuard = (to, from) => {
     return `/login?redirect=${to.path}`
   }
 
+  // 如果路由中定义了 systemCode，则设置系统名称 处理用户使用浏览器前进后退按钮时，系统名称不正确的问题
+  const systemCode = to.meta.system
+  if (systemCode) {
+    authStore.setSystemName(systemCode)
+  }
+
   return true
 }
 

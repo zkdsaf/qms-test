@@ -13,14 +13,37 @@
         @change="handleFileChange('file', $event)"
         :value="formData.file"
       >
-        <n-button type="primary">选择文件</n-button>
+        <n-icon
+          :component="CloudUploadOutline"
+          size="28"
+          class="cursor-pointer"
+        ></n-icon>
       </file-upload>
     </template>
 
     <template #materialTableData="{ field }">
       <n-space vertical class="w-full">
-        <n-data-table v-bind="field.props"> </n-data-table>
-        <n-button type="primary" @click="handleAddRow">添加</n-button>
+        <n-scrollbar x-scrollable trigger="none">
+          <n-data-table v-bind="field.props"> </n-data-table>
+        </n-scrollbar>
+        <div class="flex justify-end">
+          <n-button type="primary" @click="handleAddRow('materialTableData')">
+            添加
+          </n-button>
+        </div>
+      </n-space>
+    </template>
+
+    <template #principalTableData="{ field }">
+      <n-space vertical class="w-full">
+        <n-scrollbar x-scrollable trigger="none">
+          <n-data-table v-bind="field.props"> </n-data-table>
+        </n-scrollbar>
+        <div class="flex justify-end">
+          <n-button type="primary" @click="handleAddRow('principalTableData')">
+            添加
+          </n-button>
+        </div>
       </n-space>
     </template>
   </custom-form>
@@ -32,10 +55,12 @@ import { useMessage } from 'naive-ui'
 import CustomForm from '@/components/CustomForm.vue'
 import FileUpload from '@/components/CustomUpload.vue'
 
+import { SearchOutline, CloudUploadOutline } from '@vicons/ionicons5'
+
 const props = defineProps({
   formData: {
     type: Object,
-    default: () => ({}),
+    default: () => null,
   },
 })
 const message = useMessage()
@@ -81,12 +106,24 @@ const formData = ref({
       compareResult: '',
     },
   ],
+  principalTableData: [
+    {
+      id: 1,
+      module: '',
+      moduleName: '',
+      moduleManager: '',
+      moduleManagerName: '',
+      location: '',
+    },
+  ],
 })
 
 watch(
   () => props.formData,
   (newVal) => {
-    formData.value = newVal
+    if (newVal) {
+      formData.value = newVal
+    }
   },
   { deep: true, immediate: true }
 )
@@ -101,10 +138,20 @@ const roleOptions = [
   { label: '访客', value: 'guest' },
 ]
 
+const locationOptions = [
+  { label: '磐石', value: 'G1' },
+  { label: '司南', value: 'G2' },
+]
+
 // 表格列定义（使用 JSX）
 const materialTableColumns = [
   {
-    title: '参数',
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>参数</span>
+      </div>
+    ),
     key: 'parameter',
     align: 'center',
     render: (row, index) => (
@@ -126,7 +173,12 @@ const materialTableColumns = [
     ),
   },
   {
-    title: '单位',
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>单位</span>
+      </div>
+    ),
     align: 'center',
     key: 'parameterUnit',
     render: (row, index) => (
@@ -148,7 +200,12 @@ const materialTableColumns = [
     ),
   },
   {
-    title: '对比结果',
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>对比结果</span>
+      </div>
+    ),
     align: 'center',
     key: 'compareResult',
     render: (row, index) => (
@@ -171,7 +228,12 @@ const materialTableColumns = [
   },
   {
     align: 'center',
-    title: '历史来料Max',
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>历史来料Max</span>
+      </div>
+    ),
     key: 'incomingMax',
     render: (row, index) => (
       <NFormItem
@@ -192,7 +254,12 @@ const materialTableColumns = [
     ),
   },
   {
-    title: '历史来料Max/对应批次',
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>历史来料Max/对应批次</span>
+      </div>
+    ),
     align: 'center',
     key: 'incomingMaxBatch',
     render: (row, index) => (
@@ -214,7 +281,12 @@ const materialTableColumns = [
     ),
   },
   {
-    title: '历史来料Min',
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>历史来料Min</span>
+      </div>
+    ),
     align: 'center',
     key: 'incomingMin',
     render: (row, index) => (
@@ -236,10 +308,14 @@ const materialTableColumns = [
     ),
   },
   {
-    title: '历史来料Min/对应批次',
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>历史来料Min/对应批次</span>
+      </div>
+    ),
     key: 'incomingMinBatch',
     align: 'center',
-
     render: (row, index) => (
       <NFormItem
         path={`materialTableData[${index}].incomingMinBatch`}
@@ -259,7 +335,12 @@ const materialTableColumns = [
     ),
   },
   {
-    title: '异常批次号',
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>异常批次号</span>
+      </div>
+    ),
     key: 'abnormalBatch',
     align: 'center',
     render: (row, index) => (
@@ -281,7 +362,12 @@ const materialTableColumns = [
     ),
   },
   {
-    title: '异常批次数量',
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>异常批次数量</span>
+      </div>
+    ),
     key: 'abnormalBatchQty',
     align: 'center',
     render: (row, index) => (
@@ -303,7 +389,12 @@ const materialTableColumns = [
     ),
   },
   {
-    title: '异常数量',
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>异常数量</span>
+      </div>
+    ),
     key: 'abnormalQty',
     align: 'center',
     render: (row, index) => (
@@ -325,7 +416,12 @@ const materialTableColumns = [
     ),
   },
   {
-    title: '异常数量单位',
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>异常数量单位</span>
+      </div>
+    ),
     key: 'unit',
     align: 'center',
     render: (row, index) => (
@@ -353,6 +449,140 @@ const materialTableColumns = [
       <NPopconfirm
         onPositiveClick={() =>
           formData.value.materialTableData.splice(index, 1)
+        }
+      >
+        {{
+          trigger: () => (
+            <NButton type="error" size="small">
+              删除
+            </NButton>
+          ),
+          default: () => '确定删除吗？',
+        }}
+      </NPopconfirm>
+    ),
+  },
+]
+
+const principalColumns = [
+  {
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>使用部门科长</span>
+      </div>
+    ),
+    key: 'moduleName',
+    align: 'center',
+    render: (row, index) => (
+      <NFormItem
+        path={`principalTableData[${index}].moduleName`}
+        rule={{
+          required: true,
+          message: '请输入',
+          trigger: ['input', 'blur'],
+        }}
+      >
+        <NInput
+          value={row.moduleName}
+          onUpdateValue={(value) => {
+            row.moduleName = value
+          }}
+        >
+          {{
+            suffix: () => (
+              <NIcon
+                component={SearchOutline}
+                size="24"
+                class="cursor-pointer"
+                onClick={() => {
+                  message.info('搜索')
+                }}
+              />
+            ),
+          }}
+        </NInput>
+      </NFormItem>
+    ),
+  },
+  {
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>使用部门负责人</span>
+      </div>
+    ),
+    key: 'moduleManagerName',
+    align: 'center',
+    render: (row, index) => (
+      <NFormItem
+        path={`principalTableData[${index}].moduleManagerName`}
+        rule={{
+          required: true,
+          message: '请输入',
+          trigger: ['input', 'blur'],
+        }}
+      >
+        <NInput
+          value={row.moduleManagerName}
+          onUpdateValue={(value) => {
+            row.moduleManagerName = value
+          }}
+        >
+          {{
+            suffix: () => (
+              <NIcon
+                component={SearchOutline}
+                size="24"
+                class="cursor-pointer"
+                onClick={() => {
+                  message.info('搜索')
+                }}
+              />
+            ),
+          }}
+        </NInput>
+      </NFormItem>
+    ),
+  },
+  {
+    title: () => (
+      <div>
+        <span class="text-red-500">*</span>
+        <span>适用范围</span>
+      </div>
+    ),
+    key: 'location',
+    align: 'center',
+    render: (row, index) => (
+      <NFormItem
+        path={`principalTableData[${index}].location`}
+        rule={{
+          required: true,
+          message: '请输入',
+          trigger: ['input', 'blur'],
+        }}
+      >
+        <NSelect
+          options={locationOptions}
+          value={row.location}
+          onUpdateValue={(value) => {
+            row.location = value
+          }}
+          filterable
+          clearable
+        ></NSelect>
+      </NFormItem>
+    ),
+  },
+  {
+    title: '操作',
+    align: 'center',
+    width: 80,
+    render: (row, index) => (
+      <NPopconfirm
+        onPositiveClick={() =>
+          formData.value.principalTableData.splice(index, 1)
         }
       >
         {{
@@ -744,6 +974,23 @@ const formFields = ref([
       data: computed(() => formData.value.materialTableData),
       columns: materialTableColumns, // 表格列定义
       rowKey: (row) => row.id, // 表格行主键
+      'scroll-x': 1000,
+    },
+    listenChange: true,
+    span: '3 m:3 l:3 xl:3',
+  },
+  {
+    key: 'principalTableData',
+    label: '',
+    type: 'table',
+    dataKey: 'principalTableData', // 指定表格数据在 formModel 中的键
+    props: {
+      bordered: true,
+      singleLine: false,
+      data: computed(() => formData.value.principalTableData),
+      columns: principalColumns, // 表格列定义
+      rowKey: (row) => row.id, // 表格行主键
+      'scroll-x': 1000,
     },
     listenChange: true,
     span: '3 m:3 l:3 xl:3',
@@ -770,20 +1017,31 @@ const handleFileChange = (key, finishedFiles) => {
   )
 }
 
-const handleAddRow = () => {
-  formData.value.materialTableData.push({
+const handleAddRow = (type) => {
+  if (type === 'materialTableData') {
+    formData.value.materialTableData.push({
+      id: Date.now(),
+      parameter: '',
+      parameterUnit: '',
+      incomingMax: '',
+      incomingMin: '',
+      incomingMaxBatch: '',
+      incomingMinBatch: '',
+      abnormalBatch: '',
+      abnormalBatchQty: '',
+      abnormalQty: '',
+      unit: '',
+      compareResult: '',
+    })
+    return
+  }
+  formData.value.principalTableData.push({
     id: Date.now(),
-    parameter: '',
-    parameterUnit: '',
-    incomingMax: '',
-    incomingMin: '',
-    incomingMaxBatch: '',
-    incomingMinBatch: '',
-    abnormalBatch: '',
-    abnormalBatchQty: '',
-    abnormalQty: '',
-    unit: '',
-    compareResult: '',
+    module: '',
+    moduleName: '',
+    moduleManager: '',
+    moduleManagerName: '',
+    location: '',
   })
 }
 

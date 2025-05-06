@@ -436,7 +436,6 @@ const actionList = shallowRef([
 ])
 
 const handleSystemSwitch = (systemCode) => {
-  console.log('🚀 ~ systemCode:', systemCode)
   authStore.setSystemName(systemCode)
   switchSystem(systemCode)
 }

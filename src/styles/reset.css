@@ -1,0 +1,4 @@
+.n-data-table-td > .n-form-item .n-form-item-feedback-wrapper,
+.n-data-table-td > .n-data-table-td--center-align n-data-table-td--last-row {
+  min-height: 0px !important;
+}

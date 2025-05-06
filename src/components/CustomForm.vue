@@ -101,7 +101,7 @@ const props = defineProps({
   },
   labelWidth: {
     type: [Number, String],
-    default: 80,
+    default: 140,
   },
   labelPlacement: {
     type: String,
