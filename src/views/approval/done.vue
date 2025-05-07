@@ -1,20 +1,25 @@
 <template>
-  <CustomTable
-    :columns="columnDefinitions"
-    :data="tableData"
-    :pagination="pagination"
-    :loading="loading"
-    :filterValues="filterValues"
-    :row-key="(row) => row.applySn"
-    @update:sorter="updateSorter"
-    @update:filters="updateFilters"
-  >
-  </CustomTable>
+  <n-card class="h-full">
+    <CustomTable
+      :columns="columnDefinitions"
+      :data="tableData"
+      :pagination="pagination"
+      :loading="loading"
+      :filterValues="filterValues"
+      :row-key="(row) => row.applySn"
+      @update:sorter="updateSorter"
+      @update:filters="updateFilters"
+    >
+    </CustomTable>
+  </n-card>
 </template>
 
 <script setup lang="jsx">
 import { ref, reactive, onMounted } from 'vue'
 import { useMessage } from 'naive-ui'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
 import CustomTable from '@/components/CustomTable.vue'
 import { UserOutlined } from '@vicons/antd'
 const message = useMessage()
@@ -53,6 +58,9 @@ const mockFetchData = ({ search, sortKey, sortOrder }) => {
     }, 500)
   })
 }
+
+const router = useRouter()
+const authStore = useAuthStore()
 
 const tableData = ref([])
 const loading = ref(false)
@@ -114,6 +122,17 @@ const updateFilters = (filters) => {
   fetchData()
 }
 
+const lookFormDetail = (applySn) => {
+  const currentSystem = authStore.systemName.toLowerCase()
+  const formPath = `/pages/${currentSystem}/form`
+  router.push({
+    path: formPath,
+    query: {
+      id: applySn,
+    },
+  })
+}
+
 const columnDefinitions = [
   {
     title: '流程',
@@ -169,7 +188,7 @@ const columnDefinitions = [
       return (
         <div
           class="flex items-center justify-center text-blue-400 cursor-pointer"
-          onClick={() => message.info(row.applySn)}
+          onClick={() => lookFormDetail(row.applySn)}
         >
           {row.applySn}
         </div>

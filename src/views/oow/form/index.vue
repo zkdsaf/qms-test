@@ -14,7 +14,11 @@
                 <h2 class="text-lg font-bold">基本信息</h2>
               </template>
 
-              <BasicInfo ref="basicInfoRef" />
+              <BasicInfo
+                ref="basicInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
             </n-collapse-item>
           </n-collapse>
 
@@ -24,7 +28,11 @@
                 <h2 class="text-lg font-bold">流程后续审批人</h2>
               </template>
 
-              <ProcessUser ref="processUserRef" />
+              <ProcessUser
+                ref="processUserRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
             </n-collapse-item>
           </n-collapse>
 
@@ -34,7 +42,11 @@
                 <h2 class="text-lg font-bold">库存风险</h2>
               </template>
 
-              <McInfo ref="mcInfoRef" />
+              <McInfo
+                ref="mcInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
             </n-collapse-item>
           </n-collapse>
 
@@ -44,7 +56,11 @@
                 <h2 class="text-lg font-bold">安全环境科信息</h2>
               </template>
 
-              <SafeInfo ref="safeInfoRef" />
+              <SafeInfo
+                ref="safeInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
             </n-collapse-item>
           </n-collapse>
 
@@ -54,7 +70,11 @@
                 <h2 class="text-lg font-bold">气化科信息</h2>
               </template>
 
-              <GasInfo ref="gasInfoRef" />
+              <GasInfo
+                ref="gasInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
             </n-collapse-item>
           </n-collapse>
 
@@ -64,7 +84,11 @@
                 <h2 class="text-lg font-bold">Pi-Run Infomation</h2>
               </template>
 
-              <PiRunInfo ref="piRunInfoRef" />
+              <PiRunInfo
+                ref="piRunInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
             </n-collapse-item>
           </n-collapse>
 
@@ -74,7 +98,11 @@
                 <h2 class="text-lg font-bold">使用风险</h2>
               </template>
 
-              <ModuleInfo ref="moduleInfoRef" />
+              <ModuleInfo
+                ref="moduleInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
             </n-collapse-item>
           </n-collapse>
 
@@ -94,7 +122,11 @@
                 <h2 class="text-lg font-bold">采购物料处理</h2>
               </template>
 
-              <PurchaseInfo ref="purchaseInfoRef" />
+              <PurchaseInfo
+                ref="purchaseInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
             </n-collapse-item>
           </n-collapse>
 
@@ -104,7 +136,11 @@
                 <h2 class="text-lg font-bold">更换标签</h2>
               </template>
 
-              <LabelInfo ref="labelInfoRef" />
+              <LabelInfo
+                ref="labelInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
             </n-collapse-item>
           </n-collapse>
 
@@ -114,25 +150,71 @@
                 <h2 class="text-lg font-bold">供应商报告信息</h2>
               </template>
 
-              <FileInfo ref="fileInfoRef" />
+              <FileInfo
+                ref="fileInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['12']" v-if="readonly">
+            <n-collapse-item name="12">
+              <template #header>
+                <h2 class="text-lg font-bold">审批记录</h2>
+              </template>
+
+              <HistoryList />
             </n-collapse-item>
           </n-collapse>
         </n-tab-pane>
-        <n-tab-pane name="流程记录" tab="流程记录"> 流程记录 </n-tab-pane>
+        <n-tab-pane name="流程记录" tab="流程记录" v-if="id">
+          流程记录
+        </n-tab-pane>
       </n-tabs>
     </template>
 
     <!-- 自定义按钮 -->
-    <template #buttons>
-      <n-button type="primary" @click="onSubmit">确认提交</n-button>
-      <n-button class="ml-2" type="warning" @click="onSave">暂存</n-button>
-      <n-button class="ml-2" type="error" @click="onCancel">取消</n-button>
+    <template #buttons v-if="!id">
+      <n-popconfirm
+        positive-text="确定"
+        negative-text="取消"
+        @positive-click="onSubmit"
+      >
+        <template #trigger>
+          <n-button type="primary">确认提交</n-button>
+        </template>
+        确定要提交当前表单吗？
+      </n-popconfirm>
+
+      <n-popconfirm
+        positive-text="确定"
+        negative-text="取消"
+        @positive-click="onSave"
+      >
+        <template #trigger>
+          <n-button class="ml-2" type="warning">暂存</n-button>
+        </template>
+        确定要暂存当前表单吗？
+      </n-popconfirm>
+
+      <n-popconfirm
+        positive-text="确定"
+        negative-text="取消"
+        @positive-click="onCancel"
+      >
+        <template #trigger>
+          <n-button class="ml-2" type="error">取消</n-button>
+        </template>
+        确定要取消当前表单吗？
+      </n-popconfirm>
     </template>
   </FormPage>
 </template>
 
 <script setup>
 import FormPage from '@/components/FormPage.vue'
+import HistoryList from '@/components/HistoryList.vue'
 import {
   BasicInfo,
   ProcessUser,
@@ -147,6 +229,9 @@ import {
   FileInfo,
 } from './component/index.'
 import { useMessage } from 'naive-ui'
+import { useRoute, useRouter } from 'vue-router'
+import { h } from 'vue'
+import { NPopconfirm, NButton } from 'naive-ui'
 
 // 表单信息
 const formHeaderInfo = {
@@ -156,13 +241,21 @@ const formHeaderInfo = {
   applicant: '张三',
   subject: '办公用品采购',
   status: '待审批',
-  department: '行政部',
+  department: '质量工程科',
 }
 
+// 获取路由参数
+const route = useRoute()
+const router = useRouter()
+
 // 表单数据
-const formData = ref({
+const id = route.query.id
+
+const readonly = ref(id ? true : false)
+// 表单数据
+const formDataValue = {
   iqaNo: 'IQA申请单编号',
-  materialType: 'user',
+  materialType: 'admin',
   materialNo: '料号',
   materialName: '物料名称',
   materialDescription: '物料描述',
@@ -170,22 +263,22 @@ const formData = ref({
   vendorName: '供应商名称',
   makerCode: null,
   makerName: '生产商名称',
-  occurTime: 1745052211000,
-  incomingTime: 1744965795000,
-  responsibleParty: 'user',
-  isLaunch: 'N',
-  carType: null,
-  carNo: null,
-  carStartTime: null,
+  occurTime: 1746589558000,
+  incomingTime: 1746589561000,
+  responsibleParty: 'admin',
+  isLaunch: 'Y',
+  carType: 'admin',
+  carNo: 'CAR NO',
+  carStartTime: 1746675980000,
   abnormalCnt: 1,
   incomingBatch: 2,
   incomingQty: 3,
   totalBatchQty: 4,
   totalBatch: 5,
-  abnormalDesc: '13213',
+  abnormalDesc: '异常描述异常描述异常描述异常描述',
   file: [
     {
-      id: '91710421',
+      id: '9abe798b',
       name: '前端开发规范.pdf',
       percentage: 100,
       status: 'error',
@@ -194,7 +287,7 @@ const formData = ref({
       thumbnailUrl: null,
       type: 'application/pdf',
       fullPath: '/前端开发规范.pdf',
-      batchId: '4321cf59',
+      batchId: '0fe23964',
     },
   ],
   materialTableData: [
@@ -215,15 +308,77 @@ const formData = ref({
   ],
   principalTableData: [
     {
-      id: Date.now(),
+      id: 1,
       module: '',
-      moduleName: '',
+      moduleName: '使用部门科长',
       moduleManager: '',
-      moduleManagerName: '',
-      location: null,
+      moduleManagerName: '使用部门负责人',
+      location: 'G1',
     },
   ],
-})
+  qeName: '质量工程科负责人',
+  qeManagerName: '质量工程科科长',
+  productName: '物料控制科负责人',
+  productManagerName: '物料控制科科长',
+  safeName: '安全环境科负责人',
+  safeManagerName: '安全环境科科长',
+  gasName: '气化科负责人',
+  gasManagerName: '气化科科长',
+  purchaseManagerName: '物料采购科科长',
+  inventoryImpact: 'Y',
+  currentStock: 1,
+  unit: 'Y',
+  stockRemark: '备注',
+  isReceive: 'Y',
+  safeImpact: 'Y',
+  safeComment: '备注',
+  gasImpact: 'N',
+  gasComment: '备注',
+  piRunTableData: [
+    {
+      id: 1,
+      location: '',
+      moduleName: '',
+      isPiRun: '是',
+      result: 'Pass',
+      useCount: 1,
+      unit: '件',
+      batchNo: '3',
+      fileList: [
+        {
+          id: '9abe798b',
+          name: '前端开发规范.pdf',
+          percentage: 100,
+          status: 'error',
+          url: null,
+          file: {},
+          thumbnailUrl: null,
+          type: 'application/pdf',
+          fullPath: '/前端开发规范.pdf',
+          batchId: '0fe23964',
+        },
+      ],
+    },
+  ],
+  moduleInfoTableData: [
+    {
+      id: 1,
+      location: '',
+      moduleName: '',
+      isImpact: 'Pass',
+      comment: '备注',
+    },
+  ],
+  materialDisposal: '退货',
+  purchaseRemark: '备注',
+  changeLabel: 'Y',
+  labelRemark: '备注',
+  isUploadReport: 'N',
+  reportRemark: '备注',
+}
+
+// 表单数据
+const formData = ref(id ? { ...formDataValue } : null)
 
 const basicInfoRef = ref(null)
 const processUserRef = ref(null)
@@ -271,8 +426,16 @@ const onSubmit = async () => {
     }
   }
 
+  // 合并所有表单数据到一个对象
+  const mergedFormData = Object.values(formDataCollection).reduce(
+    (acc, curr) => {
+      return { ...acc, ...curr }
+    },
+    {}
+  )
+
+  console.log('合并后的表单数据：', mergedFormData)
   console.log(Object.entries(validationResults))
-  console.log(formDataCollection)
 
   // 检查是否所有表单都验证通过
   const allValid = Object.values(validationResults).every(
@@ -281,6 +444,7 @@ const onSubmit = async () => {
 
   if (allValid) {
     message.success('提交成功')
+    timerFunction()
   } else {
     // ref名称到标题的映射
     const refToTitleMap = {
@@ -309,9 +473,17 @@ const onSubmit = async () => {
 
 const onSave = () => {
   message.info('保存成功')
+  timerFunction()
 }
 
 const onCancel = () => {
   message.error('已取消')
+  timerFunction()
+}
+
+const timerFunction = () => {
+  setTimeout(() => {
+    router.go(-1)
+  }, 1000)
 }
 </script>

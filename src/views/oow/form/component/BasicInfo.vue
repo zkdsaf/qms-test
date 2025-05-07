@@ -2,7 +2,6 @@
   <custom-form
     ref="formRef"
     :fields="formFields"
-    :cols="formCols"
     :form-data="formData"
     :readonly="readonly"
     @field-change="handleFieldChange"
@@ -12,6 +11,7 @@
         v-bind="field.props"
         @change="handleFileChange('file', $event)"
         :value="formData.file"
+        :disabled="readonly"
       >
         <n-icon
           :component="CloudUploadOutline"
@@ -27,7 +27,11 @@
           <n-data-table v-bind="field.props"> </n-data-table>
         </n-scrollbar>
         <div class="flex justify-end">
-          <n-button type="primary" @click="handleAddRow('materialTableData')">
+          <n-button
+            type="primary"
+            @click="handleAddRow('materialTableData')"
+            v-if="!readonly"
+          >
             添加
           </n-button>
         </div>
@@ -40,7 +44,11 @@
           <n-data-table v-bind="field.props"> </n-data-table>
         </n-scrollbar>
         <div class="flex justify-end">
-          <n-button type="primary" @click="handleAddRow('principalTableData')">
+          <n-button
+            type="primary"
+            @click="handleAddRow('principalTableData')"
+            v-if="!readonly"
+          >
             添加
           </n-button>
         </div>
@@ -61,6 +69,10 @@ const props = defineProps({
   formData: {
     type: Object,
     default: () => null,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 })
 const message = useMessage()
@@ -122,14 +134,17 @@ watch(
   () => props.formData,
   (newVal) => {
     if (newVal) {
-      formData.value = newVal
+      // 遍历 formData 的所有字段
+      Object.keys(formData.value).forEach((key) => {
+        // 如果 props.formData 中对应的字段有值，则更新
+        if (newVal[key] !== undefined && newVal[key] !== null) {
+          formData.value[key] = newVal[key]
+        }
+      })
     }
   },
   { deep: true, immediate: true }
 )
-
-const formCols = 3
-const readonly = ref(false)
 
 // 下拉框选项
 const roleOptions = [
@@ -445,6 +460,8 @@ const materialTableColumns = [
   {
     title: '操作',
     align: 'center',
+    width: 80,
+    key: 'action',
     render: (row, index) => (
       <NPopconfirm
         onPositiveClick={() =>
@@ -452,11 +469,14 @@ const materialTableColumns = [
         }
       >
         {{
-          trigger: () => (
-            <NButton type="error" size="small">
-              删除
-            </NButton>
-          ),
+          trigger: () =>
+            !props.readonly ? (
+              <NButton type="error" size="small">
+                删除
+              </NButton>
+            ) : (
+              <div></div>
+            ),
           default: () => '确定删除吗？',
         }}
       </NPopconfirm>
@@ -579,6 +599,7 @@ const principalColumns = [
     title: '操作',
     align: 'center',
     width: 80,
+    key: 'action',
     render: (row, index) => (
       <NPopconfirm
         onPositiveClick={() =>
@@ -586,11 +607,14 @@ const principalColumns = [
         }
       >
         {{
-          trigger: () => (
-            <NButton type="error" size="small">
-              删除
-            </NButton>
-          ),
+          trigger: () =>
+            !props.readonly ? (
+              <NButton type="error" size="small">
+                删除
+              </NButton>
+            ) : (
+              <div></div>
+            ),
           default: () => '确定删除吗？',
         }}
       </NPopconfirm>
@@ -972,7 +996,11 @@ const formFields = ref([
       bordered: true,
       singleLine: false,
       data: computed(() => formData.value.materialTableData),
-      columns: materialTableColumns, // 表格列定义
+      columns: computed(() => {
+        return !props.readonly
+          ? materialTableColumns
+          : materialTableColumns.filter((item) => item.key !== 'action')
+      }), // 表格列定义
       rowKey: (row) => row.id, // 表格行主键
       'scroll-x': 1000,
     },
@@ -988,7 +1016,11 @@ const formFields = ref([
       bordered: true,
       singleLine: false,
       data: computed(() => formData.value.principalTableData),
-      columns: principalColumns, // 表格列定义
+      columns: computed(() => {
+        return !props.readonly
+          ? principalColumns
+          : principalColumns.filter((item) => item.key !== 'action')
+      }), // 表格列定义
       rowKey: (row) => row.id, // 表格行主键
       'scroll-x': 1000,
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="mb-4 p-6 bg-white shadow-md">
     <h2 class="text-2xl font-bold mb-4 text-center">{{ formInfo.title }}</h2>
-    <n-form :model="formInfo" :label-width="120" label-placement="left">
+    <n-form :model="formInfo" :label-width="200" label-placement="left">
       <n-grid cols="1 m:3" :x-gap="20" :y-gap="6" responsive="screen">
         <n-gi>
           <n-form-item label="申请单编号">

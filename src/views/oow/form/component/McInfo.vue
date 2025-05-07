@@ -35,6 +35,22 @@ const formData = ref({
   isReceive: null,
 })
 
+watch(
+  () => props.formData,
+  (newVal) => {
+    if (newVal) {
+      // 遍历 formData 的所有字段
+      Object.keys(formData.value).forEach((key) => {
+        // 如果 props.formData 中对应的字段有值，则更新
+        if (newVal[key] !== undefined && newVal[key] !== null) {
+          formData.value[key] = newVal[key]
+        }
+      })
+    }
+  },
+  { deep: true, immediate: true }
+)
+
 // 表单字段配置
 const formFields = ref([
   {

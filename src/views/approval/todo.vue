@@ -1,5 +1,5 @@
 <template>
-  <n-card>
+  <n-card class="h-full">
     <n-data-table
       :columns="columns"
       :data="tableData"
@@ -15,6 +15,9 @@
 
 <script setup lang="jsx">
 import { ref, reactive, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
 import { NDataTable, NInput, NButton, NPopconfirm } from 'naive-ui'
 import { UserOutlined } from '@vicons/antd'
 import { useMessage } from 'naive-ui'
@@ -72,6 +75,8 @@ const mockFetchData = ({ page, pageSize, search, sortKey, sortOrder }) => {
     }, 500)
   })
 }
+const router = useRouter()
+const authStore = useAuthStore()
 
 // 表格数据
 const tableData = ref([])
@@ -150,6 +155,17 @@ const handleFilters = (filters) => {
 
   pagination.page = 1 // 重置到第一页
   fetchData()
+}
+
+const lookFormDetail = (applySn) => {
+  const currentSystem = authStore.systemName.toLowerCase()
+  const formPath = `/pages/${currentSystem}/form`
+  router.push({
+    path: formPath,
+    query: {
+      id: applySn,
+    },
+  })
 }
 
 // 通用 renderFilterMenu
@@ -257,7 +273,7 @@ const columnDefinitions = [
       return (
         <div
           class="flex items-center justify-center text-blue-400 cursor-pointer"
-          onClick={() => message.info(row.applySn)}
+          onClick={() => lookFormDetail(row.applySn)}
         >
           {row.applySn}
         </div>
