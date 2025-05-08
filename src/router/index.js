@@ -30,23 +30,6 @@ const router = createRouter({
   routes,
 })
 
-// 暴露切换系统的方法（仅更新系统状态并跳转）
-export const switchSystem = (system) => {
-  // 跳转到新系统的默认页面
-  const defaultRoute = `/pages/${system.toLowerCase()}/todo`
-
-  console.log('🚀 ~ defaultRoute:', defaultRoute)
-  console.log(router.getRoutes())
-  console.log('currentRoute', router.currentRoute.value.fullPath)
-
-  router.replace({
-    path: defaultRoute,
-    query: {
-      t: new Date().getTime(),
-    },
-  })
-}
-
 router.beforeEach(authGuard)
 router.afterEach(progressGuard)
 export default router

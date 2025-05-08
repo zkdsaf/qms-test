@@ -6,6 +6,9 @@ import { zhCN, dateZhCN } from 'naive-ui'
  * @type import('naive-ui').GlobalThemeOverrides
  */
 const themeOverrides = {
+  common: {
+    textColorDisabled: 'rgba(100, 100, 100, 1)',
+  },
   Form: {
     feedbackHeightLarge: '10px',
     feedbackHeightSmall: '10px',
@@ -15,11 +18,7 @@ const themeOverrides = {
 </script>
 
 <template>
-  <n-config-provider
-    :locale="zhCN"
-    :date-locale="dateZhCN"
-    :theme-overrides="themeOverrides"
-  >
+  <n-config-provider :locale="zhCN" :date-locale="dateZhCN" :theme-overrides="themeOverrides">
     <n-message-provider>
       <router-view />
     </n-message-provider>

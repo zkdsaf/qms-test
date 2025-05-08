@@ -1,65 +1,83 @@
 <template>
-  <n-form ref="formRef" :model="formData">
-    <n-data-table
-      :columns="columns"
-      :data="formData.tableData"
-      :bordered="true"
-      :single-line="false"
-      default-expand-all
-      class="shadow-md rounded-lg"
-    />
-    <div class="mt-4 flex justify-end">
-      <n-button type="primary" @Click="validateForm">提交</n-button>
-    </div>
+  <n-form ref="formRef" :model="formData" :disabled="readonly" label-placement="left" label-width="auto">
+    <n-data-table :columns="columns" :data="formData.tableData" :bordered="true" :single-line="false" default-expand-all class="shadow-md rounded-lg" />
   </n-form>
 </template>
 
 <script setup lang="jsx">
+import { RefreshSharp } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui'
 const message = useMessage()
 const formRef = ref(null)
+
+const props = defineProps({
+  formData: {
+    type: Object,
+    default: () => null,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
+  },
+})
 
 // 响应式表单数据
 const formData = ref({
   tableData: [
     {
-      batchNo: '',
-      supplierBatchNo: '',
-      pendingQuantity: '',
-      remainingQuantity: '',
-      unit: '',
-      productionDate: null,
-      expiryDate: null,
-      arrivalDate: null,
-      checkInDate: null,
-      tankNo: '',
-      ecoaNo: '',
-      ecoaStatus: '',
+      batchNo: 'BATCH001',
+      supplierBatchNo: 'SUP001',
+      pendingQuantity: 100,
+      remainingQuantity: 100,
+      unit: '个',
+      productionDate: Date.now(),
+      expiryDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
+      arrivalDate: Date.now(),
+      checkInDate: Date.now(),
+      tankNo: 'TANK001',
+      ecoaNo: 'ECOA001',
+      ecoaStatus: 'pending',
       subTableData: [
         {
-          primaryInspection: '',
-          avl: '',
-          expiryDate: null,
-          remainingExpiryDays: null,
-          coaCheck: '',
-          transportTemperature: '',
-          cylinderNo: '',
-          tankNo: '',
-          remarks: '',
-          inspectionResult: '',
-          initiateIqndOow: '',
-          conclusion: '',
-          qualifiedQuantity: null,
-          concessionalQuantity: null,
-          returnQuantity: null,
-          scrapQuantity: null,
-          postedQuantity: null,
-          parentIndex: null,
+          primaryInspection: 'Y',
+          avl: 'Y',
+          expiryDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
+          remainingExpiryDays: 30,
+          coaCheck: 'Y',
+          transportTemperature: 25,
+          cylinderNo: 'CYL001',
+          tankNo: 'TANK001',
+          remarks: '正常',
+          inspectionResult: 'Y',
+          initiateIqndOow: 'IQND',
+          conclusion: 'qualified',
+          qualifiedQuantity: 100,
+          concessionalQuantity: 0,
+          returnQuantity: 0,
+          scrapQuantity: 0,
+          postedQuantity: 0,
+          parentIndex: 0,
         },
       ],
     },
   ],
 })
+
+watch(
+  () => props.formData,
+  (newVal) => {
+    if (newVal) {
+      // 遍历 formData 的所有字段
+      Object.keys(formData.value).forEach((key) => {
+        // 如果 props.formData 中对应的字段有值，则更新
+        if (newVal[key] !== undefined && newVal[key] !== null) {
+          formData.value[key] = newVal[key]
+        }
+      })
+    }
+  },
+  { deep: true, immediate: true }
+)
 
 // 选项定义
 const ecoaStatusOptions = [
@@ -68,19 +86,9 @@ const ecoaStatusOptions = [
   { label: '已取消', value: 'cancelled' },
 ]
 
-const yesNoOptions = [
-  { label: '是', value: 'yes' },
-  { label: '否', value: 'no' },
-]
-
-const coaCheckOptions = [
-  { label: '通过', value: 'pass' },
-  { label: '未通过', value: 'fail' },
-]
-
-const inspectionResultOptions = [
-  { label: '合格', value: 'qualified' },
-  { label: '不合格', value: 'unqualified' },
+const initiateIqndOowOptions = [
+  { label: 'IQND', value: 'IQND' },
+  { label: 'OOW', value: 'OOW' },
 ]
 
 const conclusionOptions = [
@@ -95,245 +103,150 @@ const subColumns = [
   {
     title: '一次质检',
     key: 'primaryInspection',
+    align: 'center',
+    width: 90,
     render: (row, subIndex) => {
       return (
-        <NFormItem
-          path={`tableData[${row.parentIndex}].subTableData[${subIndex}].primaryInspection`}
-          rule={{
-            required: true,
-            message: '请选择是否进行一次质检',
-            trigger: ['blur', 'change'],
+        <NIcon
+          class="cursor-pointer text-blue-600"
+          size={30}
+          component={RefreshSharp}
+          onClick={() => {
+            // 刷新逻辑
+            message.success('刷新成功')
           }}
-        >
-          <NSelect
-            value={row.primaryInspection}
-            onUpdateValue={(value) => {
-              row.primaryInspection = value
-            }}
-            options={yesNoOptions}
-            placeholder="请选择"
-            clearable
-          />
-        </NFormItem>
+        />
       )
     },
   },
   {
     title: 'AVL',
+    align: 'center',
     key: 'avl',
+    width: 60,
     render: (row, subIndex) => (
-      <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].avl`}
-        rule={{
-          required: true,
-          message: '请输入AVL',
-          trigger: ['blur', 'input'],
-        }}
-      >
-        <NInput
-          value={row.avl}
-          onUpdateValue={(value) => {
-            row.avl = value
-          }}
-          placeholder="请输入"
-          clearable
-        />
-      </NFormItem>
+      <div class="flex justify-center">
+        <NTag class="text-center" type={row.avl === 'Y' ? 'success' : 'error'}>
+          {row.avl === 'Y' ? 'Pass' : 'Fail'}
+        </NTag>
+      </div>
     ),
   },
   {
     title: '有效期',
+    align: 'center',
     key: 'expiryDate',
+    width: 70,
     render: (row, subIndex) => (
-      <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].expiryDate`}
-        rule={{
-          required: true,
-          message: '请选择有效期',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NDatePicker
-          value={row.expiryDate}
-          onUpdateValue={(value) => {
-            row.expiryDate = value
-          }}
-          type="date"
-          placeholder="请选择"
-          clearable
-        />
-      </NFormItem>
+      <div class="flex justify-center">
+        <NTag class="text-center" type={row.avl === 'Y' ? 'success' : 'error'}>
+          {row.avl === 'Y' ? 'Pass' : 'Fail'}
+        </NTag>
+      </div>
     ),
   },
   {
     title: '到厂/到岗剩余有效期',
+    align: 'center',
     key: 'remainingExpiryDays',
+    width: 160,
     render: (row, subIndex) => (
-      <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].remainingExpiryDays`}
-        rule={{
-          required: true,
-          message: '请输入剩余有效期（天）',
-          trigger: ['blur', 'input'],
-        }}
-      >
-        <NInputNumber
-          value={row.remainingExpiryDays}
-          onUpdateValue={(value) => {
-            row.remainingExpiryDays = value
-          }}
-          placeholder="请输入"
-          clearable
-          min={0}
-        />
-      </NFormItem>
+      <div class="flex justify-center">
+        <NTag class="text-center" type={row.avl === 'Y' ? 'success' : 'error'}>
+          {row.avl === 'Y' ? 'Pass' : 'Fail'}
+        </NTag>
+      </div>
     ),
   },
   {
     title: '规格文件检查(COA检验)',
+    align: 'center',
     key: 'coaCheck',
+    width: 180,
     render: (row, subIndex) => (
-      <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].coaCheck`}
-        rule={{
-          required: true,
-          message: '请选择COA检验结果',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NSelect
-          value={row.coaCheck}
-          onUpdateValue={(value) => {
-            row.coaCheck = value
-          }}
-          options={coaCheckOptions}
-          placeholder="请选择"
-          clearable
-        />
-      </NFormItem>
+      <div class="flex justify-center">
+        <NTag class="text-center" type={row.avl === 'Y' ? 'success' : 'error'}>
+          {row.avl === 'Y' ? 'Pass' : 'Fail'}
+        </NTag>
+      </div>
     ),
   },
   {
     title: '运输温度',
+    align: 'center',
     key: 'transportTemperature',
+    width: 90,
     render: (row, subIndex) => (
-      <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].transportTemperature`}
-        rule={{
-          required: true,
-          message: '请输入运输温度（℃）',
-          trigger: ['blur', 'input'],
-        }}
-      >
-        <NInput
-          value={row.transportTemperature}
-          onUpdateValue={(value) => {
-            row.transportTemperature = value
-          }}
-          placeholder="请输入"
-          clearable
-        />
-      </NFormItem>
+      <div class="flex justify-center">
+        <NTag class="text-center" type={row.avl === 'Y' ? 'success' : 'error'}>
+          {row.avl === 'Y' ? 'Pass' : 'Fail'}
+        </NTag>
+      </div>
     ),
   },
   {
     title: '钢瓶号',
+    align: 'center',
     key: 'cylinderNo',
+    width: 90,
     render: (row, subIndex) => (
-      <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].cylinderNo`}
-        rule={{
-          required: true,
-          message: '请输入钢瓶号',
-          trigger: ['blur', 'input'],
-        }}
-      >
-        <NInput
-          value={row.cylinderNo}
-          onUpdateValue={(value) => {
-            row.cylinderNo = value
-          }}
-          placeholder="请输入"
-          clearable
-        />
-      </NFormItem>
+      <div class="flex justify-center">
+        <NTag class="text-center" type={row.avl === 'Y' ? 'success' : 'error'}>
+          {row.avl === 'Y' ? 'Pass' : 'Fail'}
+        </NTag>
+      </div>
     ),
   },
   {
     title: '槽车号',
+    align: 'center',
     key: 'tankNo',
+    width: 90,
     render: (row, subIndex) => (
-      <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].tankNo`}
-        rule={{
-          required: true,
-          message: '请输入槽车号',
-          trigger: ['blur', 'input'],
-        }}
-      >
-        <NInput
-          value={row.tankNo}
-          onUpdateValue={(value) => {
-            row.tankNo = value
-          }}
-          placeholder="请输入"
-          clearable
-        />
-      </NFormItem>
+      <div class="flex justify-center">
+        <NTag class="text-center" type={row.avl === 'Y' ? 'success' : 'error'}>
+          {row.avl === 'Y' ? 'Pass' : 'Fail'}
+        </NTag>
+      </div>
     ),
   },
   {
     title: '其他',
+    align: 'center',
     key: 'remarks',
+    width: 60,
     render: (row, subIndex) => (
-      <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].remarks`}
-      >
-        <NInput
-          type="textarea"
-          value={row.remarks}
-          onUpdateValue={(value) => {
-            row.remarks = value
-          }}
-          placeholder="请输入"
-          clearable
-        />
-      </NFormItem>
+      <div class="flex justify-center">
+        <NTag class="text-center" type={row.avl === 'Y' ? 'success' : 'error'}>
+          {row.avl === 'Y' ? 'Pass' : 'Fail'}
+        </NTag>
+      </div>
     ),
   },
   {
     title: '检验结果',
+    width: 90,
+    align: 'center',
     key: 'inspectionResult',
     render: (row, subIndex) => (
-      <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].inspectionResult`}
-        rule={{
-          required: true,
-          message: '请选择检验结果',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NSelect
-          value={row.inspectionResult}
-          onUpdateValue={(value) => {
-            row.inspectionResult = value
-          }}
-          options={inspectionResultOptions}
-          placeholder="请选择"
-          clearable
-        />
-      </NFormItem>
+      <div class="flex justify-center">
+        <NTag class="text-center" type={row.avl === 'Y' ? 'success' : 'error'}>
+          {row.avl === 'Y' ? 'Pass' : 'Fail'}
+        </NTag>
+      </div>
     ),
   },
   {
+    align: 'center',
     title: '是否发起IQND/OOW',
+    width: 160,
     key: 'initiateIqndOow',
     render: (row, subIndex) => (
       <NFormItem
         path={`tableData[${row.parentIndex}].subTableData[${subIndex}].initiateIqndOow`}
         rule={{
           required: true,
-          message: '请选择是否发起IQND/OOW',
+          message: '请选择',
           trigger: ['blur', 'change'],
         }}
       >
@@ -342,7 +255,7 @@ const subColumns = [
           onUpdateValue={(value) => {
             row.initiateIqndOow = value
           }}
-          options={yesNoOptions}
+          options={initiateIqndOowOptions}
           placeholder="请选择"
           clearable
         />
@@ -351,13 +264,15 @@ const subColumns = [
   },
   {
     title: '结论',
+    width: 120,
+    align: 'center',
     key: 'conclusion',
     render: (row, subIndex) => (
       <NFormItem
         path={`tableData[${row.parentIndex}].subTableData[${subIndex}].conclusion`}
         rule={{
           required: true,
-          message: '请选择结论',
+          message: '请选择',
           trigger: ['blur', 'change'],
         }}
       >
@@ -375,10 +290,18 @@ const subColumns = [
   },
   {
     title: '合格数量',
+    width: 145,
+    align: 'center',
     key: 'qualifiedQuantity',
     render: (row, subIndex) => (
       <NFormItem
         path={`tableData[${row.parentIndex}].subTableData[${subIndex}].qualifiedQuantity`}
+        rule={{
+          type: 'number',
+          required: true,
+          message: '请输入',
+          trigger: ['blur', 'input'],
+        }}
       >
         <NInputNumber
           value={row.qualifiedQuantity}
@@ -394,10 +317,18 @@ const subColumns = [
   },
   {
     title: '让步接收数量',
+    width: 145,
+    align: 'center',
     key: 'concessionalQuantity',
     render: (row, subIndex) => (
       <NFormItem
         path={`tableData[${row.parentIndex}].subTableData[${subIndex}].concessionalQuantity`}
+        rule={{
+          type: 'number',
+          required: true,
+          message: '请输入',
+          trigger: ['blur', 'input'],
+        }}
       >
         <NInputNumber
           value={row.concessionalQuantity}
@@ -413,10 +344,18 @@ const subColumns = [
   },
   {
     title: '退货数量',
+    align: 'center',
+    width: 145,
     key: 'returnQuantity',
     render: (row, subIndex) => (
       <NFormItem
         path={`tableData[${row.parentIndex}].subTableData[${subIndex}].returnQuantity`}
+        rule={{
+          type: 'number',
+          required: true,
+          message: '请输入',
+          trigger: ['blur', 'input'],
+        }}
       >
         <NInputNumber
           value={row.returnQuantity}
@@ -432,10 +371,18 @@ const subColumns = [
   },
   {
     title: '报废数量',
+    align: 'center',
+    width: 145,
     key: 'scrapQuantity',
     render: (row, subIndex) => (
       <NFormItem
         path={`tableData[${row.parentIndex}].subTableData[${subIndex}].scrapQuantity`}
+        rule={{
+          type: 'number',
+          required: true,
+          message: '请输入',
+          trigger: ['blur', 'input'],
+        }}
       >
         <NInputNumber
           value={row.scrapQuantity}
@@ -451,13 +398,16 @@ const subColumns = [
   },
   {
     title: '已过账数量',
+    align: 'center',
+    width: 125,
     key: 'postedQuantity',
     render: (row, subIndex) => (
       <NFormItem
         path={`tableData[${row.parentIndex}].subTableData[${subIndex}].postedQuantity`}
         rule={{
+          type: 'number',
           required: true,
-          message: '请输入已过账数量',
+          message: '请输入',
           trigger: ['blur', 'input'],
         }}
       >
@@ -484,27 +434,20 @@ const columns = [
       rowData.subTableData.forEach((subRow) => {
         subRow.parentIndex = index
       })
-      return (
-        <NDataTable
-          columns={subColumns}
-          data={rowData.subTableData}
-          bordered
-          singleLine={false}
-          class="bg-white"
-          scroll-x="3000"
-        />
-      )
+      return <NDataTable columns={subColumns} data={rowData.subTableData} bordered singleLine={false} class="bg-white" />
     },
   },
   {
     title: '入库批次',
+    align: 'center',
     key: 'batchNo',
+    width: 120,
     render: (row, index) => (
       <NFormItem
         path={`tableData[${index}].batchNo`}
         rule={{
           required: true,
-          message: '请输入入库批次',
+          message: '请输入',
           trigger: ['blur', 'input'],
         }}
       >
@@ -521,13 +464,15 @@ const columns = [
   },
   {
     title: '供应商批次号',
+    align: 'center',
+    width: 200,
     key: 'supplierBatchNo',
     render: (row, index) => (
       <NFormItem
         path={`tableData[${index}].supplierBatchNo`}
         rule={{
           required: true,
-          message: '请输入供应商批次号',
+          message: '请输入',
           trigger: ['blur', 'input'],
         }}
       >
@@ -544,22 +489,26 @@ const columns = [
   },
   {
     title: '待检数量',
+    width: 145,
+    align: 'center',
     key: 'pendingQuantity',
     render: (row, index) => (
       <NFormItem
         path={`tableData[${index}].pendingQuantity`}
         rule={{
+          type: 'number',
           required: true,
-          message: '请输入待检数量',
+          message: '请输入',
           trigger: ['blur', 'input'],
         }}
       >
-        <NInput
+        <NInputNumber
           value={row.pendingQuantity}
           onUpdateValue={(value) => {
             row.pendingQuantity = value
           }}
           placeholder="请输入"
+          min={0}
           clearable
         />
       </NFormItem>
@@ -567,36 +516,42 @@ const columns = [
   },
   {
     title: '剩余待检数量',
+    width: 145,
+    align: 'center',
     key: 'remainingQuantity',
     render: (row, index) => (
       <NFormItem
         path={`tableData[${index}].remainingQuantity`}
         rule={{
+          type: 'number',
           required: true,
-          message: '请输入剩余待检数量',
+          message: '请输入',
           trigger: ['blur', 'input'],
         }}
       >
-        <NInput
+        <NInputNumber
           value={row.remainingQuantity}
           onUpdateValue={(value) => {
             row.remainingQuantity = value
           }}
           placeholder="请输入"
           clearable
+          min={0}
         />
       </NFormItem>
     ),
   },
   {
     title: '单位',
+    align: 'center',
+    width: 125,
     key: 'unit',
     render: (row, index) => (
       <NFormItem
         path={`tableData[${index}].unit`}
         rule={{
           required: true,
-          message: '请输入单位',
+          message: '请输入',
           trigger: ['blur', 'input'],
         }}
       >
@@ -613,13 +568,16 @@ const columns = [
   },
   {
     title: '生产日期',
+    align: 'center',
+    width: 145,
     key: 'productionDate',
     render: (row, index) => (
       <NFormItem
         path={`tableData[${index}].productionDate`}
         rule={{
+          type: 'number',
           required: true,
-          message: '请选择生产日期',
+          message: '请选择',
           trigger: ['blur', 'change'],
         }}
       >
@@ -635,14 +593,17 @@ const columns = [
     ),
   },
   {
+    align: 'center',
+    width: 145,
     title: '有效日期',
     key: 'expiryDate',
     render: (row, index) => (
       <NFormItem
         path={`tableData[${index}].expiryDate`}
         rule={{
+          type: 'number',
           required: true,
-          message: '请选择有效日期',
+          message: '请选择',
           trigger: ['blur', 'change'],
         }}
       >
@@ -658,14 +619,17 @@ const columns = [
     ),
   },
   {
+    align: 'center',
     title: '到料日期',
+    width: 145,
     key: 'arrivalDate',
     render: (row, index) => (
       <NFormItem
         path={`tableData[${index}].arrivalDate`}
         rule={{
+          type: 'number',
           required: true,
-          message: '请选择到料日期',
+          message: '请选择',
           trigger: ['blur', 'change'],
         }}
       >
@@ -682,13 +646,16 @@ const columns = [
   },
   {
     title: '到岗日期',
+    align: 'center',
+    width: 145,
     key: 'checkInDate',
     render: (row, index) => (
       <NFormItem
         path={`tableData[${index}].checkInDate`}
         rule={{
+          type: 'number',
           required: true,
-          message: '请选择到岗日期',
+          message: '请选择',
           trigger: ['blur', 'change'],
         }}
       >
@@ -705,13 +672,15 @@ const columns = [
   },
   {
     title: '槽车/钢瓶号',
+    align: 'center',
+    width: 145,
     key: 'tankNo',
     render: (row, index) => (
       <NFormItem
         path={`tableData[${index}].tankNo`}
         rule={{
           required: true,
-          message: '请输入槽车/钢瓶号',
+          message: '请输入',
           trigger: ['blur', 'input'],
         }}
       >
@@ -728,13 +697,15 @@ const columns = [
   },
   {
     title: 'ECOA编号',
+    align: 'center',
+    width: 145,
     key: 'ecoaNo',
     render: (row, index) => (
       <NFormItem
         path={`tableData[${index}].ecoaNo`}
         rule={{
           required: true,
-          message: '请输入ECOA编号',
+          message: '请输入',
           trigger: ['blur', 'input'],
         }}
       >
@@ -750,6 +721,8 @@ const columns = [
     ),
   },
   {
+    align: 'center',
+    width: 145,
     title: 'ECOA状态',
     key: 'ecoaStatus',
     render: (row, index) => (
@@ -757,7 +730,7 @@ const columns = [
         path={`tableData[${index}].ecoaStatus`}
         rule={{
           required: true,
-          message: '请选择ECOA状态',
+          message: '请选择',
           trigger: ['blur', 'change'],
         }}
       >
@@ -795,3 +768,5 @@ defineExpose({
   getTableData: () => formData.value.tableData,
 })
 </script>
+
+<style scoped></style>

@@ -1,9 +1,5 @@
 <template>
-  <FormPage
-    :form-header-info="formHeaderInfo"
-    @submit="onSubmit"
-    @save="onSave"
-  >
+  <FormPage :form-header-info="formHeaderInfo" @submit="onSubmit" @save="onSave">
     <!-- 自定义表单内容 -->
     <template #content>
       <n-tabs type="line" animated>
@@ -14,11 +10,7 @@
                 <h2 class="text-lg font-bold">基本信息</h2>
               </template>
 
-              <FormBasicInfo
-                ref="basicInfoRef"
-                :form-data="formData"
-                :readonly="readonly"
-              />
+              <FormBasicInfo ref="basicInfoRef" :form-data="formData" :readonly="readonly" />
             </n-collapse-item>
           </n-collapse>
 
@@ -28,7 +20,7 @@
                 <h2 class="text-lg font-bold">批次信息</h2>
               </template>
 
-              <FormBatchInfo />
+              <FormBatchInfo :form-data="formData" :readonly="readonly" />
             </n-collapse-item>
           </n-collapse>
 
@@ -42,41 +34,27 @@
             </n-collapse-item>
           </n-collapse>
         </n-tab-pane>
-        <n-tab-pane name="流程记录" tab="流程记录" v-if="id">
-          流程记录
-        </n-tab-pane>
+        <n-tab-pane name="流程记录" tab="流程记录" v-if="id"> 流程记录 </n-tab-pane>
       </n-tabs>
     </template>
 
     <!-- 自定义按钮 -->
     <template #buttons v-if="!id">
-      <n-popconfirm
-        positive-text="确定"
-        negative-text="取消"
-        @positive-click="onSubmit"
-      >
+      <n-popconfirm positive-text="确定" negative-text="取消" @positive-click="onSubmit">
         <template #trigger>
           <n-button type="primary">确认提交</n-button>
         </template>
         确定要提交当前表单吗？
       </n-popconfirm>
 
-      <n-popconfirm
-        positive-text="确定"
-        negative-text="取消"
-        @positive-click="onSave"
-      >
+      <n-popconfirm positive-text="确定" negative-text="取消" @positive-click="onSave">
         <template #trigger>
           <n-button class="ml-2" type="warning">暂存</n-button>
         </template>
         确定要暂存当前表单吗？
       </n-popconfirm>
 
-      <n-popconfirm
-        positive-text="确定"
-        negative-text="取消"
-        @positive-click="onCancel"
-      >
+      <n-popconfirm positive-text="确定" negative-text="取消" @positive-click="onCancel">
         <template #trigger>
           <n-button class="ml-2" type="error">取消</n-button>
         </template>
@@ -126,6 +104,44 @@ const formDataValue = {
   occurTime: 1746589558000,
   incomingTime: 1746589561000,
   responsibleParty: 'admin',
+  tableData: [
+    {
+      batchNo: 'BATCH001',
+      supplierBatchNo: 'SUP001',
+      pendingQuantity: 100,
+      remainingQuantity: 100,
+      unit: '个',
+      productionDate: Date.now(),
+      expiryDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
+      arrivalDate: Date.now(),
+      checkInDate: Date.now(),
+      tankNo: 'TANK001',
+      ecoaNo: 'ECOA001',
+      ecoaStatus: 'pending',
+      subTableData: [
+        {
+          primaryInspection: 'Y',
+          avl: 'Y',
+          expiryDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
+          remainingExpiryDays: 30,
+          coaCheck: 'Y',
+          transportTemperature: 25,
+          cylinderNo: 'CYL001',
+          tankNo: 'TANK001',
+          remarks: '正常',
+          inspectionResult: 'Y',
+          initiateIqndOow: 'IQND',
+          conclusion: 'qualified',
+          qualifiedQuantity: 100,
+          concessionalQuantity: 0,
+          returnQuantity: 0,
+          scrapQuantity: 0,
+          postedQuantity: 0,
+          parentIndex: 0,
+        },
+      ],
+    },
+  ],
 }
 
 // 表单数据
@@ -160,20 +176,15 @@ const onSubmit = async () => {
   }
 
   // 合并所有表单数据到一个对象
-  const mergedFormData = Object.values(formDataCollection).reduce(
-    (acc, curr) => {
-      return { ...acc, ...curr }
-    },
-    {}
-  )
+  const mergedFormData = Object.values(formDataCollection).reduce((acc, curr) => {
+    return { ...acc, ...curr }
+  }, {})
 
   console.log('合并后的表单数据：', mergedFormData)
   console.log(Object.entries(validationResults))
 
   // 检查是否所有表单都验证通过
-  const allValid = Object.values(validationResults).every(
-    (result) => result === true
-  )
+  const allValid = Object.values(validationResults).every((result) => result === true)
 
   if (allValid) {
     message.success('提交成功')
@@ -189,9 +200,7 @@ const onSubmit = async () => {
       .filter(([_, isValid]) => !isValid)
       .map(([name]) => refToTitleMap[name] || name)
 
-    message.error(
-      `表单验证失败，请检查以下部分: ${failedFormTitles.join(', ')}`
-    )
+    message.error(`表单验证失败，请检查以下部分: ${failedFormTitles.join(', ')}`)
   }
 }
 
