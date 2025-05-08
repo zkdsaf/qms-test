@@ -14,52 +14,58 @@
       responsive="screen"
       item-responsive
     >
-      <n-grid-item v-for="field in fields" :key="field.key" :span="field.span">
-        <n-form-item
-          :label="field.label"
-          :path="field.key"
+      <template v-for="field in fields">
+        <n-grid-item
+          :key="field.key"
+          :span="field.span"
           v-if="!field.visibleWhen || field.visibleWhen(formModel)"
         >
-          <!-- 优先使用插槽 -->
-          <slot :name="field.key" :field="field" :formModel="formModel">
-            <!-- 默认使用配置化的组件 -->
-            <component
-              :is="getComponent(field.type)"
-              :value="formModel[field.key]"
-              v-bind="field.props"
-              @update:value="
-                field.listenChange ? handleFieldChange(field.key, $event) : null
-              "
-              v-if="field.type !== 'radio'"
-            >
-              <!-- 动态插槽支持，例如 FileUpload 的 default 插槽 -->
-              <template
-                v-for="slotName in Object.keys(field.slots || {})"
-                #[slotName]="slotProps"
+          <n-form-item :label="field.label" :path="field.key">
+            <!-- 优先使用插槽 -->
+            <slot :name="field.key" :field="field" :formModel="formModel">
+              <!-- 默认使用配置化的组件 -->
+              <component
+                :is="getComponent(field.type)"
+                :value="formModel[field.key]"
+                v-bind="field.props"
+                @update:value="
+                  field.listenChange
+                    ? handleFieldChange(field.key, $event)
+                    : null
+                "
+                v-if="field.type !== 'radio'"
               >
-                <slot :name="`${field.key}-${slotName}`" v-bind="slotProps" />
-              </template>
-            </component>
+                <!-- 动态插槽支持，例如 FileUpload 的 default 插槽 -->
+                <template
+                  v-for="slotName in Object.keys(field.slots || {})"
+                  #[slotName]="slotProps"
+                >
+                  <slot :name="`${field.key}-${slotName}`" v-bind="slotProps" />
+                </template>
+              </component>
 
-            <!-- 特殊处理 radio 类型，使用 NRadioGroup -->
-            <n-radio-group
-              v-else
-              :value="formModel[field.key]"
-              v-bind="field.props"
-              @update:value="
-                field.listenChange ? handleFieldChange(field.key, $event) : null
-              "
-            >
-              <n-radio
-                v-for="option in field.props.options"
-                :key="option.value"
-                :value="option.value"
-                :label="option.label"
-              />
-            </n-radio-group>
-          </slot>
-        </n-form-item>
-      </n-grid-item>
+              <!-- 特殊处理 radio 类型，使用 NRadioGroup -->
+              <n-radio-group
+                v-else
+                :value="formModel[field.key]"
+                v-bind="field.props"
+                @update:value="
+                  field.listenChange
+                    ? handleFieldChange(field.key, $event)
+                    : null
+                "
+              >
+                <n-radio
+                  v-for="option in field.props.options"
+                  :key="option.value"
+                  :value="option.value"
+                  :label="option.label"
+                />
+              </n-radio-group>
+            </slot>
+          </n-form-item>
+        </n-grid-item>
+      </template>
     </n-grid>
   </n-form>
 </template>

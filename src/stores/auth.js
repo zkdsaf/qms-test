@@ -13,7 +13,10 @@ export const useAuthStore = defineStore(
     // 登录方法
     const login = async (username, password) => {
       // 校验用户名和密码
-      if ((username === 'admin' && password === 'admin') || (username === 'user' && password === 'user')) {
+      if (
+        (username === 'admin' && password === 'admin') ||
+        (username === 'user' && password === 'user')
+      ) {
         // 登录成功
         user.value = { username }
         isLoggedIn.value = true
@@ -40,7 +43,16 @@ export const useAuthStore = defineStore(
       language.value = lang
     }
 
-    return { user, isLoggedIn, login, logout, systemName, setSystemName, language, setLanguage }
+    return {
+      user,
+      isLoggedIn,
+      login,
+      logout,
+      systemName,
+      setSystemName,
+      language,
+      setLanguage,
+    }
   },
   {
     // 添加持久化配置
@@ -49,6 +61,7 @@ export const useAuthStore = defineStore(
       key: 'auth-store',
       // 使用 localStorage 存储
       storage: localStorage,
+      paths: ['isLoggedIn', 'user', 'systemName', 'language'],
     },
   }
 )

@@ -37,11 +37,13 @@ export const switchSystem = (system) => {
 
   console.log('🚀 ~ defaultRoute:', defaultRoute)
   console.log(router.getRoutes())
+  console.log('currentRoute', router.currentRoute.value.fullPath)
 
-  router.isReady().then(() => {
-    router.push(defaultRoute).catch((err) => {
-      console.log('🚀 ~ err:', err)
-    })
+  router.replace({
+    path: defaultRoute,
+    query: {
+      t: new Date().getTime(),
+    },
   })
 }
 

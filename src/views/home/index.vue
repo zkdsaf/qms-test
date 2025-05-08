@@ -158,14 +158,19 @@
           <div class="bg-gray-50 p-4 rounded">
             <n-card title="快捷操作" class="rounded">
               <template #header-extra>
-                <div class="cursor-pointer text-blue-500">管理</div>
+                <div
+                  class="cursor-pointer text-blue-500"
+                  @click="message.info('敬请期待')"
+                >
+                  管理
+                </div>
               </template>
 
-              <div class="flex flex-wrap w-full justify-start gap-2">
+              <div class="flex flex-wrap w-full justify-center">
                 <div
                   v-for="(action, index) in actionList"
                   :key="index"
-                  class="cursor-pointer p-3"
+                  class="cursor-pointer p-2"
                   @click="handleSystemSwitch(action.systemCode)"
                 >
                   <!-- 上部：蓝色背景 + 图标 -->
@@ -180,7 +185,7 @@
                   </div>
                   <!-- 下部：汉字 -->
                   <div
-                    class="whitespace-nowrap text-center text-ellipsis overflow-hidden w-12"
+                    class="whitespace-nowrap text-center text-ellipsis overflow-hidden w-14"
                   >
                     <n-tooltip trigger="hover">
                       <template #trigger>
@@ -198,7 +203,12 @@
             <!-- 帮助文档-->
             <n-card title="帮助文档" class="my-2 rounded">
               <template #header-extra>
-                <div class="cursor-pointer text-blue-500">查看更多</div>
+                <div
+                  class="cursor-pointer text-blue-500"
+                  @click="message.info('敬请期待')"
+                >
+                  查看更多
+                </div>
               </template>
 
               <n-list clickable hoverable>
@@ -218,7 +228,12 @@
             <!-- 公告卡片 -->
             <n-card title="公告" class="shadow-md">
               <template #header-extra>
-                <div class="cursor-pointer text-blue-500">查看更多</div>
+                <div
+                  class="cursor-pointer text-blue-500"
+                  @click="message.info('敬请期待')"
+                >
+                  查看更多
+                </div>
               </template>
               <n-list>
                 <n-list-item
@@ -433,6 +448,11 @@ const actionList = shallowRef([
     systemCode: 'OOW',
     icon: UserOutlined,
   },
+  {
+    title: 'SLED',
+    systemCode: 'SLED',
+    icon: UserOutlined,
+  },
 ])
 
 const handleSystemSwitch = (systemCode) => {
@@ -475,6 +495,21 @@ const placardList = shallowRef([
     content: '新人加入、岗位变动、员工离职等信息',
     type: 'warning',
     title: '人事公告',
+  },
+  {
+    content: '故障通知、数据异常、停机维护等紧急信息',
+    type: 'error',
+    title: '紧急公告',
+  },
+  {
+    content: '功能上线、版本更新说明等',
+    type: 'info',
+    title: '更新公告',
+  },
+  {
+    content: '其他重要信息',
+    type: 'info',
+    title: '其他公告',
   },
   {
     content: '故障通知、数据异常、停机维护等紧急信息',

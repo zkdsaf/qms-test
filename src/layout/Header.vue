@@ -114,7 +114,12 @@ const menuOptions = ref([
       },
       { label: 'SPC', key: 'spc' },
       { label: 'BarCode', key: 'barCode', isShow: false },
-      { label: 'EIQA', key: 'eiqa' },
+      {
+        label: 'EIQA',
+        key: '/pages/eiqa/todo',
+        path: '/pages/eiqa/todo',
+        systemCode: 'EIQA',
+      },
     ],
   },
   {
@@ -147,7 +152,12 @@ const menuOptions = ref([
     label: '物料异常提醒',
     key: 'settings',
     children: [
-      { label: 'OOW', key: 'oow' },
+      {
+        label: 'OOW',
+        key: '/pages/oow/todo',
+        path: '/pages/oow/todo',
+        systemCode: 'OOW',
+      },
       { label: 'IQND', key: 'iqnd' },
       { label: 'PiRun', key: 'piRun', isShow: false },
       { label: 'SLED', key: 'sled' },

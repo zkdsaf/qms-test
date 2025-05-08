@@ -1,53 +1,50 @@
-```vue
 <template>
-  <div class="min-h-screen bg-gray-100 p-4 md:p-6">
-    <n-card class="mb-6 shadow-lg rounded-lg" title="封装的表单校验">
-      <custom-form
-        ref="formRef"
-        :fields="formFields"
-        :cols="formCols"
-        :form-data="formData"
-        :readonly="readonly"
-        @field-change="handleFieldChange"
-      >
-        <template #keyword-suffix> 可以搜索 </template>
-        <template #category-header> 头部插槽 </template>
-        <template #category-action> 操作插槽 </template>
-        <template #file="{ field }">
-          <file-upload
-            v-bind="field.props"
-            @change="handleFileChange('file', $event)"
-            :value="formData.file"
-          >
-            <n-button type="primary">选择文件</n-button>
-          </file-upload>
-        </template>
+  <n-card class="mb-6 shadow-lg rounded-lg" title="封装的表单校验">
+    <custom-form
+      ref="formRef"
+      :fields="formFields"
+      :cols="formCols"
+      :form-data="formData"
+      :readonly="readonly"
+      @field-change="handleFieldChange"
+    >
+      <template #keyword-suffix> 可以搜索 </template>
+      <template #category-header> 头部插槽 </template>
+      <template #category-action> 操作插槽 </template>
+      <template #file="{ field }">
+        <file-upload
+          v-bind="field.props"
+          @change="handleFileChange('file', $event)"
+          :value="formData.file"
+        >
+          <n-button type="primary">选择文件</n-button>
+        </file-upload>
+      </template>
 
-        <template #tableData="{ field }">
-          <n-space vertical class="w-full">
-            <n-data-table v-bind="field.props"> </n-data-table>
-            <n-button type="primary" @click="handleAddRow">添加</n-button>
-          </n-space>
-        </template>
-      </custom-form>
-      <div class="flex justify-end mt-6 space-x-2">
-        <n-button
-          type="primary"
-          @click="handleSearch"
-          class="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-6"
-        >
-          校验
-        </n-button>
-        <n-button
-          type="default"
-          @click="handleReset"
-          class="bg-gray-200 hover:bg-gray-300 rounded-md px-6"
-        >
-          重置
-        </n-button>
-      </div>
-    </n-card>
-  </div>
+      <template #tableData="{ field }">
+        <n-space vertical class="w-full">
+          <n-data-table v-bind="field.props"> </n-data-table>
+          <n-button type="primary" @click="handleAddRow">添加</n-button>
+        </n-space>
+      </template>
+    </custom-form>
+    <div class="flex justify-end mt-6 space-x-2">
+      <n-button
+        type="primary"
+        @click="handleSearch"
+        class="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-6"
+      >
+        校验
+      </n-button>
+      <n-button
+        type="default"
+        @click="handleReset"
+        class="bg-gray-200 hover:bg-gray-300 rounded-md px-6"
+      >
+        重置
+      </n-button>
+    </div>
+  </n-card>
 </template>
 
 <script setup lang="jsx">

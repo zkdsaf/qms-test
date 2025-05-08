@@ -144,10 +144,24 @@
             </n-collapse-item>
           </n-collapse>
 
-          <n-collapse :default-expanded-names="['11']">
-            <n-collapse-item name="11">
+          <n-collapse :default-expanded-names="['10']">
+            <n-collapse-item name="10">
               <template #header>
-                <h2 class="text-lg font-bold">供应商报告信息</h2>
+                <h2 class="text-lg font-bold">责任明确及追踪改善</h2>
+              </template>
+
+              <DutyInfo
+                ref="dutyInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['12']">
+            <n-collapse-item name="12">
+              <template #header>
+                <h2 class="text-lg font-bold">附件信息</h2>
               </template>
 
               <FileInfo
@@ -227,13 +241,14 @@ import {
   PurchaseInfo,
   LabelInfo,
   FileInfo,
+  DutyInfo,
 } from './component/index.'
 import { useMessage } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
 
 // 表单信息
 const formHeaderInfo = {
-  title: 'OOW申请单',
+  title: 'IQND申请单',
   applicationId: 'APP-2025-001',
   applicationTime: '2025-04-30 10:00',
   applicant: '张三',
@@ -254,9 +269,9 @@ const readonly = ref(id ? true : false)
 const formDataValue = {
   iqaNo: 'IQA申请单编号',
   materialType: 'admin',
-  materialNo: '料号',
-  materialName: '物料名称',
-  materialDescription: '物料描述',
+  defectCategory: '异常触发类型',
+  defectLevel: '异常等级',
+  defectType: '异常类型',
   vendorCode: '供应商代码',
   vendorName: '供应商名称',
   makerCode: null,
@@ -264,16 +279,23 @@ const formDataValue = {
   occurTime: 1746589558000,
   incomingTime: 1746589561000,
   responsibleParty: 'admin',
-  isLaunch: 'Y',
-  carType: 'admin',
-  carNo: 'CAR NO',
-  carStartTime: 1746675980000,
-  abnormalCnt: 1,
-  incomingBatch: 2,
-  incomingQty: 3,
-  totalBatchQty: 4,
-  totalBatch: 5,
+  puchaseLocation: '实物地点',
+  puchaseOrderNo: '采购订单号',
   abnormalDesc: '异常描述异常描述异常描述异常描述',
+  responsible: '供应商责任',
+  responsibleDepartment: '供应商责任部门',
+  responsiblePerson: '供应商责任人',
+  isLaunch: 'Y',
+  carType: '5D',
+  carNo: 'A12345',
+  carStartime: 1746589558000,
+  isVendorConfirmation: null,
+  causeRemark: 'remar',
+  capa: 'capa',
+  carTime: 1746589558000,
+  carCycleTime: 1746589558000,
+  confirmContent: 'confirmContent',
+  confirmTime: 1746589558000,
   file: [
     {
       id: '9abe798b',
@@ -291,8 +313,8 @@ const formDataValue = {
   materialTableData: [
     {
       id: 1,
-      parameter: '1',
-      parameterUnit: '2',
+      materialNo: '1',
+      materialName: '2',
       incomingMax: '4',
       incomingMin: '6',
       incomingMaxBatch: '5',
@@ -301,7 +323,7 @@ const formDataValue = {
       abnormalBatchQty: '9',
       abnormalQty: '10',
       unit: '11',
-      compareResult: '3',
+      materialDescription: '3',
     },
   ],
   principalTableData: [
@@ -323,6 +345,7 @@ const formDataValue = {
   gasName: '气化科负责人',
   gasManagerName: '气化科科长',
   purchaseManagerName: '物料采购科科长',
+  purchaseName: '物料采购科负责人',
   inventoryImpact: 'Y',
   currentStock: 1,
   unit: 'Y',
@@ -388,6 +411,7 @@ const moduleInfoRef = ref(null)
 const purchaseInfoRef = ref(null)
 const labelInfoRef = ref(null)
 const fileInfoRef = ref(null)
+const dutyInfoRef = ref(null)
 
 // 消息提示
 const message = useMessage()
@@ -405,6 +429,7 @@ const onSubmit = async () => {
     purchaseInfoRef,
     labelInfoRef,
     fileInfoRef,
+    dutyInfoRef,
   }
 
   // 保存所有验证结果
@@ -456,6 +481,7 @@ const onSubmit = async () => {
       purchaseInfoRef: '采购物料处理',
       labelInfoRef: '更换标签',
       fileInfoRef: '供应商报告信息',
+      dutyInfoRef: '责任明确及追踪改善',
     }
 
     // 找出验证失败的表单并转换为对应的标题

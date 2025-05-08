@@ -22,8 +22,6 @@ async function bootstrap() {
   // 设置 i18n 初始语言
   setI18nLanguage()
 
-  // 挂载应用
-  await router.isReady()
   app.mount('#app')
 }
 

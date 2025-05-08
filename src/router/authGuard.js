@@ -7,7 +7,7 @@ export const authGuard = (to, from) => {
   const authStore = useAuthStore()
   NProgress.start()
 
-  console.log(authStore.isLoggedIn, to.path)
+  console.log('beforeEach', authStore.isLoggedIn, to.path)
 
   if (authStore.isLoggedIn && to.path === '/login') {
     return '/'
