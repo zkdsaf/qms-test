@@ -88,4 +88,28 @@ export default [
       },
     ],
   },
+  {
+    path: 'oow/editRoute',
+    name: 'OOW申请单编辑路由',
+    component: () => import('@/views/approval/editRoute.vue'),
+    meta: {
+      title: '申请单编辑路由',
+      icon: renderIcon(FileSearchOutlined),
+      show: true,
+      role: ['admin'],
+      system: 'OOW',
+    },
+  },
+  {
+    path: 'oow/actionLog',
+    name: 'OOW编辑路由操作日志',
+    component: () => import('@/views/approval/actionLog.vue'),
+    meta: {
+      title: '编辑路由操作日志',
+      icon: renderIcon(FileSearchOutlined),
+      show: true,
+      role: ['admin'],
+      system: 'OOW',
+    },
+  },
 ]

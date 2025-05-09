@@ -16,8 +16,8 @@
       :collapsed="collapsed"
       :options="filteredMenuOptions"
       @update:value="handleUpdateValue"
-      :default-value="defaultPath"
       ref="menuInstRef"
+      :value="defaultPath"
     />
   </n-layout-sider>
 </template>
@@ -32,11 +32,7 @@ import { filterMenuOptions } from '@/utils/menuUtils'
 const router = useRouter()
 const route = useRoute()
 
-const defaultPath = computed(() => {
-  const { meta, path } = route
-  if (meta.activeMenu) return meta.activeMenu
-  return path
-})
+const defaultPath = ref('')
 
 // 所有系统路由
 const rawMenuOptions = ref(allRoutes)
@@ -49,7 +45,7 @@ const menuInstRef = ref(null)
 // 获取当前用户角色
 const authStore = useAuthStore()
 const currentSystem = computed(() => authStore.systemName || 'SPEC')
-const userRole = computed(() => authStore.user.username)
+const userRole = computed(() => authStore.user?.username)
 
 // 过滤菜单选项
 const filteredMenuOptions = computed(() =>
@@ -60,14 +56,16 @@ const handleUpdateValue = (path) => {
   router.push(path)
 }
 
-// watch(
-//   () => route.path,
-//   (newPath) => {
-//     defaultPath.value = newPath
-//     menuInstRef.value?.showOption(newPath)
-//   },
-//   { immediate: true }
-// )
+//选中菜单
+watch(
+  () => route,
+  (route) => {
+    const { meta, path } = route
+    defaultPath.value = meta.activeMenu || path
+    menuInstRef.value?.showOption(meta.activeMenu || path)
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <style scoped></style>

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import router from '@/router'
 
 export const useAuthStore = defineStore(
   'auth',
@@ -20,6 +21,7 @@ export const useAuthStore = defineStore(
         // 登录成功
         user.value = { username }
         isLoggedIn.value = true
+
         return Promise.resolve()
       } else {
         // 登录失败
@@ -31,6 +33,19 @@ export const useAuthStore = defineStore(
     const logout = () => {
       user.value = null
       isLoggedIn.value = false
+      // 重置路由
+      resetRouter()
+    }
+
+    // 重置路由
+    const resetRouter = () => {
+      const baseRoutesName = ['Pages', 'Home', 'Login', 'NotFound']
+      // 移除所有动态添加的路由
+      router.getRoutes().forEach((route) => {
+        if (route.name && !baseRoutesName.includes(route.name)) {
+          router.removeRoute(route.name)
+        }
+      })
     }
 
     // 设置系统名称
@@ -52,6 +67,7 @@ export const useAuthStore = defineStore(
       setSystemName,
       language,
       setLanguage,
+      resetRouter,
     }
   },
   {

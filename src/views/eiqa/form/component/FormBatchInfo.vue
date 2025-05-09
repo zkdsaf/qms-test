@@ -1,6 +1,19 @@
 <template>
-  <n-form ref="formRef" :model="formData" :disabled="readonly" label-placement="left" label-width="auto">
-    <n-data-table :columns="columns" :data="formData.tableData" :bordered="true" :single-line="false" default-expand-all class="shadow-md rounded-lg" />
+  <n-form
+    ref="formRef"
+    :model="formData"
+    :disabled="readonly"
+    label-placement="left"
+    label-width="auto"
+  >
+    <n-data-table
+      :columns="columns"
+      :data="formData.tableData"
+      :bordered="true"
+      :single-line="false"
+      default-expand-all
+      class="shadow-md rounded-lg mb-4"
+    />
   </n-form>
 </template>
 
@@ -37,7 +50,7 @@ const formData = ref({
       tankNo: 'TANK001',
       ecoaNo: 'ECOA001',
       ecoaStatus: 'pending',
-      subTableData: [
+      firstTableData: [
         {
           primaryInspection: 'Y',
           avl: 'Y',
@@ -56,6 +69,21 @@ const formData = ref({
           returnQuantity: 0,
           scrapQuantity: 0,
           postedQuantity: 0,
+          parentIndex: 0,
+        },
+      ],
+      secondTableData: [
+        {
+          secondaryInspection: 'Y',
+          smallBatchPostedQuantity: 50,
+          chemicalLabCheck: 'Y',
+          inspectionResult: 'Y',
+          initiateIqndOow: 'IQND',
+          conclusion: 'qualified',
+          concessionalQuantity: 0,
+          returnQuantity: 0,
+          scrapQuantity: 0,
+          postedQuantity: 50,
           parentIndex: 0,
         },
       ],
@@ -243,7 +271,7 @@ const subColumns = [
     key: 'initiateIqndOow',
     render: (row, subIndex) => (
       <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].initiateIqndOow`}
+        path={`tableData[${row.parentIndex}].firstTableData[${subIndex}].initiateIqndOow`}
         rule={{
           required: true,
           message: '请选择',
@@ -269,7 +297,7 @@ const subColumns = [
     key: 'conclusion',
     render: (row, subIndex) => (
       <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].conclusion`}
+        path={`tableData[${row.parentIndex}].firstTableData[${subIndex}].conclusion`}
         rule={{
           required: true,
           message: '请选择',
@@ -295,7 +323,7 @@ const subColumns = [
     key: 'qualifiedQuantity',
     render: (row, subIndex) => (
       <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].qualifiedQuantity`}
+        path={`tableData[${row.parentIndex}].firstTableData[${subIndex}].qualifiedQuantity`}
         rule={{
           type: 'number',
           required: true,
@@ -322,7 +350,7 @@ const subColumns = [
     key: 'concessionalQuantity',
     render: (row, subIndex) => (
       <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].concessionalQuantity`}
+        path={`tableData[${row.parentIndex}].firstTableData[${subIndex}].concessionalQuantity`}
         rule={{
           type: 'number',
           required: true,
@@ -349,7 +377,7 @@ const subColumns = [
     key: 'returnQuantity',
     render: (row, subIndex) => (
       <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].returnQuantity`}
+        path={`tableData[${row.parentIndex}].firstTableData[${subIndex}].returnQuantity`}
         rule={{
           type: 'number',
           required: true,
@@ -376,7 +404,7 @@ const subColumns = [
     key: 'scrapQuantity',
     render: (row, subIndex) => (
       <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].scrapQuantity`}
+        path={`tableData[${row.parentIndex}].firstTableData[${subIndex}].scrapQuantity`}
         rule={{
           type: 'number',
           required: true,
@@ -403,7 +431,249 @@ const subColumns = [
     key: 'postedQuantity',
     render: (row, subIndex) => (
       <NFormItem
-        path={`tableData[${row.parentIndex}].subTableData[${subIndex}].postedQuantity`}
+        path={`tableData[${row.parentIndex}].firstTableData[${subIndex}].postedQuantity`}
+        rule={{
+          type: 'number',
+          required: true,
+          message: '请输入',
+          trigger: ['blur', 'input'],
+        }}
+      >
+        <NInputNumber
+          value={row.postedQuantity}
+          onUpdateValue={(value) => {
+            row.postedQuantity = value
+          }}
+          placeholder="请输入"
+          clearable
+          min={0}
+        />
+      </NFormItem>
+    ),
+  },
+]
+
+// 二次质检表格列定义
+const secondSubColumns = [
+  {
+    title: '二次质检',
+    key: 'secondaryInspection',
+    align: 'center',
+    width: 90,
+    render: (row, subIndex) => {
+      return (
+        <NIcon
+          class="cursor-pointer text-blue-600"
+          size={30}
+          component={RefreshSharp}
+          onClick={() => {
+            // 刷新逻辑
+            message.success('刷新成功')
+          }}
+        />
+      )
+    },
+  },
+  {
+    title: '小批账过账数量',
+    align: 'center',
+    width: 145,
+    key: 'smallBatchPostedQuantity',
+    render: (row, subIndex) => (
+      <NFormItem
+        path={`tableData[${row.parentIndex}].secondTableData[${subIndex}].smallBatchPostedQuantity`}
+        rule={{
+          type: 'number',
+          required: true,
+          message: '请输入',
+          trigger: ['blur', 'input'],
+        }}
+      >
+        <NInputNumber
+          value={row.smallBatchPostedQuantity}
+          onUpdateValue={(value) => {
+            row.smallBatchPostedQuantity = value
+          }}
+          placeholder="请输入"
+          clearable
+          min={0}
+        />
+      </NFormItem>
+    ),
+  },
+  {
+    title: 'Chemical Lab检验',
+    align: 'center',
+    key: 'chemicalLabCheck',
+    width: 145,
+    render: (row, subIndex) => (
+      <div class="flex justify-center">
+        <NTag
+          class="text-center"
+          type={row.chemicalLabCheck === 'Y' ? 'success' : 'error'}
+        >
+          {row.chemicalLabCheck === 'Y' ? 'Pass' : 'Fail'}
+        </NTag>
+      </div>
+    ),
+  },
+  {
+    title: '检验结果',
+    width: 90,
+    align: 'center',
+    key: 'inspectionResult',
+    render: (row, subIndex) => (
+      <div class="flex justify-center">
+        <NTag
+          class="text-center"
+          type={row.inspectionResult === 'Y' ? 'success' : 'error'}
+        >
+          {row.inspectionResult === 'Y' ? 'Pass' : 'Fail'}
+        </NTag>
+      </div>
+    ),
+  },
+  {
+    align: 'center',
+    title: '是否发起IQND/OOW',
+    width: 160,
+    key: 'initiateIqndOow',
+    render: (row, subIndex) => (
+      <NFormItem
+        path={`tableData[${row.parentIndex}].secondTableData[${subIndex}].initiateIqndOow`}
+        rule={{
+          required: true,
+          message: '请选择',
+          trigger: ['blur', 'change'],
+        }}
+      >
+        <NSelect
+          value={row.initiateIqndOow}
+          onUpdateValue={(value) => {
+            row.initiateIqndOow = value
+          }}
+          options={initiateIqndOowOptions}
+          placeholder="请选择"
+          clearable
+        />
+      </NFormItem>
+    ),
+  },
+  {
+    title: '结论',
+    width: 120,
+    align: 'center',
+    key: 'conclusion',
+    render: (row, subIndex) => (
+      <NFormItem
+        path={`tableData[${row.parentIndex}].secondTableData[${subIndex}].conclusion`}
+        rule={{
+          required: true,
+          message: '请选择',
+          trigger: ['blur', 'change'],
+        }}
+      >
+        <NSelect
+          value={row.conclusion}
+          onUpdateValue={(value) => {
+            row.conclusion = value
+          }}
+          options={conclusionOptions}
+          placeholder="请选择"
+          clearable
+        />
+      </NFormItem>
+    ),
+  },
+  {
+    title: '让步接收数量',
+    width: 145,
+    align: 'center',
+    key: 'concessionalQuantity',
+    render: (row, subIndex) => (
+      <NFormItem
+        path={`tableData[${row.parentIndex}].secondTableData[${subIndex}].concessionalQuantity`}
+        rule={{
+          type: 'number',
+          required: true,
+          message: '请输入',
+          trigger: ['blur', 'input'],
+        }}
+      >
+        <NInputNumber
+          value={row.concessionalQuantity}
+          onUpdateValue={(value) => {
+            row.concessionalQuantity = value
+          }}
+          placeholder="请输入"
+          clearable
+          min={0}
+        />
+      </NFormItem>
+    ),
+  },
+  {
+    title: '退货数量',
+    align: 'center',
+    width: 145,
+    key: 'returnQuantity',
+    render: (row, subIndex) => (
+      <NFormItem
+        path={`tableData[${row.parentIndex}].secondTableData[${subIndex}].returnQuantity`}
+        rule={{
+          type: 'number',
+          required: true,
+          message: '请输入',
+          trigger: ['blur', 'input'],
+        }}
+      >
+        <NInputNumber
+          value={row.returnQuantity}
+          onUpdateValue={(value) => {
+            row.returnQuantity = value
+          }}
+          placeholder="请输入"
+          clearable
+          min={0}
+        />
+      </NFormItem>
+    ),
+  },
+  {
+    title: '报废数量',
+    align: 'center',
+    width: 145,
+    key: 'scrapQuantity',
+    render: (row, subIndex) => (
+      <NFormItem
+        path={`tableData[${row.parentIndex}].secondTableData[${subIndex}].scrapQuantity`}
+        rule={{
+          type: 'number',
+          required: true,
+          message: '请输入',
+          trigger: ['blur', 'input'],
+        }}
+      >
+        <NInputNumber
+          value={row.scrapQuantity}
+          onUpdateValue={(value) => {
+            row.scrapQuantity = value
+          }}
+          placeholder="请输入"
+          clearable
+          min={0}
+        />
+      </NFormItem>
+    ),
+  },
+  {
+    title: '已过账数量',
+    align: 'center',
+    width: 125,
+    key: 'postedQuantity',
+    render: (row, subIndex) => (
+      <NFormItem
+        path={`tableData[${row.parentIndex}].secondTableData[${subIndex}].postedQuantity`}
         rule={{
           type: 'number',
           required: true,
@@ -431,10 +701,34 @@ const columns = [
     type: 'expand',
     expandable: () => true,
     renderExpand: (rowData, index) => {
-      rowData.subTableData.forEach((subRow) => {
+      rowData.firstTableData.forEach((subRow) => {
         subRow.parentIndex = index
       })
-      return <NDataTable columns={subColumns} data={rowData.subTableData} bordered singleLine={false} class="bg-white" />
+      rowData.secondTableData.forEach((subRow) => {
+        subRow.parentIndex = index
+      })
+      return (
+        <div>
+          <div class="mb-4">
+            <NDataTable
+              columns={subColumns}
+              data={rowData.firstTableData}
+              bordered
+              singleLine={false}
+              class="bg-white"
+            />
+          </div>
+          <div>
+            <NDataTable
+              columns={secondSubColumns}
+              data={rowData.secondTableData}
+              bordered
+              singleLine={false}
+              class="bg-white"
+            />
+          </div>
+        </div>
+      )
     },
   },
   {

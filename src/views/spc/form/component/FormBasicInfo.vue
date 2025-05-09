@@ -5,6 +5,7 @@
     :form-data="formData"
     :readonly="readonly"
     @field-change="handleFieldChange"
+    :label-width="155"
   >
   </custom-form>
 </template>
@@ -28,23 +29,25 @@ const message = useMessage()
 
 // 表单数据
 const formData = ref({
-  materialType: 'admin', // 物料类型，默认选择管理员类型
-  materialNo: 'M001', // 料号，默认示例料号
-  location: 'G1', // 适用范围，默认选择磐石
-  materialName: '示例物料', // 物料名称，默认示例名称
-  materialDescription: '这是一个示例物料描述', // 物料描述，默认示例描述
-  vendorCode: 'V001', // 供应商编码，默认示例编码
-  vendorName: '示例供应商', // 供应商名称，默认示例名称
-  manufacturerCode: 'MF001', // 生产商编码，默认示例编码
-  manufacturerName: '示例生产商', // 生产商名称，默认示例名称
-  orderNumber: 'PO2024001', // 订单编号，默认示例订单号
-  specNo: 'SPEC001', // SPEC No，默认示例编号
-  versionNo: '1.0.0', // 版本号，默认版本号
-  materialVoucher: 'MV001', // 物料凭证，默认示例凭证号
-  firstThreeBatches: 'B001,B002,B003', // Pcn前3批来料，默认示例批次
-  newBatchArrival: 'B004', // 新批次到料，默认示例批次
-  arrivalInterval: '7', // 来料间隔时长/天，默认7天
-  remarks: '这是一个示例备注信息', // 备注，默认示例备注
+  materialType: null,
+  materialNo: null,
+  materialName: null,
+  materialDescription: null,
+  coaVersion: null,
+  coaTemplateNo: null,
+  g1SpecNo: null,
+  g1SpecVersion: null,
+  g2SpecNo: null,
+  g2SpecVersion: null,
+  g1Module: null,
+  g1ModuleManager: null,
+  g2Module: null,
+  g2ModuleManager: null,
+  vendorCode: null,
+  vendorName: null,
+  manufacturerCode: null,
+  manufacturerName: null,
+  materialSelection: null,
 })
 
 watch(
@@ -103,19 +106,6 @@ const formFields = ref([
     span: '3 m:1 l:1',
   },
   {
-    key: 'location',
-    label: '适用范围',
-    type: 'select',
-    rules: [{ required: true, message: '请选择', trigger: ['blur', 'input'] }],
-    props: {
-      placeholder: '请选择适用范围',
-      clearable: true,
-      options: locationOptions,
-    },
-    listenChange: true,
-    span: '3 m:1 l:1',
-  },
-  {
     key: 'materialName',
     label: '物料名称',
     type: 'input',
@@ -134,6 +124,126 @@ const formFields = ref([
     rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
     props: {
       placeholder: '请输入物料描述',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'coaVersion',
+    label: 'COA版本号',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入COA版本号',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'coaTemplateNo',
+    label: 'COA模版编号',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入COA模版编号',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g1SpecNo',
+    label: '磐石SPEC编号',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入磐石SPEC编号',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g1SpecVersion',
+    label: '磐石SPEC版本',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入磐石SPEC版本',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g2SpecNo',
+    label: '司南SPEC编号',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入司南SPEC编号',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g2SpecVersion',
+    label: '司南SPEC版本',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入司南SPEC版本',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g1Module',
+    label: '磐石主要Module科长',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入磐石主要Module科长',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g1ModuleManager',
+    label: '磐石主要Module部长',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入磐石主要Module部长',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g2Module',
+    label: '司南主要Module科长',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入司南主要Module科长',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g2ModuleManager',
+    label: '司南主要Module部长',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入司南主要Module部长',
       clearable: true,
     },
     listenChange: true,
@@ -188,97 +298,17 @@ const formFields = ref([
     span: '3 m:1 l:1',
   },
   {
-    key: 'orderNumber',
-    label: '订单编号',
-    type: 'input',
+    key: 'materialSelection',
+    label: '关键物料选择',
+    type: 'radio',
     rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
     props: {
-      placeholder: '请输入订单编号',
+      placeholder: '请输入关键物料选择',
       clearable: true,
-    },
-    listenChange: true,
-    span: '3 m:1 l:1',
-  },
-  {
-    key: 'specNo',
-    label: 'SPEC No',
-    type: 'input',
-    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
-    props: {
-      placeholder: '请输入SPEC No',
-      clearable: true,
-    },
-    listenChange: true,
-    span: '3 m:1 l:1',
-  },
-  {
-    key: 'versionNo',
-    label: '版本号',
-    type: 'input',
-    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
-    props: {
-      placeholder: '请输入版本号',
-      clearable: true,
-    },
-    listenChange: true,
-    span: '3 m:1 l:1',
-  },
-  {
-    key: 'materialVoucher',
-    label: '物料凭证',
-    type: 'input',
-    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
-    props: {
-      placeholder: '请输入物料凭证',
-      clearable: true,
-    },
-    listenChange: true,
-    span: '3 m:1 l:1',
-  },
-  {
-    key: 'firstThreeBatches',
-    label: 'Pcn前3批来料',
-    type: 'input',
-    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
-    props: {
-      placeholder: '请输入Pcn前3批来料',
-      clearable: true,
-    },
-    listenChange: true,
-    span: '3 m:1 l:1',
-  },
-  {
-    key: 'newBatchArrival',
-    label: '新批次到料',
-    type: 'input',
-    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
-    props: {
-      placeholder: '请输入新批次到料',
-      clearable: true,
-    },
-    listenChange: true,
-    span: '3 m:1 l:1',
-  },
-  {
-    key: 'arrivalInterval',
-    label: '来料间隔时长/天',
-    type: 'input',
-    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
-    props: {
-      placeholder: '请输入来料间隔时长',
-      clearable: true,
-    },
-    listenChange: true,
-    span: '3 m:1 l:1',
-  },
-  {
-    key: 'remarks',
-    label: '备注',
-    type: 'textarea',
-    rules: [{ required: false, message: '请输入', trigger: ['blur', 'input'] }],
-    props: {
-      placeholder: '请输入备注',
-      clearable: true,
+      options: [
+        { label: 'Key', value: 'Key' },
+        { label: 'Non-Key', value: 'Non-Key' },
+      ],
     },
     listenChange: true,
     span: '3 m:1 l:1',

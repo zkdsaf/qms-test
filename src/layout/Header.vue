@@ -231,7 +231,7 @@ const handleNegativeClick = () => {
 // 处理退出登录
 const handleLogout = () => {
   // 获取当前路径
-  const currentPath = route.path
+  const currentPath = route.fullPath
   // 调用退出登录方法
   authStore.logout()
   message.success('已退出登录')

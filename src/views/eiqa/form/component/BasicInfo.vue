@@ -176,47 +176,6 @@ const handleFieldChange = ({ key, value }) => {
   formData.value[key] = value
 }
 
-const handleFileChange = (key, finishedFiles) => {
-  console.log(`插槽化 - 上传完成的 ${key} fileList:`, finishedFiles)
-  formData.value[key] = finishedFiles
-  formRef.value?.validate(
-    (errors) => {
-      if (errors) {
-        console.error(errors)
-      }
-    },
-    (rule) => rule?.key === 'file'
-  )
-}
-
-const handleAddRow = (type) => {
-  if (type === 'materialTableData') {
-    formData.value.materialTableData.push({
-      id: Date.now(),
-      parameter: '',
-      parameterUnit: '',
-      incomingMax: '',
-      incomingMin: '',
-      incomingMaxBatch: '',
-      incomingMinBatch: '',
-      abnormalBatch: '',
-      abnormalBatchQty: '',
-      abnormalQty: '',
-      unit: '',
-      compareResult: '',
-    })
-    return
-  }
-  formData.value.principalTableData.push({
-    id: Date.now(),
-    module: '',
-    moduleName: '',
-    moduleManager: '',
-    moduleManagerName: '',
-    location: '',
-  })
-}
-
 const validateForm = () => {
   return new Promise((resolve) => {
     formRef.value?.validate((errors) => {

@@ -28,7 +28,11 @@
                 <h2 class="text-lg font-bold">批次信息</h2>
               </template>
 
-              <FormBatchInfo :form-data="formData" :readonly="readonly" />
+              <FormBatchInfo
+                :form-data="formData"
+                :readonly="readonly"
+                ref="batchInfoRef"
+              />
             </n-collapse-item>
           </n-collapse>
 
@@ -114,69 +118,64 @@ const id = route.query.id
 const readonly = ref(id ? true : false)
 // 表单数据
 const formDataValue = {
-  iqaNo: 'IQA申请单编号',
   materialType: 'admin',
-  materialNo: '料号',
-  materialName: '物料名称',
-  materialDescription: '物料描述',
-  vendorCode: '供应商代码',
-  vendorName: '供应商名称',
-  makerCode: null,
-  makerName: '生产商名称',
-  occurTime: 1746589558000,
-  incomingTime: 1746589561000,
-  responsibleParty: 'admin',
+  materialNo: 'M001',
+  materialName: '示例物料',
+  materialDescription: '这是一个示例物料描述',
+  coaVersion: 'V1.0',
+  coaTemplateNo: 'COA-001',
+  g1SpecNo: 'G1-001',
+  g1SpecVersion: 'V1.0',
+  g2SpecNo: 'G2-001',
+  g2SpecVersion: 'V1.0',
+  g1Module: '模块A',
+  g1ModuleManager: '李四',
+  g2Module: '模块B',
+  g2ModuleManager: '王五',
+  vendorCode: 'V001',
+  vendorName: '示例供应商',
+  manufacturerCode: 'MF001',
+  manufacturerName: '示例生产商',
+  materialSelection: '标准物料',
+  file: [],
   tableData: [
     {
-      batchNo: 'BATCH001',
-      supplierBatchNo: 'SUP001',
-      pendingQuantity: 100,
-      remainingQuantity: 100,
+      id: 1,
+      vendorBatchNo: 'BATCH-001',
+      containerNo: 'CN-001',
+      effectTime: '2024-04-01',
+      arrivalTime: '2024-04-01',
+      category: 'A类',
+      parameter: '参数1',
       unit: '个',
-      productionDate: Date.now(),
-      expiryDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
-      arrivalDate: Date.now(),
-      checkInDate: Date.now(),
-      tankNo: 'TANK001',
-      ecoaNo: 'ECOA001',
-      ecoaStatus: 'pending',
-      firstTableData: [
-        {
-          primaryInspection: 'Y',
-          avl: 'Y',
-          expiryDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
-          remainingExpiryDays: 30,
-          coaCheck: 'Y',
-          transportTemperature: 25,
-          cylinderNo: 'CYL001',
-          tankNo: 'TANK001',
-          remarks: '正常',
-          inspectionResult: 'Y',
-          initiateIqndOow: 'IQND',
-          conclusion: 'qualified',
-          qualifiedQuantity: 100,
-          concessionalQuantity: 0,
-          returnQuantity: 0,
-          scrapQuantity: 0,
-          postedQuantity: 0,
-          parentIndex: 0,
-        },
-      ],
-      secondTableData: [
-        {
-          secondaryInspection: 'Y',
-          smallBatchPostedQuantity: 50,
-          chemicalLabCheck: 'Y',
-          inspectionResult: 'Y',
-          initiateIqndOow: 'IQND',
-          conclusion: 'qualified',
-          concessionalQuantity: 0,
-          returnQuantity: 0,
-          scrapQuantity: 0,
-          postedQuantity: 50,
-          parentIndex: 0,
-        },
-      ],
+      keyNoKey: 'Key',
+      batchQuantity: 100,
+      batchUnit: '个',
+      controlLimitRule: '标准规则',
+      upperLimitSymbol: '≤',
+      upperLimit: 100,
+      lowerLimitSymbol: '≥',
+      lowerLimit: 0,
+      detectionLimit: 0.1,
+      averageValue: 50,
+      standardDeviation: 5,
+      controlLineComparison: '符合',
+      cooperationMechanism: '标准机制',
+      panshiOpinion: '同意',
+      sinanOpinion: '同意',
+      panshiEnableRule: true,
+      sinanEnableRule: true,
+      stcSpecPush: true,
+      stcEcoaPush: true,
+      remark: '无',
+      standardUpperLimitSymbol: '≤',
+      standardUpperLimit: 100,
+      standardLowerLimit: 0,
+      standardLowerLimitSymbol: '≥',
+      supplierUpperLimitSymbol: '≤',
+      supplierUpperLimit: 100,
+      supplierLowerLimit: 0,
+      supplierLowerLimitSymbol: '≥',
     },
   ],
 }
@@ -185,6 +184,7 @@ const formDataValue = {
 const formData = ref(id ? { ...formDataValue } : null)
 
 const basicInfoRef = ref(null)
+const batchInfoRef = ref(null)
 
 // 消息提示
 const message = useMessage()
@@ -193,6 +193,7 @@ const onSubmit = async () => {
   // 收集所有表单引用
   const formRefs = {
     basicInfoRef,
+    batchInfoRef,
   }
 
   // 保存所有验证结果
@@ -235,6 +236,7 @@ const onSubmit = async () => {
     // ref名称到标题的映射
     const refToTitleMap = {
       basicInfoRef: '基本信息',
+      batchInfoRef: 'Control Plan更新信息',
     }
 
     // 找出验证失败的表单并转换为对应的标题

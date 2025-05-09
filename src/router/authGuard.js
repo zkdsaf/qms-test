@@ -1,13 +1,14 @@
 import { useAuthStore } from '@/stores/auth'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css' // 导入 NProgress 样式
+import { setupDynamicRoutes } from './index'
+import router from '@/router'
+
 const whiteList = ['/login', '/404']
 
-export const authGuard = (to, from) => {
+export const authGuard = async (to, from) => {
   const authStore = useAuthStore()
   NProgress.start()
-
-  console.log('beforeEach', authStore.isLoggedIn, to.path)
 
   if (whiteList.includes(to.path)) {
     return true
@@ -25,6 +26,18 @@ export const authGuard = (to, from) => {
   const systemCode = to.meta.system
   if (systemCode) {
     authStore.setSystemName(systemCode)
+  }
+
+  // 检查是否已经添加了动态路由
+
+  const hasDynamicRoutes = router.getRoutes().length > 4
+
+  // 如果没有动态路由，则添加
+  if (!hasDynamicRoutes && authStore.user) {
+    // 添加动态路由
+    await setupDynamicRoutes(authStore.user.username)
+
+    return to.fullPath
   }
 
   return true
