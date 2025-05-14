@@ -14,6 +14,31 @@ export default [
     },
     children: [
       {
+        path: 'create',
+        name: 'SPEC申请创建',
+        component: () => import('@/views/spec/form/create.vue'),
+        meta: {
+          title: '申请创建',
+          show: true,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'SPEC',
+        },
+      },
+      {
+        path: 'form',
+        name: 'SPEC表单创建',
+        component: () => import('@/views/spec/form/index.vue'),
+        meta: {
+          title: '表单创建',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'SPEC',
+          activeMenu: '/pages/spec/create',
+        },
+      },
+      {
         path: 'todo',
         name: 'SPEC审批列表',
         component: () => import('@/views/approval/todo.vue'),

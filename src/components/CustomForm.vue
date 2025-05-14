@@ -17,36 +17,28 @@
       <template v-for="field in fields">
         <n-grid-item
           :key="field.key"
+          span="3 m:3 l:3"
+          v-if="
+            (!field.visibleWhen || field.visibleWhen(formModel)) &&
+            field.divider
+          "
+        >
+          <n-divider title-placement="left">
+            {{ field.divider.title }}
+          </n-divider>
+        </n-grid-item>
+
+        <n-grid-item
+          :key="field.key"
           :span="field.span"
           v-if="!field.visibleWhen || field.visibleWhen(formModel)"
         >
           <n-form-item :label="field.label" :path="field.key">
             <!-- 优先使用插槽 -->
             <slot :name="field.key" :field="field" :formModel="formModel">
-              <!-- 默认使用配置化的组件 -->
-              <component
-                :is="getComponent(field.type)"
-                :value="formModel[field.key]"
-                v-bind="field.props"
-                @update:value="
-                  field.listenChange
-                    ? handleFieldChange(field.key, $event)
-                    : null
-                "
-                v-if="field.type !== 'radio'"
-              >
-                <!-- 动态插槽支持，例如 FileUpload 的 default 插槽 -->
-                <template
-                  v-for="slotName in Object.keys(field.slots || {})"
-                  #[slotName]="slotProps"
-                >
-                  <slot :name="`${field.key}-${slotName}`" v-bind="slotProps" />
-                </template>
-              </component>
-
               <!-- 特殊处理 radio 类型，使用 NRadioGroup -->
               <n-radio-group
-                v-else
+                v-if="field.type === 'radio'"
                 :value="formModel[field.key]"
                 v-bind="field.props"
                 @update:value="
@@ -62,6 +54,46 @@
                   :label="option.label"
                 />
               </n-radio-group>
+
+              <!-- 特殊处理 checkbox类型 -->
+              <n-checkbox-group
+                v-else-if="field.type === 'checkbox'"
+                :value="formModel[field.key]"
+                v-bind="field.props"
+                @update:value="
+                  field.listenChange
+                    ? handleFieldChange(field.key, $event)
+                    : null
+                "
+              >
+                <n-checkbox
+                  v-for="option in field.props.options"
+                  :key="option.value"
+                  :value="option.value"
+                  :label="option.label"
+                />
+              </n-checkbox-group>
+
+              <!-- 默认使用配置化的组件 -->
+              <component
+                :is="getComponent(field.type)"
+                :value="formModel[field.key]"
+                v-bind="field.props"
+                @update:value="
+                  field.listenChange
+                    ? handleFieldChange(field.key, $event)
+                    : null
+                "
+                v-else
+              >
+                <!-- 动态插槽支持，例如 FileUpload 的 default 插槽 -->
+                <template
+                  v-for="slotName in Object.keys(field.slots || {})"
+                  #[slotName]="slotProps"
+                >
+                  <slot :name="`${field.key}-${slotName}`" v-bind="slotProps" />
+                </template>
+              </component>
             </slot>
           </n-form-item>
         </n-grid-item>
@@ -80,6 +112,7 @@ import {
   NDataTable,
   NInputNumber,
   NRadioGroup,
+  NCheckboxGroup,
 } from 'naive-ui'
 import FileUpload from './CustomUpload.vue'
 // Props
@@ -148,6 +181,7 @@ const componentMap = {
   table: NDataTable,
   'input-number': NInputNumber,
   radio: NRadioGroup,
+  checkbox: NCheckboxGroup,
 }
 
 // 获取控件组件

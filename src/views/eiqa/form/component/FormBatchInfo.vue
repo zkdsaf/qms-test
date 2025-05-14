@@ -457,22 +457,8 @@ const subColumns = [
 const secondSubColumns = [
   {
     title: '二次质检',
-    key: 'secondaryInspection',
     align: 'center',
     width: 90,
-    render: (row, subIndex) => {
-      return (
-        <NIcon
-          class="cursor-pointer text-blue-600"
-          size={30}
-          component={RefreshSharp}
-          onClick={() => {
-            // 刷新逻辑
-            message.success('刷新成功')
-          }}
-        />
-      )
-    },
   },
   {
     title: '小批账过账数量',

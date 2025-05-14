@@ -105,14 +105,24 @@ const menuOptions = ref([
     label: '物料管理',
     key: 'home',
     children: [
-      { label: 'EQUAL', key: 'equal' },
+      {
+        label: 'EQUAL',
+        key: '/pages/equal/todo',
+        path: '/pages/equal/todo',
+        systemCode: 'EQUAL',
+      },
       {
         label: 'ECOA',
         key: '/pages/coa/todo',
         path: '/pages/coa/todo',
         systemCode: 'COA',
       },
-      { label: 'SPC', key: 'spc' },
+      {
+        label: 'SPC',
+        key: '/pages/spc/todo',
+        path: '/pages/spc/todo',
+        systemCode: 'SPC',
+      },
       { label: 'BarCode', key: 'barCode', isShow: false },
       {
         label: 'EIQA',
@@ -158,7 +168,12 @@ const menuOptions = ref([
         path: '/pages/oow/todo',
         systemCode: 'OOW',
       },
-      { label: 'IQND', key: 'iqnd' },
+      {
+        label: 'IQND',
+        key: '/pages/iqnd/todo',
+        path: '/pages/iqnd/todo',
+        systemCode: 'IQND',
+      },
       { label: 'PiRun', key: 'piRun', isShow: false },
       { label: 'SLED', key: 'sled' },
     ],

@@ -5,3 +5,5 @@ export { default as BatchInfo } from './BatchInfo.vue'
 export { default as FormBasicInfo } from './FormBasicInfo.vue'
 
 export { default as FormBatchInfo } from './FormBatchInfo.vue'
+
+export { default as CompareInfo } from './CompareInfo.vue'

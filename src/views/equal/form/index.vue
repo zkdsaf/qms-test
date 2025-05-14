@@ -14,7 +14,7 @@
                 <h2 class="text-lg font-bold">基本信息</h2>
               </template>
 
-              <FormBasicInfo
+              <BasicInfo
                 ref="basicInfoRef"
                 :form-data="formData"
                 :readonly="readonly"
@@ -22,28 +22,8 @@
             </n-collapse-item>
           </n-collapse>
 
-          <n-collapse :default-expanded-names="['2']">
+          <n-collapse :default-expanded-names="['2']" v-if="readonly">
             <n-collapse-item name="2">
-              <template #header>
-                <h2 class="text-lg font-bold">批次信息</h2>
-              </template>
-
-              <FormBatchInfo :form-data="formData" :readonly="readonly" />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['3']" v-if="readonly">
-            <n-collapse-item name="3">
-              <template #header>
-                <h2 class="text-lg font-bold">数据对比信息</h2>
-              </template>
-
-              <CompareInfo />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['3']" v-if="readonly">
-            <n-collapse-item name="3">
               <template #header>
                 <h2 class="text-lg font-bold">审批记录</h2>
               </template>
@@ -99,13 +79,13 @@
 <script setup>
 import FormPage from '@/components/FormPage.vue'
 import HistoryList from '@/components/HistoryList.vue'
-import { FormBasicInfo, FormBatchInfo, CompareInfo } from './component/index.'
+import { BasicInfo } from './component/index.'
 import { useMessage } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
 
 // 表单信息
 const formHeaderInfo = {
-  title: 'EIQA申请单',
+  title: '物料立项申请',
   applicationId: 'APP-2025-001',
   applicationTime: '2025-04-30 10:00',
   applicant: '张三',
@@ -124,69 +104,16 @@ const id = route.query.id
 const readonly = ref(id ? true : false)
 // 表单数据
 const formDataValue = {
-  iqaNo: 'IQA申请单编号',
   materialType: 'admin',
-  materialNo: '料号',
   materialName: '物料名称',
-  materialDescription: '物料描述',
-  vendorCode: '供应商代码',
-  vendorName: '供应商名称',
-  makerCode: null,
-  makerName: '生产商名称',
-  occurTime: 1746589558000,
-  incomingTime: 1746589561000,
-  responsibleParty: 'admin',
+  department: '质量工程科',
+  departmentHead: '张三',
+  projectTime: new Date().getTime(),
   tableData: [
     {
-      batchNo: 'BATCH001',
-      supplierBatchNo: 'SUP001',
-      pendingQuantity: 100,
-      remainingQuantity: 100,
-      unit: '个',
-      productionDate: Date.now(),
-      expiryDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
-      arrivalDate: Date.now(),
-      checkInDate: Date.now(),
-      tankNo: 'TANK001',
-      ecoaNo: 'ECOA001',
-      ecoaStatus: 'pending',
-      firstTableData: [
-        {
-          primaryInspection: 'Y',
-          avl: 'Y',
-          expiryDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
-          remainingExpiryDays: 30,
-          coaCheck: 'Y',
-          transportTemperature: 25,
-          cylinderNo: 'CYL001',
-          tankNo: 'TANK001',
-          remarks: '正常',
-          inspectionResult: 'Y',
-          initiateIqndOow: 'IQND',
-          conclusion: 'qualified',
-          qualifiedQuantity: 100,
-          concessionalQuantity: 0,
-          returnQuantity: 0,
-          scrapQuantity: 0,
-          postedQuantity: 0,
-          parentIndex: 0,
-        },
-      ],
-      secondTableData: [
-        {
-          secondaryInspection: 'Y',
-          smallBatchPostedQuantity: 50,
-          chemicalLabCheck: 'Y',
-          inspectionResult: 'Y',
-          initiateIqndOow: 'IQND',
-          conclusion: 'qualified',
-          concessionalQuantity: 0,
-          returnQuantity: 0,
-          scrapQuantity: 0,
-          postedQuantity: 50,
-          parentIndex: 0,
-        },
-      ],
+      id: 1,
+      vendorName: '供应商名称',
+      manufacturerName: '制造商名称',
     },
   ],
 }

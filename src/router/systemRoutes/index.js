@@ -4,6 +4,7 @@ import oowRoutes from './oow'
 import iqndRoutes from './iqnd'
 import eiqaRoutes from './eiqa'
 import spcRoutes from './spc'
+import equalRoutes from './equal'
 
 export const allRoutes = [
   ...coaRoutes,
@@ -12,4 +13,5 @@ export const allRoutes = [
   ...iqndRoutes,
   ...eiqaRoutes,
   ...spcRoutes,
+  ...equalRoutes,
 ]

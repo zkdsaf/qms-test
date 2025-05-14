@@ -27,7 +27,7 @@ export default [
       },
       {
         path: 'form',
-        name: 'eiqa表单创建',
+        name: 'EIQA表单创建',
         component: () => import('@/views/eiqa/form/index.vue'),
         meta: {
           title: '表单创建',
