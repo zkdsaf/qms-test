@@ -18,7 +18,13 @@ const generateRandomData = () => {
   const departments = ['技术部', '人事部', '财务部', '市场部', '运营部']
   const permissions = ['管理员', '普通用户', '访客', '超级管理员']
   const actions = ['审批', '驳回', '提交', '修改']
-  const remarks = ['正常', '需要修改', '已处理', '待审核']
+  const remarks = [
+    '正常',
+    '需要修改',
+    '已处理',
+    '待审核',
+    '今天天气不错，适合出去玩',
+  ]
 
   return Array.from({ length: 10 }, (_, index) => ({
     key: index + 1,
@@ -93,6 +99,9 @@ const columns = [
     key: 'remark',
     align: 'center',
     width: 120,
+    ellipsis: {
+      tooltip: true,
+    },
   },
   {
     title: '附件',

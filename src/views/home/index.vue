@@ -5,52 +5,95 @@
 
     <!-- 首页内容 -->
     <n-layout-content class="p-4">
-      <n-grid :cols="10" :x-gap="16" :y-gap="16" responsive="screen" item-responsive>
+      <n-grid
+        :cols="10"
+        :x-gap="16"
+        :y-gap="16"
+        responsive="screen"
+        item-responsive
+      >
         <!-- 左侧内容，占18格 -->
         <n-gi span="10 m:8 l:8">
           <div class="bg-gray-50 p-4 rounded">
             <!-- 轮播图 -->
-            <n-carousel direction="vertical" dot-placement="right" show-arrow effect="custom" :transition-props="{ name: 'creative' }" class="w-full h-[240px] object-cover mb-3" autoplay>
+            <n-carousel
+              direction="vertical"
+              dot-placement="right"
+              show-arrow
+              effect="custom"
+              :transition-props="{ name: 'creative' }"
+              class="w-full h-[240px] object-cover mb-3"
+              autoplay
+            >
               <div class="w-full h-[240px] object-cover bg-blue-500 rounded" />
               <div class="w-full h-[240px] object-cover bg-red-500 rounded" />
               <div class="w-full h-[240px] object-cover bg-green-500 rounded" />
-              <div class="w-full h-[240px] object-cover bg-yellow-500 rounded" />
+              <div
+                class="w-full h-[240px] object-cover bg-yellow-500 rounded"
+              />
             </n-carousel>
 
             <!-- 轮播图下方的三个子div -->
             <n-card title="待办统计">
               <div class="flex space-x-4">
                 <!-- 子div 1 -->
-                <div class="w-full md:flex-1 bg-white p-4 rounded-lg shadow flex flex-col md:flex-row">
+                <div
+                  class="w-full md:flex-1 bg-white p-4 rounded-lg shadow flex flex-col md:flex-row"
+                >
                   <!-- 左侧：上下两部分 -->
-                  <div class="flex-1 flex flex-row justify-between md:flex-col items-center md:items-start">
-                    <div class="text-lg font-semibold text-gray-800">超期七天待办事项</div>
+                  <div
+                    class="flex-1 flex flex-row justify-between md:flex-col items-center md:items-start"
+                  >
+                    <div class="text-lg font-semibold text-gray-800">
+                      超期七天待办事项
+                    </div>
                     <div class="text-3xl font-bold text-blue-600 mt-2">
-                      <n-number-animation :from="0" :to="randomNumber(300, 1000)" />
+                      <n-number-animation
+                        :from="0"
+                        :to="randomNumber(300, 1000)"
+                      />
                     </div>
                   </div>
                   <!-- 右侧：ECharts 图表 -->
                   <div class="flex-1 h-32 mt-4 md:mt-0" ref="chart1"></div>
                 </div>
                 <!-- 子div 2 -->
-                <div class="w-full md:flex-1 bg-white p-4 rounded-lg shadow flex flex-col md:flex-row">
+                <div
+                  class="w-full md:flex-1 bg-white p-4 rounded-lg shadow flex flex-col md:flex-row"
+                >
                   <!-- 左侧：上下两部分 -->
-                  <div class="flex-1 flex flex-row justify-between md:flex-col items-center md:items-start">
-                    <div class="text-lg font-semibold text-gray-800">待办事项</div>
+                  <div
+                    class="flex-1 flex flex-row justify-between md:flex-col items-center md:items-start"
+                  >
+                    <div class="text-lg font-semibold text-gray-800">
+                      待办事项
+                    </div>
                     <div class="text-3xl font-bold text-green-600 mt-2">
-                      <n-number-animation :from="0" :to="randomNumber(0, 10000)" />
+                      <n-number-animation
+                        :from="0"
+                        :to="randomNumber(0, 10000)"
+                      />
                     </div>
                   </div>
                   <!-- 右侧：ECharts 图表 -->
                   <div class="flex-1 h-32 mt-4 md:mt-0" ref="chart2"></div>
                 </div>
                 <!-- 子div 3 -->
-                <div class="w-full md:flex-1 bg-white p-4 rounded-lg shadow flex flex-col md:flex-row">
+                <div
+                  class="w-full md:flex-1 bg-white p-4 rounded-lg shadow flex flex-col md:flex-row"
+                >
                   <!-- 左侧：上下两部分 -->
-                  <div class="flex-1 flex flex-row justify-between md:flex-col items-center md:items-start">
-                    <div class="text-lg font-semibold text-gray-800">今日完成事项</div>
+                  <div
+                    class="flex-1 flex flex-row justify-between md:flex-col items-center md:items-start"
+                  >
+                    <div class="text-lg font-semibold text-gray-800">
+                      今日完成事项
+                    </div>
                     <div class="text-3xl font-bold text-red-600 mt-2">
-                      <n-number-animation :from="0" :to="randomNumber(100, 900)" />
+                      <n-number-animation
+                        :from="0"
+                        :to="randomNumber(100, 900)"
+                      />
                     </div>
                   </div>
                   <!-- 右侧：ECharts 图表 -->
@@ -67,12 +110,25 @@
                 <n-tab-pane name="我的已办" tab="Done"> </n-tab-pane>
                 <n-tab-pane name="我的草稿" tab="Draft"> </n-tab-pane>
               </n-tabs>
-              <n-data-table :columns="tableColumns" :data="tableData" :pagination="false" :bordered="false" :max-height="250" striped />
+              <n-data-table
+                :columns="tableColumns"
+                :data="tableData"
+                :pagination="false"
+                :bordered="false"
+                :max-height="250"
+                striped
+              />
             </n-card>
 
             <!-- 底部图标 -->
             <div class="mt-3">
-              <n-grid :cols="3" :x-gap="16" :y-gap="16" responsive="screen" item-responsive>
+              <n-grid
+                :cols="3"
+                :x-gap="16"
+                :y-gap="16"
+                responsive="screen"
+                item-responsive
+              >
                 <!-- 卡片 1 -->
                 <n-gi span="3 m:1">
                   <n-card title="超期未处理CASE" class="shadow-md">
@@ -102,17 +158,35 @@
           <div class="bg-gray-50 p-4 rounded">
             <n-card title="快捷操作" class="rounded">
               <template #header-extra>
-                <div class="cursor-pointer text-blue-500" @click="message.info('敬请期待')">管理</div>
+                <div
+                  class="cursor-pointer text-blue-500"
+                  @click="message.info('敬请期待')"
+                >
+                  管理
+                </div>
               </template>
 
               <div class="flex flex-wrap w-full justify-center">
-                <div v-for="(action, index) in actionList" :key="index" class="cursor-pointer p-2" @click="handleSystemSwitch(action.systemCode)">
+                <div
+                  v-for="(action, index) in actionList"
+                  :key="index"
+                  class="cursor-pointer p-2"
+                  @click="handleSystemSwitch(action.systemCode)"
+                >
                   <!-- 上部：蓝色背景 + 图标 -->
-                  <div class="rounded w-14 h-14 bg-blue-500 flex items-center justify-center">
-                    <n-icon :component="action.icon" size="30" class="text-white" />
+                  <div
+                    class="rounded w-14 h-14 bg-blue-500 flex items-center justify-center"
+                  >
+                    <n-icon
+                      :component="action.icon"
+                      size="30"
+                      class="text-white"
+                    />
                   </div>
                   <!-- 下部：汉字 -->
-                  <div class="whitespace-nowrap text-center text-ellipsis overflow-hidden w-14">
+                  <div
+                    class="whitespace-nowrap text-center text-ellipsis overflow-hidden w-14"
+                  >
                     <n-tooltip trigger="hover">
                       <template #trigger>
                         <span class="text-gray-800 font-medium">
@@ -129,12 +203,20 @@
             <!-- 帮助文档-->
             <n-card title="帮助文档" class="my-2 rounded">
               <template #header-extra>
-                <div class="cursor-pointer text-blue-500" @click="message.info('敬请期待')">查看更多</div>
+                <div
+                  class="cursor-pointer text-blue-500"
+                  @click="message.info('敬请期待')"
+                >
+                  查看更多
+                </div>
               </template>
 
               <n-list clickable hoverable>
                 <n-list-item v-for="(item, index) in helpList" :key="index">
-                  <div class="cursor-pointer text-blue-500 w-full" @click="downFile(item)">
+                  <div
+                    class="cursor-pointer text-blue-500 w-full"
+                    @click="downFile(item)"
+                  >
                     <n-ellipsis>
                       {{ item.title }}
                     </n-ellipsis>
@@ -146,10 +228,18 @@
             <!-- 公告卡片 -->
             <n-card title="公告" class="shadow-md">
               <template #header-extra>
-                <div class="cursor-pointer text-blue-500" @click="message.info('敬请期待')">查看更多</div>
+                <div
+                  class="cursor-pointer text-blue-500"
+                  @click="message.info('敬请期待')"
+                >
+                  查看更多
+                </div>
               </template>
               <n-list>
-                <n-list-item v-for="(placard, index) in placardList" :key="index">
+                <n-list-item
+                  v-for="(placard, index) in placardList"
+                  :key="index"
+                >
                   <div class="flex items-center justify-start">
                     <!-- 左侧：Tag -->
                     <n-tag :type="placard.type">
@@ -196,9 +286,13 @@ const tableData = Array.from({ length: 20 }).map((_, index) => ({
   applySn: Math.floor(Math.random() * 1000000),
   subject: '主题主题主题主题主题主题主题主题主题主题主题主题主题',
   applyUser: '张三',
-  applyTime: new Date(Date.now() + Math.random() * 1000 * 60 * 60 * 24).toLocaleString(),
+  applyTime: new Date(
+    Date.now() + Math.random() * 1000 * 60 * 60 * 24
+  ).toLocaleString(),
   status: '待办',
-  arriveTime: new Date(Date.now() + Math.random() * 1000 * 60 * 60 * 24).toLocaleString(),
+  arriveTime: new Date(
+    Date.now() + Math.random() * 1000 * 60 * 60 * 24
+  ).toLocaleString(),
   todoWaitTime: Math.floor(Math.random() * 100) + '分钟',
 }))
 
@@ -219,7 +313,12 @@ const tableColumns = ref([
               </n-icon>
             ),
             default: () => (
-              <n-card title="当前单据信息" header-style={{ fontSize: '14px' }} size="small" border>
+              <n-card
+                title="当前单据信息"
+                header-style={{ fontSize: '14px' }}
+                size="small"
+                border
+              >
                 <div class="flex">
                   <div class="text-blue-500">当前节点：</div>
                   <div>审批规格书:SQE签核</div>
@@ -248,7 +347,10 @@ const tableColumns = ref([
     align: 'center',
     render: (row) => {
       return (
-        <div class="flex items-center justify-center text-blue-400 cursor-pointer" onClick={() => message.info(row.applySn)}>
+        <div
+          class="flex items-center justify-center text-blue-400 cursor-pointer"
+          onClick={() => message.info(row.applySn)}
+        >
           {row.applySn}
         </div>
       )
@@ -314,12 +416,12 @@ const actionList = shallowRef([
   },
   {
     title: 'MAKER CODE',
-    systemCode: 'MAKER CODE',
+    systemCode: 'MAKER',
     icon: UserOutlined,
   },
   {
     title: 'VENDORINFO',
-    systemCode: 'VENDORINFO',
+    systemCode: 'VENDOR',
     icon: UserOutlined,
   },
   {

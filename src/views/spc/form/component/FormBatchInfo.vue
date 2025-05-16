@@ -928,8 +928,8 @@ const columns = [
             row.panshiEnableRule = value
           }}
           options={[
-            { label: '是', value: true },
-            { label: '否', value: false },
+            { label: '是', value: 'Y' },
+            { label: '否', value: 'N' },
           ]}
           placeholder="请选择"
         />
@@ -961,8 +961,8 @@ const columns = [
             row.sinanEnableRule = value
           }}
           options={[
-            { label: '是', value: true },
-            { label: '否', value: false },
+            { label: '是', value: 'Y' },
+            { label: '否', value: 'N' },
           ]}
           placeholder="请选择"
         />
@@ -994,8 +994,8 @@ const columns = [
             row.stcSpecPush = value
           }}
           options={[
-            { label: '是', value: true },
-            { label: '否', value: false },
+            { label: '是', value: 'Y' },
+            { label: '否', value: 'N' },
           ]}
           placeholder="请选择"
         />
@@ -1027,8 +1027,8 @@ const columns = [
             row.stcEcoaPush = value
           }}
           options={[
-            { label: '是', value: true },
-            { label: '否', value: false },
+            { label: '是', value: 'Y' },
+            { label: '否', value: 'N' },
           ]}
           placeholder="请选择"
         />

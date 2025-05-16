@@ -35,6 +35,7 @@ export default [
           role: ['admin', 'user'],
           icon: '',
           system: 'EIQA',
+          activeMenu: '/pages/eiqa/create',
         },
       },
       {

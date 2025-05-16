@@ -148,9 +148,24 @@ const menuOptions = ref([
     label: '生产商管理',
     key: 'history',
     children: [
-      { label: 'MAKERCODE', key: 'makerCode' },
-      { label: 'VENDORINFO', key: 'vendorInfo' },
-      { label: 'CERT', key: 'CERT' },
+      {
+        label: 'MAKERCODE',
+        key: '/pages/maker/todo',
+        path: '/pages/maker/todo',
+        systemCode: 'MAKERCODE',
+      },
+      {
+        label: 'VENDORINFO',
+        key: '/pages/vendor/todo',
+        path: '/pages/vendor/todo',
+        systemCode: 'VENDOR',
+      },
+      {
+        label: 'CERT',
+        key: '/pages/cert/todo',
+        path: '/pages/cert/todo',
+        systemCode: 'CERT',
+      },
     ],
   },
   {
@@ -175,7 +190,12 @@ const menuOptions = ref([
         systemCode: 'IQND',
       },
       { label: 'PiRun', key: 'piRun', isShow: false },
-      { label: 'SLED', key: 'sled' },
+      {
+        label: 'SLED',
+        key: '/pages/sled/todo',
+        path: '/pages/sled/todo',
+        systemCode: 'SLED',
+      },
     ],
   },
   {
@@ -219,6 +239,7 @@ const currentPath = computed(() => {
 })
 
 const goHome = () => {
+  authStore.setSystemName('')
   router.push('/')
 }
 //菜单选中

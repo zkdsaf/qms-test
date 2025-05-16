@@ -35,6 +35,7 @@ export default [
           role: ['admin', 'user'],
           icon: '',
           system: 'EQUAL',
+          activeMenu: '/pages/equal/create',
         },
       },
       {
@@ -88,7 +89,7 @@ export default [
     ],
   },
   {
-    path: 'EQUAL/editRoute',
+    path: 'equal/editRoute',
     name: 'EQUAL申请单编辑路由',
     component: () => import('@/views/approval/editRoute.vue'),
     meta: {
@@ -100,7 +101,7 @@ export default [
     },
   },
   {
-    path: 'EQUAL/actionLog',
+    path: 'equal/actionLog',
     name: 'EQUAL编辑路由操作日志',
     component: () => import('@/views/approval/actionLog.vue'),
     meta: {
