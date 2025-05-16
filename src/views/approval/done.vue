@@ -9,6 +9,7 @@
       :row-key="(row) => row.applySn"
       @update:sorter="updateSorter"
       @update:filters="updateFilters"
+      :scroll-x="1200"
     >
     </CustomTable>
   </n-card>

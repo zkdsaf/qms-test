@@ -28,7 +28,6 @@
               <div class="w-full h-[240px] object-cover bg-blue-500 rounded" />
               <div class="w-full h-[240px] object-cover bg-red-500 rounded" />
               <div class="w-full h-[240px] object-cover bg-green-500 rounded" />
-              <div class="w-full h-[240px] object-cover bg-pink-500 rounded" />
             </n-carousel>
 
             <!-- 轮播图下方的三个子div -->

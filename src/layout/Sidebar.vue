@@ -51,7 +51,7 @@ let collapsed = computed({
 const menuInstRef = ref(null)
 
 // 获取当前用户角色
-const currentSystem = computed(() => authStore.systemName || 'SPEC')
+const currentSystem = computed(() => authStore.systemName)
 const userRole = computed(() => authStore.user?.username)
 
 // 过滤菜单选项

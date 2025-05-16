@@ -11,6 +11,7 @@
       @update:sorter="updateSorter"
       @update:filters="updateFilters"
       @update:checked-row-keys="handleCheck"
+      :scroll-x="1200"
     >
     </CustomTable>
   </n-card>

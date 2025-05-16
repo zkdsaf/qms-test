@@ -1,4 +1,8 @@
-import { FileSearchOutlined } from '@vicons/antd'
+import {
+  SearchOutlined,
+  UnorderedListOutlined,
+  InteractionOutlined,
+} from '@vicons/antd'
 import { CreateOutline } from '@vicons/ionicons5'
 import { renderIcon } from '@/utils/icon.js'
 
@@ -13,6 +17,31 @@ export default [
       system: 'COA',
     },
     children: [
+      {
+        path: 'create',
+        name: 'COA申请创建',
+        component: () => import('@/views/coa/form/create.vue'),
+        meta: {
+          title: '申请创建',
+          show: true,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'COA',
+        },
+      },
+      {
+        path: 'form',
+        name: 'COA表单创建',
+        component: () => import('@/views/coa/form/index.vue'),
+        meta: {
+          title: '表单创建',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'COA',
+          activeMenu: '/pages/coa/create',
+        },
+      },
       {
         path: 'todo',
         name: 'COA审批列表',
@@ -69,7 +98,7 @@ export default [
     component: () => import('@/views/coa/find/index.vue'),
     meta: {
       title: '查找中心',
-      icon: renderIcon(FileSearchOutlined),
+      icon: renderIcon(SearchOutlined),
       show: true,
       role: ['admin', 'user'],
       system: 'COA',
@@ -81,8 +110,8 @@ export default [
     component: () => import('@/views/coa/find/demo.vue'),
     meta: {
       title: 'COA表格校验',
-      icon: renderIcon(FileSearchOutlined),
-      show: true,
+      icon: renderIcon(SearchOutlined),
+      show: false,
       role: ['admin', 'user'],
       system: 'COA',
     },
@@ -93,7 +122,7 @@ export default [
     component: () => import('@/views/approval/editRoute.vue'),
     meta: {
       title: '申请单编辑路由',
-      icon: renderIcon(FileSearchOutlined),
+      icon: renderIcon(InteractionOutlined),
       show: true,
       role: ['admin'],
       system: 'COA',
@@ -105,7 +134,7 @@ export default [
     component: () => import('@/views/approval/actionLog.vue'),
     meta: {
       title: '编辑路由操作日志',
-      icon: renderIcon(FileSearchOutlined),
+      icon: renderIcon(UnorderedListOutlined),
       show: true,
       role: ['admin'],
       system: 'COA',

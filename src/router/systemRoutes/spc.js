@@ -1,4 +1,8 @@
-import { FileSearchOutlined } from '@vicons/antd'
+import {
+  SearchOutlined,
+  UnorderedListOutlined,
+  InteractionOutlined,
+} from '@vicons/antd'
 import { CreateOutline } from '@vicons/ionicons5'
 import { renderIcon } from '@/utils/icon.js'
 
@@ -94,7 +98,7 @@ export default [
     component: () => import('@/views/approval/editRoute.vue'),
     meta: {
       title: '申请单编辑路由',
-      icon: renderIcon(FileSearchOutlined),
+      icon: renderIcon(InteractionOutlined),
       show: true,
       role: ['admin'],
       system: 'SPC',
@@ -106,7 +110,7 @@ export default [
     component: () => import('@/views/approval/actionLog.vue'),
     meta: {
       title: '编辑路由操作日志',
-      icon: renderIcon(FileSearchOutlined),
+      icon: renderIcon(UnorderedListOutlined),
       show: true,
       role: ['admin'],
       system: 'SPC',

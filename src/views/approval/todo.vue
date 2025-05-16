@@ -9,6 +9,7 @@
       striped
       @update:sorter="handleSorter"
       @update:filters="handleFilters"
+      :scroll-x="1200"
     />
   </n-card>
 </template>
