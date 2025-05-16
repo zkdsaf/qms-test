@@ -239,8 +239,8 @@ const currentPath = computed(() => {
 })
 
 const goHome = () => {
-  authStore.setSystemName('')
   router.push('/')
+  authStore.setSystemName('')
 }
 //菜单选中
 const handleUpdateValue = (key, item) => {

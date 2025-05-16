@@ -10,6 +10,7 @@ export const useAuthStore = defineStore(
     const isLoggedIn = ref(false)
     const systemName = ref('')
     const language = ref('zh')
+    const collapsed = ref(false)
 
     // 登录方法
     const login = async (username, password) => {
@@ -33,6 +34,9 @@ export const useAuthStore = defineStore(
     const logout = () => {
       user.value = null
       isLoggedIn.value = false
+      collapsed.value = false
+      language.value = 'zh'
+      systemName.value = ''
       // 重置路由
       resetRouter()
     }
@@ -58,6 +62,10 @@ export const useAuthStore = defineStore(
       language.value = lang
     }
 
+    const setCollapsed = (value) => {
+      collapsed.value = value
+    }
+
     return {
       user,
       isLoggedIn,
@@ -68,6 +76,8 @@ export const useAuthStore = defineStore(
       language,
       setLanguage,
       resetRouter,
+      collapsed,
+      setCollapsed,
     }
   },
   {
@@ -77,7 +87,7 @@ export const useAuthStore = defineStore(
       key: 'auth-store',
       // 使用 localStorage 存储
       storage: localStorage,
-      paths: ['isLoggedIn', 'user', 'systemName', 'language'],
+      paths: ['isLoggedIn', 'user', 'systemName', 'language', 'collapsed'],
     },
   }
 )

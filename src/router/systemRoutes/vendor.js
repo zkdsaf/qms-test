@@ -14,6 +14,31 @@ export default [
     },
     children: [
       {
+        path: 'create',
+        name: 'VENDOR申请创建',
+        component: () => import('@/views/vendor/form/create.vue'),
+        meta: {
+          title: '申请创建',
+          show: true,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'VENDOR',
+        },
+      },
+      {
+        path: 'form',
+        name: 'VENDOR表单创建',
+        component: () => import('@/views/vendor/form/index.vue'),
+        meta: {
+          title: '表单创建',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'VENDOR',
+          activeMenu: '/pages/vendor/create',
+        },
+      },
+      {
         path: 'todo',
         name: 'VENDOR审批列表',
         component: () => import('@/views/approval/todo.vue'),

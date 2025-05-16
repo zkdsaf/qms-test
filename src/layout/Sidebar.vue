@@ -6,7 +6,7 @@
     :width="240"
     :collapsed="collapsed"
     :native-scrollbar="false"
-    show-trigger
+    show-trigger="arrow-circle"
     @collapse="collapsed = true"
     @expand="collapsed = false"
   >
@@ -29,6 +29,7 @@ import { useAuthStore } from '@/stores/auth'
 import { allRoutes } from '@/router/systemRoutes'
 import { filterMenuOptions } from '@/utils/menuUtils'
 
+const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -38,12 +39,18 @@ const defaultPath = ref('')
 const rawMenuOptions = ref(allRoutes)
 
 // 菜单状态
-const collapsed = ref(false)
+let collapsed = computed({
+  get() {
+    return authStore.collapsed
+  },
+  set(val) {
+    authStore.setCollapsed(val)
+  },
+})
 
 const menuInstRef = ref(null)
 
 // 获取当前用户角色
-const authStore = useAuthStore()
 const currentSystem = computed(() => authStore.systemName || 'SPEC')
 const userRole = computed(() => authStore.user?.username)
 
