@@ -14,7 +14,7 @@
                 <h2 class="text-lg font-bold">基本信息</h2>
               </template>
 
-              <BasicInfo
+              <FormBasicInfo
                 ref="basicInfoRef"
                 :form-data="formData"
                 :readonly="readonly"
@@ -25,33 +25,19 @@
           <n-collapse :default-expanded-names="['2']">
             <n-collapse-item name="2">
               <template #header>
-                <h2 class="text-lg font-bold">设置信息</h2>
+                <h2 class="text-lg font-bold">批次信息</h2>
               </template>
 
-              <SetInfo
-                ref="setInfoRef"
+              <FormBatchInfo
                 :form-data="formData"
                 :readonly="readonly"
+                ref="batchInfoRef"
               />
             </n-collapse-item>
           </n-collapse>
 
-          <n-collapse :default-expanded-names="['3']">
+          <n-collapse :default-expanded-names="['3']" v-if="readonly">
             <n-collapse-item name="3">
-              <template #header>
-                <h2 class="text-lg font-bold">Spec Data</h2>
-              </template>
-
-              <SpecInfo
-                ref="specInfoRef"
-                :form-data="formData"
-                :readonly="readonly"
-              />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['4']" v-if="readonly">
-            <n-collapse-item name="4">
               <template #header>
                 <h2 class="text-lg font-bold">审批记录</h2>
               </template>
@@ -107,13 +93,13 @@
 <script setup>
 import FormPage from '@/components/FormPage.vue'
 import HistoryList from '@/components/HistoryList.vue'
-import { BasicInfo, SetInfo, SpecInfo } from './component/index.'
+import { FormBasicInfo, FormBatchInfo } from './component/index.'
 import { useMessage } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
 
 // 表单信息
 const formHeaderInfo = {
-  title: 'Maker Code(无料号)申请单',
+  title: 'EIQA申请单',
   applicationId: 'APP-2025-001',
   applicationTime: '2025-04-30 10:00',
   applicant: '张三',
@@ -132,180 +118,160 @@ const id = route.query.id
 const readonly = ref(id ? true : false)
 // 表单数据
 const formDataValue = {
-  coaTemplateNo: 'TEMP-001',
-  materialType: '类型1',
-  materialName: 'Product X',
-  materialNo: 'M001',
-  materialDescription: 'Standard material for production',
-  g1DocSpecNo: 'G1-001',
-  g1DocSpecVersion: '1.0',
-  g2DocSpecNo: 'G2-001',
-  g2DocSpecVersion: '1.0',
-  coaVersion: '1.0',
-  materialTemplateVersion: '1.0',
-  materialTemplateNo: 'MT-001',
-  pushToVendor: 'Y',
-  documentFormat: ['PDF', 'TXT', 'XML'],
-  scope: ['G1', 'G2'],
-
+  materialType: '默认物料类型',
+  materialNo: '默认物料编号',
+  materialName: '默认物料名称',
+  materialDescription: '默认物料描述',
+  isSharedFab: 'Y',
+  delayType: '1',
+  vendorCode: '默认供应商代码',
+  vendorName: '默认供应商名称',
+  makerName: '默认制造商名称',
+  delayReason: '默认延迟原因',
+  delayMonths: 0,
+  delayTotalQty: 0,
+  materialTableData: [
+    {
+      id: 1,
+      vendorBatch: '默认供应商批次',
+      internalBatch: '默认内部批次',
+      currentStock: '1',
+      unit: '默认单位',
+      productionDate: new Date().getTime(),
+      validityMonths: 12,
+      currentExpiryDate: new Date().getTime(),
+      expectedDelayDate: new Date().getTime(),
+      delayQty: 0,
+    },
+  ],
+  principalTableData: [
+    {
+      id: 1,
+      location: 'G2',
+      user: '默认用户',
+      sectionManager: '默认部门经理',
+      departmentManager: '默认部门主管',
+    },
+  ],
   tableData: [
     {
       id: 1,
-      source: 'COA',
-      name: 'Material Type',
-      previousName: 'Material Type',
-      specValue: 'Type A: Raw Material',
-      history: '初始数据',
-      isNew: false,
+      item: 'Aging Test',
+      isProvideData: 'Y',
+
+      remark: '默认备注',
+      provideData: [
+        {
+          id: '9abe798b',
+          name: '测试默认数据.pdf',
+          percentage: 100,
+          status: 'finished',
+          url: null,
+          file: {},
+          thumbnailUrl: null,
+          type: 'application/pdf',
+          fullPath: '/测试默认数据.pdf',
+          batchId: '0fe23964',
+        },
+      ],
+      evaluationConclusionProvided: 'Pass',
+      evaluationConclusionNotProvided: '1',
+      riskDescription: '默认风险描述',
     },
     {
       id: 2,
-      source: 'SPEC',
-      name: 'Material No',
-      previousName: 'Material No',
-      specValue: 'M001: 12345',
-      history: '初始数据',
-      isNew: false,
+      item: '验证污染性',
+      isProvideData: 'Y',
+
+      remark: '默认备注',
+      provideData: [
+        {
+          id: '9abe798b',
+          name: '测试默认数据.pdf',
+          percentage: 100,
+          status: 'finished',
+          url: null,
+          file: {},
+          thumbnailUrl: null,
+          type: 'application/pdf',
+          fullPath: '/测试默认数据.pdf',
+          batchId: '0fe23964',
+        },
+      ],
+      evaluationConclusionProvided: 'Pass',
+      evaluationConclusionNotProvided: '0',
+      riskDescription: '默认风险描述',
     },
     {
       id: 3,
-      source: 'COA',
-      name: 'Material Name',
-      previousName: 'Material Name',
-      specValue: 'Product X: Chemical Compound',
-      history: '初始数据',
-      isNew: false,
+      item: '工艺参数影响',
+      isProvideData: 'Y',
+
+      remark: '默认备注',
+      provideData: [
+        {
+          id: '9abe798b',
+          name: '测试默认数据.pdf',
+          percentage: 100,
+          status: 'finished',
+          url: null,
+          file: {},
+          thumbnailUrl: null,
+          type: 'application/pdf',
+          fullPath: '/测试默认数据.pdf',
+          batchId: '0fe23964',
+        },
+      ],
+      evaluationConclusionProvided: 'Fail',
+      evaluationConclusionNotProvided: '0',
+      riskDescription: '默认风险描述',
     },
     {
       id: 4,
-      source: 'SPEC',
-      name: 'Po No',
-      previousName: 'Po No',
-      specValue: 'Type B: Processed Material',
-      history: '初始数据',
-      isNew: false,
+      item: '产品特性影响',
+      isProvideData: 'Y',
+
+      remark: '默认备注',
+      provideData: [
+        {
+          id: '9abe798b',
+          name: '测试默认数据.pdf',
+          percentage: 100,
+          status: 'finished',
+          url: null,
+          file: {},
+          thumbnailUrl: null,
+          type: 'application/pdf',
+          fullPath: '/测试默认数据.pdf',
+          batchId: '0fe23964',
+        },
+      ],
+      evaluationConclusionProvided: 'Pass',
+      evaluationConclusionNotProvided: '0',
+      riskDescription: '默认风险描述',
     },
     {
       id: 5,
-      source: 'COA',
-      name: 'Invoice No',
-      previousName: 'Invoice No',
-      specValue: 'M002: 67890',
-      history: '初始数据',
-      isNew: false,
-    },
-    {
-      id: 6,
-      source: 'SPEC',
-      name: 'Delivery Name',
-      previousName: 'Delivery Name',
-      specValue: 'Product Y: Industrial Chemical',
-      history: '初始数据',
-      isNew: false,
-    },
-    {
-      id: 7,
-      source: 'COA',
-      name: 'Vendor Code',
-      previousName: 'Vendor Code',
-      specValue: 'Type C: Finished Product',
-      history: '初始数据',
-      isNew: false,
-    },
-    {
-      id: 8,
-      source: 'SPEC',
-      name: 'Vendor Name',
-      previousName: 'Vendor Name',
-      specValue: 'M003: 54321',
-      history: '初始数据',
-      isNew: false,
-    },
-    {
-      id: 9,
-      source: 'COA',
-      name: 'Maker Code',
-      previousName: 'Maker Code',
-      specValue: 'Product Z: Special Compound',
-      history: '初始数据',
-      isNew: false,
-    },
-    {
-      id: 10,
-      source: 'SPEC',
-      name: 'Maker Name',
-      previousName: 'Maker Name',
-      specValue: 'Type D: Custom Material',
-      history: '初始数据',
-      isNew: false,
-    },
-    {
-      id: 11,
-      source: 'COA',
-      name: 'Maker Brand',
-      previousName: 'Maker Brand',
-      specValue: 'M004: 98765',
-      history: '初始数据',
-      isNew: false,
-    },
-    {
-      id: 12,
-      source: 'SPEC',
-      name: 'Maker Plant',
-      previousName: 'Maker Plant',
-      specValue: 'Product W: Advanced Material',
-      history: '初始数据',
-      isNew: false,
-    },
-    {
-      id: 13,
-      source: '',
-      name: 'Maker Lot No.',
-      previousName: '',
-      specValue: '',
-      history: '新增数据',
-      isNew: true,
-    },
-    {
-      id: 14,
-      source: '',
-      name: 'Maker Date Code',
-      previousName: '',
-      specValue: '',
-      history: '新增数据',
-      isNew: true,
-    },
-    {
-      id: 15,
-      source: '',
-      name: 'Maker Expiry Date',
-      previousName: '',
-      specValue: '',
-      history: '新增数据',
-      isNew: true,
-    },
-  ],
-
-  paramsTableData: [
-    {
-      id: 1,
-      parameter: 'Temperature',
-      unit: '°C',
-      uslType: '≤',
-      uslValue: '100',
-      lslType: '≥',
-      lslValue: '20',
-      ucl: '90',
-      lcl: '30',
-      uwl: '80',
-      lwl: '40',
-      target: '60',
-      cl: '50',
-      mdl: '0.1',
-      spcRuleStdev: '3',
-      variablesAttributesData: '计量型',
-      rules: ['OOMDL', 'WE1', 'WE2'],
-      reviewCycle: '按批次',
+      item: 'Others',
+      isProvideData: 'Y',
+      remark: '默认备注',
+      provideData: [
+        {
+          id: '9abe798b',
+          name: '测试默认数据.pdf',
+          percentage: 100,
+          status: 'finished',
+          url: null,
+          file: {},
+          thumbnailUrl: null,
+          type: 'application/pdf',
+          fullPath: '/测试默认数据.pdf',
+          batchId: '0fe23964',
+        },
+      ],
+      evaluationConclusionProvided: 'Pass',
+      evaluationConclusionNotProvided: '0',
+      riskDescription: '默认风险描述',
     },
   ],
 }
@@ -314,8 +280,7 @@ const formDataValue = {
 const formData = ref(id ? { ...formDataValue } : null)
 
 const basicInfoRef = ref(null)
-const setInfoRef = ref(null)
-const specInfoRef = ref(null)
+const batchInfoRef = ref(null)
 
 // 消息提示
 const message = useMessage()
@@ -324,8 +289,7 @@ const onSubmit = async () => {
   // 收集所有表单引用
   const formRefs = {
     basicInfoRef,
-    setInfoRef,
-    specInfoRef,
+    batchInfoRef,
   }
 
   // 保存所有验证结果
@@ -368,8 +332,7 @@ const onSubmit = async () => {
     // ref名称到标题的映射
     const refToTitleMap = {
       basicInfoRef: '基本信息',
-      setInfoRef: '设置信息',
-      specInfoRef: 'Spec Data',
+      batchInfoRef: '评估数据',
     }
 
     // 找出验证失败的表单并转换为对应的标题

@@ -6,16 +6,6 @@
     :readonly="readonly"
     @field-change="handleFieldChange"
   >
-    <template #tableData="{ field }">
-      <n-space vertical class="w-full">
-        <n-data-table v-bind="field.props"> </n-data-table>
-        <div class="flex justify-end mt-2">
-          <n-button type="primary" @click="handleAddRow" v-if="!readonly">
-            添加
-          </n-button>
-        </div>
-      </n-space>
-    </template>
   </custom-form>
 </template>
 
@@ -35,25 +25,25 @@ const props = defineProps({
   },
 })
 const message = useMessage()
+const route = useRoute()
 
 // 表单数据
 const formData = ref({
-  tableData: [
-    {
-      id: 1,
-      sequenceNo: null,
-      materialType: null,
-      materialDesc: null,
-      materialName: null,
-      supplierCode: null,
-      supplierName: null,
-      supplierAttribute: null,
-      manufacturerName: null,
-      brandOwner: null,
-      manufacturerCountry: null,
-      detailedAddress: null,
-    },
-  ],
+  coaTemplateNo: null,
+  materialType: route.query.materialType,
+  materialName: null,
+  materialNo: route.query.materialNumber,
+  materialDescription: null,
+  g1DocSpecNo: null,
+  g1DocSpecVersion: null,
+  g2DocSpecNo: null,
+  g2DocSpecVersion: null,
+  coaVersion: null,
+  materialTemplateVersion: null,
+  materialTemplateNo: null,
+  pushToVendor: null,
+  documentFormat: [],
+  scope: [],
 })
 
 watch(
@@ -72,376 +62,211 @@ watch(
   { deep: true, immediate: true }
 )
 
-// 物料类型选项
+// 选项数据
 const materialTypeOptions = [
-  { label: '类型1', value: 'type1' },
-  { label: '类型2', value: 'type2' },
-  { label: '类型3', value: 'type3' },
+  { label: '类型1', value: '类型1' },
+  { label: '类型2', value: '类型2' },
 ]
 
-// 供应商属性选项
-const supplierAttributeOptions = [
-  { label: '属性1', value: 'attr1' },
-  { label: '属性2', value: 'attr2' },
-  { label: '属性3', value: 'attr3' },
+const pushToVendorOptions = [
+  { label: '是', value: 'Y' },
+  { label: '否', value: 'N' },
 ]
 
-// 生产商国家/地区选项
-const countryOptions = [
-  { label: '中国', value: 'CN' },
-  { label: '美国', value: 'US' },
-  { label: '日本', value: 'JP' },
+const documentFormatOptions = [
+  { label: 'TXT', value: 'TXT' },
+  { label: 'XSL', value: 'XSL' },
+  { label: 'CSV', value: 'CSV' },
+  { label: 'XML', value: 'XML' },
+  { label: 'PDF', value: 'PDF' },
 ]
 
-// 表格列定义（使用 JSX）
-const columns = [
-  {
-    title: '序号',
-    key: 'sequenceNo',
-    align: 'center',
-    width: 80,
-    render: (row, index) => index + 1,
-  },
-  {
-    title: () => (
-      <div>
-        <span class="text-red-500">*</span>
-        <span>物料类型</span>
-      </div>
-    ),
-    key: 'materialType',
-    align: 'center',
-    width: 120,
-    render: (row, index) => (
-      <NFormItem
-        path={`tableData[${index}].materialType`}
-        rule={{
-          required: true,
-          message: '请选择物料类型',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NSelect
-          value={row.materialType}
-          onUpdateValue={(value) => {
-            row.materialType = value
-          }}
-          options={materialTypeOptions}
-          placeholder="请选择"
-        />
-      </NFormItem>
-    ),
-  },
-  {
-    title: () => (
-      <div>
-        <span class="text-red-500">*</span>
-        <span>物料描述</span>
-      </div>
-    ),
-    key: 'materialDesc',
-    align: 'center',
-    width: 150,
-    render: (row, index) => (
-      <NFormItem
-        path={`tableData[${index}].materialDesc`}
-        rule={{
-          required: true,
-          message: '请输入物料描述',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NInput
-          value={row.materialDesc}
-          onUpdateValue={(value) => {
-            row.materialDesc = value
-          }}
-          placeholder="请输入"
-        />
-      </NFormItem>
-    ),
-  },
-  {
-    title: () => (
-      <div>
-        <span class="text-red-500">*</span>
-        <span>物料名称</span>
-      </div>
-    ),
-    key: 'materialName',
-    align: 'center',
-    width: 150,
-    render: (row, index) => (
-      <NFormItem
-        path={`tableData[${index}].materialName`}
-        rule={{
-          required: true,
-          message: '请输入物料名称',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NInput
-          value={row.materialName}
-          onUpdateValue={(value) => {
-            row.materialName = value
-          }}
-          placeholder="请输入"
-        />
-      </NFormItem>
-    ),
-  },
-  {
-    title: () => (
-      <div>
-        <span class="text-red-500">*</span>
-        <span>供应商编码</span>
-      </div>
-    ),
-    key: 'supplierCode',
-    align: 'center',
-    width: 120,
-    render: (row, index) => (
-      <NFormItem
-        path={`tableData[${index}].supplierCode`}
-        rule={{
-          required: true,
-          message: '请输入供应商编码',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NInput
-          value={row.supplierCode}
-          onUpdateValue={(value) => {
-            row.supplierCode = value
-          }}
-          placeholder="请输入"
-        />
-      </NFormItem>
-    ),
-  },
-  {
-    title: () => (
-      <div>
-        <span class="text-red-500">*</span>
-        <span>供应商名称</span>
-      </div>
-    ),
-    key: 'supplierName',
-    align: 'center',
-    width: 150,
-    render: (row, index) => (
-      <NFormItem
-        path={`tableData[${index}].supplierName`}
-        rule={{
-          required: true,
-          message: '请输入供应商名称',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NInput
-          value={row.supplierName}
-          onUpdateValue={(value) => {
-            row.supplierName = value
-          }}
-          placeholder="请输入"
-        />
-      </NFormItem>
-    ),
-  },
-  {
-    title: () => (
-      <div>
-        <span class="text-red-500">*</span>
-        <span>供应商属性</span>
-      </div>
-    ),
-    key: 'supplierAttribute',
-    align: 'center',
-    width: 120,
-    render: (row, index) => (
-      <NFormItem
-        path={`tableData[${index}].supplierAttribute`}
-        rule={{
-          required: true,
-          message: '请选择供应商属性',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NSelect
-          value={row.supplierAttribute}
-          onUpdateValue={(value) => {
-            row.supplierAttribute = value
-          }}
-          options={supplierAttributeOptions}
-          placeholder="请选择"
-        />
-      </NFormItem>
-    ),
-  },
-  {
-    title: () => (
-      <div>
-        <span class="text-red-500">*</span>
-        <span>生产商名称</span>
-      </div>
-    ),
-    key: 'manufacturerName',
-    align: 'center',
-    width: 150,
-    render: (row, index) => (
-      <NFormItem
-        path={`tableData[${index}].manufacturerName`}
-        rule={{
-          required: true,
-          message: '请输入生产商名称',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NInput
-          value={row.manufacturerName}
-          onUpdateValue={(value) => {
-            row.manufacturerName = value
-          }}
-          placeholder="请输入"
-        />
-      </NFormItem>
-    ),
-  },
-  {
-    title: () => (
-      <div>
-        <span class="text-red-500">*</span>
-        <span>品牌商</span>
-      </div>
-    ),
-    key: 'brandOwner',
-    align: 'center',
-    width: 120,
-    render: (row, index) => (
-      <NFormItem
-        path={`tableData[${index}].brandOwner`}
-        rule={{
-          required: true,
-          message: '请输入品牌商',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NInput
-          value={row.brandOwner}
-          onUpdateValue={(value) => {
-            row.brandOwner = value
-          }}
-          placeholder="请输入"
-        />
-      </NFormItem>
-    ),
-  },
-  {
-    title: () => (
-      <div>
-        <span class="text-red-500">*</span>
-        <span>生产商国家/地区</span>
-      </div>
-    ),
-    key: 'manufacturerCountry',
-    align: 'center',
-    width: 150,
-    render: (row, index) => (
-      <NFormItem
-        path={`tableData[${index}].manufacturerCountry`}
-        rule={{
-          required: true,
-          message: '请选择生产商国家/地区',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NSelect
-          value={row.manufacturerCountry}
-          onUpdateValue={(value) => {
-            row.manufacturerCountry = value
-          }}
-          options={countryOptions}
-          placeholder="请选择"
-        />
-      </NFormItem>
-    ),
-  },
-  {
-    title: () => (
-      <div>
-        <span class="text-red-500">*</span>
-        <span>详细地址</span>
-      </div>
-    ),
-    key: 'detailedAddress',
-    align: 'center',
-    width: 200,
-    render: (row, index) => (
-      <NFormItem
-        path={`tableData[${index}].detailedAddress`}
-        rule={{
-          required: true,
-          message: '请输入详细地址',
-          trigger: ['blur', 'change'],
-        }}
-      >
-        <NInput
-          type="textarea"
-          autosize={true}
-          value={row.detailedAddress}
-          onUpdateValue={(value) => {
-            row.detailedAddress = value
-          }}
-          placeholder="请输入"
-        />
-      </NFormItem>
-    ),
-  },
-  {
-    title: '操作',
-    align: 'center',
-    width: 80,
-    key: 'action',
-    render: (row, index) => (
-      <NPopconfirm
-        onPositiveClick={() => formData.value.tableData.splice(index, 1)}
-      >
-        {{
-          trigger: () =>
-            !props.readonly ? (
-              <NButton type="error" size="small">
-                删除
-              </NButton>
-            ) : (
-              <div></div>
-            ),
-          default: () => '确定删除吗？',
-        }}
-      </NPopconfirm>
-    ),
-  },
+const scopeOptions = [
+  { label: '磐石', value: 'G1' },
+  { label: '司南', value: 'G2' },
 ]
 
 // 表单字段配置
 const formFields = ref([
   {
-    key: 'tableData',
-    label: '',
-    type: 'table',
-    dataKey: 'tableData', // 指定表格数据在 formModel 中的键
+    key: 'coaTemplateNo',
+    label: 'COA模版编号',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
     props: {
-      bordered: true,
-      singleLine: false,
-      data: computed(() => formData.value.tableData),
-      columns: computed(() =>
-        !props.readonly
-          ? columns
-          : columns.filter((item) => item.key !== 'action')
-      ), // 表格列定义
-      rowKey: (row) => row.id, // 表格行主键
+      placeholder: '请输入',
+      clearable: true,
     },
     listenChange: true,
-    span: '3 m:3 l:3 xl:3',
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'materialType',
+    label: '物料类型',
+    type: 'select',
+    rules: [{ required: true, message: '请选择', trigger: ['blur', 'change'] }],
+    props: {
+      options: materialTypeOptions,
+      placeholder: '请选择',
+      clearable: true,
+      disabled: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'materialName',
+    label: '物料名称',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'materialNo',
+    label: '料号',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入',
+      clearable: true,
+      disabled: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'materialDescription',
+    label: '物料描述',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g1DocSpecNo',
+    label: '磐石Document Spec No.',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g1DocSpecVersion',
+    label: '磐石Document Spec Version',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g2DocSpecNo',
+    label: '司南Document Spec No.',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'g2DocSpecVersion',
+    label: '司南Document Spec Version',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'coaVersion',
+    label: 'COA版本号',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'materialTemplateVersion',
+    label: '物料模版版本号',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'materialTemplateNo',
+    label: '物料模版编号',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      placeholder: '请输入',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'pushToVendor',
+    label: '推送供应商',
+    type: 'radio',
+    rules: [{ required: true, message: '请选择', trigger: ['blur', 'change'] }],
+    props: {
+      options: pushToVendorOptions,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'documentFormat',
+    label: '文档格式',
+    type: 'checkbox',
+    rules: [{ required: true, message: '请选择', trigger: ['blur', 'change'] }],
+    props: {
+      options: documentFormatOptions,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'scope',
+    label: '适用范围',
+    type: 'checkbox',
+    rules: [{ required: true, message: '请选择', trigger: ['blur', 'change'] }],
+    props: {
+      options: scopeOptions,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
   },
 ])
 
@@ -450,22 +275,6 @@ const formRef = ref(null)
 const handleFieldChange = ({ key, value }) => {
   console.log(`插槽化 - 字段变更: ${key} =`, value)
   formData.value[key] = value
-}
-
-const handleAddRow = () => {
-  formData.value.tableData.push({
-    id: Date.now(),
-    sequenceNo: formData.value.tableData.length + 1,
-    materialType: 'type1',
-    materialDesc: '默认物料描述',
-    materialName: '默认物料名称',
-    supplierCode: 'SUP001',
-    supplierName: '默认供应商',
-    manufacturerName: '默认生产商',
-    brandOwner: '默认品牌商',
-    manufacturerCountry: 'CN',
-    detailedAddress: '默认详细地址',
-  })
 }
 
 const validateForm = () => {

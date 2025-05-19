@@ -18,6 +18,31 @@ export default [
     },
     children: [
       {
+        path: 'create',
+        name: 'SLED申请创建',
+        component: () => import('@/views/sled/form/create.vue'),
+        meta: {
+          title: '申请创建',
+          show: true,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'SLED',
+        },
+      },
+      {
+        path: 'form',
+        name: 'SLED表单创建',
+        component: () => import('@/views/sled/form/index.vue'),
+        meta: {
+          title: 'SLED表单创建',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'SLED',
+          activeMenu: '/pages/sled/create',
+        },
+      },
+      {
         path: 'todo',
         name: 'SLED审批列表',
         component: () => import('@/views/approval/todo.vue'),

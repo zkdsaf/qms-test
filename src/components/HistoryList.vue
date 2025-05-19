@@ -26,7 +26,9 @@ const generateRandomData = () => {
     '今天天气不错，适合出去玩',
   ]
 
-  return Array.from({ length: 10 }, (_, index) => ({
+  const length = Math.floor(Math.random() * 10) + 1
+
+  return Array.from({ length }, (_, index) => ({
     key: index + 1,
     node: nodes[Math.floor(Math.random() * nodes.length)],
     name: names[Math.floor(Math.random() * names.length)],

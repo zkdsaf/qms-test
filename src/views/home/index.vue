@@ -1,10 +1,13 @@
 <template>
-  <n-layout class="min-h-screen">
+  <n-layout class="min-h-screen" position="absolute">
     <!-- 使用Header组件 -->
     <Header />
 
     <!-- 首页内容 -->
-    <n-layout-content class="p-4">
+    <n-layout-content
+      class="p-2 min-h-[calc(100vh-64px)] h-[calc(100vh-64px)]"
+      :native-scrollbar="false"
+    >
       <n-grid
         :cols="10"
         :x-gap="16"
@@ -14,7 +17,7 @@
       >
         <!-- 左侧内容，占18格 -->
         <n-gi span="10 m:8 l:8">
-          <div class="bg-gray-50 p-4 rounded">
+          <div class="bg-gray-50 p-2 rounded">
             <!-- 轮播图 -->
             <n-carousel
               direction="vertical"
@@ -35,7 +38,7 @@
               <div class="flex space-x-4">
                 <!-- 子div 1 -->
                 <div
-                  class="w-full md:flex-1 bg-white p-4 rounded-lg shadow flex flex-col md:flex-row"
+                  class="w-full md:flex-1 bg-white p-2 rounded-lg shadow flex flex-col md:flex-row"
                 >
                   <!-- 左侧：上下两部分 -->
                   <div
@@ -56,7 +59,7 @@
                 </div>
                 <!-- 子div 2 -->
                 <div
-                  class="w-full md:flex-1 bg-white p-4 rounded-lg shadow flex flex-col md:flex-row"
+                  class="w-full md:flex-1 bg-white p-2 rounded-lg shadow flex flex-col md:flex-row"
                 >
                   <!-- 左侧：上下两部分 -->
                   <div
@@ -77,7 +80,7 @@
                 </div>
                 <!-- 子div 3 -->
                 <div
-                  class="w-full md:flex-1 bg-white p-4 rounded-lg shadow flex flex-col md:flex-row"
+                  class="w-full md:flex-1 bg-white p-2 rounded-lg shadow flex flex-col md:flex-row"
                 >
                   <!-- 左侧：上下两部分 -->
                   <div
@@ -152,7 +155,7 @@
         <!-- 右侧内容，占6格 -->
         <n-gi span="10 m:2 l:2">
           <!-- 快捷操作 -->
-          <div class="bg-gray-50 p-4 rounded">
+          <div class="bg-gray-50 p-2 rounded">
             <n-card title="快捷操作" class="rounded">
               <template #header-extra>
                 <div
@@ -486,6 +489,9 @@ const helpList = shallowRef([
   },
   {
     title: 'SPEC用户操作手册',
+  },
+  {
+    title: 'SLED用户操作手册',
   },
 ])
 

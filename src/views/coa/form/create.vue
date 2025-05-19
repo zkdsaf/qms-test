@@ -15,7 +15,7 @@
               <n-button
                 type="primary"
                 size="small"
-                @click="goToForm(item.path)"
+                @click="goToForm(item.path, item.title)"
               >
                 创建表单
               </n-button>
@@ -24,6 +24,28 @@
         </n-gi>
       </n-grid>
     </div>
+    <n-modal
+      v-model:show="showModal"
+      draggable
+      positive-text="确认"
+      negative-text="算了"
+      @positive-click="submitForm"
+      @negative-click="showModal = false"
+      preset="dialog"
+      title="新建COA模版"
+    >
+      <n-form :model="formData" :rules="rules" ref="formRef">
+        <n-form-item label="物料类型" path="materialType">
+          <n-select
+            v-model:value="formData.materialType"
+            :options="materialTypes"
+          />
+        </n-form-item>
+        <n-form-item label="物料编号" path="materialNumber">
+          <n-input v-model:value="formData.materialNumber" />
+        </n-form-item>
+      </n-form>
+    </n-modal>
   </n-card>
 </template>
 
@@ -72,12 +94,57 @@ const list = shallowRef([
 
 // 路由跳转
 const router = useRouter()
-const goToForm = (path) => {
-  if (!path) {
+const goToForm = (path, title) => {
+  if (title === '新建COA模版') {
+    showModal.value = true
+  } else if (!path) {
     message.info('暂未开发，敬请期待')
-    return
+  } else {
+    router.push(path)
   }
-  router.push(path)
+}
+
+// 弹窗相关
+const showModal = ref(false)
+const formData = ref({
+  materialType: null,
+  materialNumber: '',
+})
+const materialTypes = [
+  { label: '类型1', value: '类型1' },
+  { label: '类型2', value: '类型2' },
+]
+const rules = {
+  materialType: {
+    required: true,
+    message: '请选择物料类型',
+    trigger: ['change'],
+  },
+  materialNumber: {
+    required: true,
+    message: '请输入物料编号',
+    trigger: ['blur', 'input'],
+  },
+}
+const formRef = ref(null)
+
+const submitForm = async () => {
+  // 1. 将函数声明为 async
+  try {
+    await formRef.value.validate() // 2. await 校验结果
+    // 处理表单提交
+    router.push({
+      path: '/pages/coa/form',
+      query: {
+        ...formData.value,
+      },
+    })
+    showModal.value = false
+    return true //
+  } catch (errors) {
+    message.error('校验未通过，请检查表单项')
+    return false // 3. 校验失败，返回 false 阻止弹窗关闭
+  }
 }
 </script>
 

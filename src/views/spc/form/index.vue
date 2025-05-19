@@ -25,7 +25,7 @@
           <n-collapse :default-expanded-names="['2']">
             <n-collapse-item name="2">
               <template #header>
-                <h2 class="text-lg font-bold">批次信息</h2>
+                <h2 class="text-lg font-bold">Control Plan更新信息</h2>
               </template>
 
               <FormBatchInfo
