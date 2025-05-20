@@ -113,7 +113,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 // 表单信息
 const formHeaderInfo = {
-  title: 'Maker Code(无料号)申请单',
+  title: 'COA Template',
   applicationId: 'APP-2025-001',
   applicationTime: '2025-04-30 10:00',
   applicant: '张三',

@@ -197,7 +197,7 @@ const formDataValue = {
       id: '9abe798b',
       name: '前端开发规范.pdf',
       percentage: 100,
-      status: 'error',
+      status: 'finished',
       url: null,
       file: {},
       thumbnailUrl: null,

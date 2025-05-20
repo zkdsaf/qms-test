@@ -142,7 +142,7 @@ const formDataValue = {
       id: 'a8ba7dad',
       name: 'Snipaste_2023-05-06_10-28-31.jpg',
       percentage: 100,
-      status: 'error',
+      status: 'finished',
       url: null,
       file: {},
       thumbnailUrl: null,

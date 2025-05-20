@@ -12,6 +12,7 @@
         @change="handleFileChange('file', $event)"
         :value="formData.file"
         :disabled="readonly"
+        show-download-button
       >
         <n-icon
           :component="CloudUploadOutline"

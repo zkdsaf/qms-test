@@ -11,6 +11,7 @@
         v-bind="field.props"
         :value="formData.vendorFileList"
         :disabled="readonly"
+        show-download-button
       >
         <n-icon
           :component="CloudUploadOutline"

@@ -358,7 +358,7 @@ const formDataValue = {
       id: 'dc59425b',
       name: '1156263.png',
       percentage: 0,
-      status: 'error',
+      status: 'finished',
       url: null,
       file: {},
       thumbnailUrl: null,

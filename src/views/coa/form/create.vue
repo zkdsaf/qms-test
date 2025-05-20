@@ -26,13 +26,11 @@
     </div>
     <n-modal
       v-model:show="showModal"
-      draggable
-      positive-text="确认"
-      negative-text="算了"
       @positive-click="submitForm"
       @negative-click="showModal = false"
-      preset="dialog"
       title="新建COA模版"
+      v-bind="modalProps"
+      :style="{ width: '600px' }"
     >
       <n-form :model="formData" :rules="rules" ref="formRef">
         <n-form-item label="物料类型" path="materialType">
@@ -45,6 +43,24 @@
           <n-input v-model:value="formData.materialNumber" />
         </n-form-item>
       </n-form>
+    </n-modal>
+    <n-modal
+      v-model:show="showDownloadModal"
+      @positive-click="handleDownloadConfirm"
+      @negative-click="showDownloadModal = false"
+      title="下载COA信息"
+      v-bind="modalProps"
+    >
+      <DownloadCoaModal ref="downloadCoaModalRef" />
+    </n-modal>
+    <n-modal
+      v-model:show="showCancelModal"
+      @positive-click="handleCancelConfirm"
+      @negative-click="showCancelModal = false"
+      title="作废上传信息"
+      v-bind="modalProps"
+    >
+      <CancelUploadModal ref="cancelUploadModalRef" />
     </n-modal>
   </n-card>
 </template>
@@ -59,6 +75,8 @@ import {
 } from '@vicons/ionicons5'
 import { EditOutlined, DeleteOutlined } from '@vicons/antd'
 import { useMessage } from 'naive-ui'
+import CancelUploadModal from '@/views/coa/component/CancelUploadModal.vue'
+import DownloadCoaModal from '@/views/coa/component/DownloadCoaModal.vue'
 const message = useMessage()
 // 列表数据
 const list = shallowRef([
@@ -75,6 +93,7 @@ const list = shallowRef([
     icon: CloudUploadOutline,
     description: '(上传COA数据)',
     bgColor: 'bg-green-100',
+    path: '/pages/coa/infoUpload',
   },
   {
     id: 1,
@@ -92,20 +111,18 @@ const list = shallowRef([
   },
 ])
 
+const modalProps = {
+  draggable: true,
+  positiveText: '确认',
+  negativeText: '算了',
+  preset: 'dialog',
+  style: { width: '1200px' },
+}
 // 路由跳转
 const router = useRouter()
-const goToForm = (path, title) => {
-  if (title === '新建COA模版') {
-    showModal.value = true
-  } else if (!path) {
-    message.info('暂未开发，敬请期待')
-  } else {
-    router.push(path)
-  }
-}
-
-// 弹窗相关
 const showModal = ref(false)
+const showDownloadModal = ref(false)
+const showCancelModal = ref(false)
 const formData = ref({
   materialType: null,
   materialNumber: '',
@@ -128,11 +145,52 @@ const rules = {
 }
 const formRef = ref(null)
 
+const cancelUploadModalRef = ref(null)
+const handleCancelConfirm = () => {
+  const selected = cancelUploadModalRef.value?.getSelectedRows?.() || []
+  if (!selected.length) {
+    message.warning('请至少选择一条作废记录')
+    return false
+  }
+  showCancelModal.value = false
+  // 继续处理逻辑
+  router.push({
+    path: '/pages/coa/infoCancel',
+  })
+}
+
+const downloadCoaModalRef = ref(null)
+const handleDownloadConfirm = () => {
+  const selected = downloadCoaModalRef.value?.getSelectedRows?.() || []
+  if (!selected.length) {
+    message.warning('请至少选择一条下载记录')
+    return false
+  }
+  showDownloadModal.value = false
+  // 继续处理逻辑
+  router.push({
+    path: '/pages/coa/infoDownload',
+    query: { dataLength: selected.length },
+  })
+}
+
+const goToForm = (path, title) => {
+  if (title === '新建COA模版') {
+    showModal.value = true
+  } else if (title === '下载COA信息') {
+    showDownloadModal.value = true
+  } else if (title === '作废上传信息') {
+    showCancelModal.value = true
+  } else if (!path) {
+    message.info('暂未开发，敬请期待')
+  } else {
+    router.push(path)
+  }
+}
+
 const submitForm = async () => {
-  // 1. 将函数声明为 async
   try {
-    await formRef.value.validate() // 2. await 校验结果
-    // 处理表单提交
+    await formRef.value.validate()
     router.push({
       path: '/pages/coa/form',
       query: {
@@ -140,10 +198,10 @@ const submitForm = async () => {
       },
     })
     showModal.value = false
-    return true //
+    return true
   } catch (errors) {
     message.error('校验未通过，请检查表单项')
-    return false // 3. 校验失败，返回 false 阻止弹窗关闭
+    return false
   }
 }
 </script>

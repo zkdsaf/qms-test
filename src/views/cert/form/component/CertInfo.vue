@@ -43,7 +43,13 @@
             <n-form-item label="认证有效期">{{ item.expireDate }}</n-form-item>
           </n-grid-item>
           <n-grid-item span="3 m:1 l:1">
-            <n-form-item label="证书原档">{{ item.certFile }}</n-form-item>
+            <n-form-item label="证书原档">
+              <span
+                class="cursor-pointer text-blue-500"
+                @click="message.info('下载证书原档' + item.certFile)"
+                >{{ item.certFile }}</span
+              >
+            </n-form-item>
           </n-grid-item>
           <n-grid-item span="3 m:1 l:1">
             <n-form-item label="证书有效证明">{{ item.certProof }}</n-form-item>

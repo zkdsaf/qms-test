@@ -256,7 +256,7 @@ const piRunTableColumns = [
     ),
     key: 'fileList',
     align: 'center',
-    width: 200,
+    width: 220,
     render: (row, index) => (
       <NFormItem
         path={`piRunTableData[${index}].fileList`}
@@ -278,6 +278,7 @@ const piRunTableColumns = [
           }}
           multiple
           max={5}
+          show-download-button
         >
           <NButton>上传文件</NButton>
         </NUpload>

@@ -9,6 +9,7 @@
       striped
       @update:sorter="handleSorter"
       @update:filters="handleFilters"
+      :maxHeight="maxHeight"
       v-bind="$attrs"
     >
       <!-- 支持插槽 -->
@@ -43,6 +44,10 @@ const props = defineProps({
   filterValues: {
     type: Object,
     default: () => ({}),
+  },
+  maxHeight: {
+    type: Number,
+    default: 600,
   },
 })
 

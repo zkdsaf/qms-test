@@ -1,5 +1,5 @@
 <template>
-  <n-layout class="min-h-screen">
+  <n-layout class="min-h-screen" position="absolute">
     <Header />
     <!--方法1： 添加:key="route.fullPath"防止组件复用 侧边了不会选中展开 -->
     <!--方法2： 在Sidebar.vue中添加menuInstRef.value?.showOption(newPath)-->
