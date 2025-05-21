@@ -175,7 +175,7 @@
                 >
                   <!-- 上部：蓝色背景 + 图标 -->
                   <div
-                    class="rounded w-14 h-14 bg-blue-500 flex items-center justify-center"
+                    class="rounded w-16 h-16 bg-blue-500 flex items-center justify-center"
                   >
                     <n-icon
                       :component="action.icon"
@@ -185,7 +185,7 @@
                   </div>
                   <!-- 下部：汉字 -->
                   <div
-                    class="whitespace-nowrap text-center text-ellipsis overflow-hidden w-14"
+                    class="whitespace-nowrap text-center text-ellipsis overflow-hidden w-16"
                   >
                     <n-tooltip trigger="hover">
                       <template #trigger>
@@ -490,9 +490,6 @@ const helpList = shallowRef([
   {
     title: 'SPEC用户操作手册',
   },
-  {
-    title: 'SLED用户操作手册',
-  },
 ])
 
 const downFile = (item) => {
@@ -530,11 +527,6 @@ const placardList = shallowRef([
     content: '故障通知、数据异常、停机维护等紧急信息',
     type: 'error',
     title: '紧急公告',
-  },
-  {
-    content: '功能上线、版本更新说明等',
-    type: 'info',
-    title: '更新公告',
   },
 ])
 

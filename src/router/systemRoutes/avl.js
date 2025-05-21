@@ -18,6 +18,71 @@ export default [
     },
     children: [
       {
+        path: 'editForm',
+        name: 'AVL修订',
+        component: () => import('@/views/avl/editForm/index.vue'),
+        meta: {
+          title: 'AVL修订',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'AVL',
+          activeMenu: '/pages/avl/vendorData',
+        },
+      },
+      {
+        path: 'muchEditForm',
+        name: 'AVL多物料修订',
+        component: () => import('@/views/avl/editForm/muchEdit.vue'),
+        meta: {
+          title: 'AVL多物料修订',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'AVL',
+          activeMenu: '/pages/avl/vendorData',
+        },
+      },
+      {
+        path: 'frozen',
+        name: 'AVL冻结/取消资格',
+        component: () => import('@/views/avl/form/frozen.vue'),
+        meta: {
+          title: 'AVL冻结/取消资格',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'AVL',
+          activeMenu: '/pages/avl/vendorData',
+        },
+      },
+      {
+        path: 'unFrozen',
+        name: 'AVL解冻/重获资格',
+        component: () => import('@/views/avl/form/unFrozen.vue'),
+        meta: {
+          title: 'AVL解冻/重获资格',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'AVL',
+          activeMenu: '/pages/avl/vendorData',
+        },
+      },
+      {
+        path: 'muchFrozen',
+        name: 'AVL多物料冻结/多物料取消资格',
+        component: () => import('@/views/avl/form/muchFrozen.vue'),
+        meta: {
+          title: 'AVL多物料冻结/多物料取消资格',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'AVL',
+          activeMenu: '/pages/avl/vendorData',
+        },
+      },
+      {
         path: 'todo',
         name: 'AVL审批列表',
         component: () => import('@/views/approval/todo.vue'),
@@ -68,7 +133,7 @@ export default [
     ],
   },
   {
-    path: 'vendorData',
+    path: 'avl/vendorData',
     name: 'AVL供应商资源池',
     component: () => import('@/views/avl/find/vendorData.vue'),
     meta: {

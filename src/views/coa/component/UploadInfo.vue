@@ -1,11 +1,9 @@
 <template>
-  <n-card size="small" title="COA信息上传" class="min-h-[calc(100vh-72px)]">
+  <n-card title="COA信息上传" class="min-h-[calc(100vh-72px)]">
     <template #header-extra>
       <n-space justify="end">
-        <n-button type="primary" size="small" @click="handleSubmit"
-          >提交</n-button
-        >
-        <n-button size="small" @click="router.go(-1)">返回</n-button>
+        <n-button type="primary" @click="handleSubmit">提交</n-button>
+        <n-button @click="router.go(-1)">返回</n-button>
       </n-space>
     </template>
     <n-form
@@ -69,7 +67,13 @@ const rules = {
 
 const columns = [
   { title: '文档格式', key: 'format', align: 'center', width: 180 },
-  { title: '上传状态', key: 'status', align: 'center', width: 100 },
+  {
+    title: '上传状态',
+    key: 'status',
+    align: 'center',
+    width: 100,
+    render: (row) => row.status && <NTag type="success">{row.status}</NTag>,
+  },
   {
     title: '上传文档',
     key: 'document',
@@ -99,6 +103,7 @@ const columns = [
                 <DeleteOutlined
                   onClick={() => {
                     row.document.splice(index, 1)
+                    row.status = null
                   }}
                 />
               </NIcon>
@@ -164,6 +169,7 @@ const columns = [
           file-list={[]}
           onChange={(value) => {
             row.document = value.fileList || []
+            row.status = '成功'
             formRef.value?.validate(
               (errors) => {
                 if (errors) {
