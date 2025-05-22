@@ -12,11 +12,7 @@
                 {{ item.title }}
               </h2>
               <p class="text-gray-600 my-2">{{ item.description }}</p>
-              <n-button
-                type="primary"
-                size="small"
-                @click="goToForm(item.path)"
-              >
+              <n-button type="primary" size="small" @click="goToForm(item)">
                 创建表单
               </n-button>
             </div>
@@ -24,11 +20,32 @@
         </n-gi>
       </n-grid>
     </div>
+    <n-modal
+      v-model:show="showModal"
+      @positive-click="handleConfirm"
+      @negative-click="showModal = false"
+      title="请选择"
+      v-bind="modalProps"
+    >
+      <MakerInfoModal ref="makerInfoModalRef" />
+    </n-modal>
+
+    <n-modal
+      v-model:show="showCancelModal"
+      @positive-click="handleCancelConfirm"
+      @negative-click="showCancelModal = false"
+      title="请选择"
+      v-bind="modalProps"
+    >
+      <CancelMakerModal />
+    </n-modal>
   </n-card>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+import MakerInfoModal from '../component/MakerInfoModal.vue'
+import CancelMakerModal from '../component/CancelMakerModal.vue'
 import {
   CreateOutline,
   CloudUploadOutline,
@@ -36,7 +53,46 @@ import {
 } from '@vicons/ionicons5'
 import { EditOutlined, DeleteOutlined } from '@vicons/antd'
 import { useMessage } from 'naive-ui'
+import { ref } from 'vue'
+
+const router = useRouter()
+
 const message = useMessage()
+
+const modalProps = {
+  draggable: true,
+  positiveText: '确认',
+  negativeText: '算了',
+  preset: 'dialog',
+  style: { width: '1200px' },
+}
+
+const showModal = ref(false)
+const makerInfoModalRef = ref(null)
+
+const showCancelModal = ref(false)
+
+const currentTitle = ref('')
+
+const handleConfirm = () => {
+  const selected = makerInfoModalRef.value?.getSelectedRows?.() || []
+  if (!selected.length) {
+    message.warning('请至少选择一条数据')
+    return false
+  }
+  showModal.value = false
+  router.push({
+    path: '/pages/maker/form',
+    query: {
+      formType: currentTitle.value === '修订Maker Code' ? 'edit' : 'add',
+      id: Math.random(),
+    },
+  })
+}
+
+const handleCancelConfirm = () => {
+  showCancelModal.value = false
+}
 // 列表数据
 const list = shallowRef([
   {
@@ -45,6 +101,7 @@ const list = shallowRef([
     icon: CloudUploadOutline,
     description: '(Maker Code导入)',
     bgColor: 'bg-blue-100',
+    path: '/pages/maker/uploadInfo',
   },
   {
     id: 1,
@@ -78,13 +135,23 @@ const list = shallowRef([
 ])
 
 // 路由跳转
-const router = useRouter()
-const goToForm = (path) => {
-  if (!path) {
+const goToForm = (item) => {
+  currentTitle.value = item.title
+  if (item.title === 'Maker Code新增料号' || item.title === '修订Maker Code') {
+    showModal.value = true
+    return
+  }
+
+  if (item.title === 'Maker Code废除') {
+    showCancelModal.value = true
+    return
+  }
+
+  if (!item.path) {
     message.info('暂未开发，敬请期待')
     return
   }
-  router.push(path)
+  router.push(item.path)
 }
 </script>
 

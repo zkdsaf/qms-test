@@ -7,19 +7,6 @@
     @field-change="handleFieldChange"
     :label-width="155"
   >
-    <template #labelTags="{ field }">
-      <n-space>
-        <n-tag
-          :closable="!readonly"
-          v-for="tag in field.props.tagsList"
-          :key="tag"
-          :type="tag.type"
-          @close="message.warning('删除标签')"
-        >
-          {{ tag.label }}
-        </n-tag>
-      </n-space>
-    </template>
   </custom-form>
 </template>
 
@@ -37,12 +24,18 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  materialType: {
+    type: String,
+    default: '',
+  },
 })
 const message = useMessage()
 
 // 表单数据
 const formData = ref({
-  labelPosition: null, // 用途
+  polysilicon: null, // 多晶硅
+  backTreatment: null, // 背面处理方式
+  oxideSealing: null, // 氧化物密封
 })
 
 watch(
@@ -61,92 +54,73 @@ watch(
   { deep: true, immediate: true }
 )
 
+// 到厂/到港选项
+const arrivalTypeOptions = [
+  { label: '到厂', value: 'factory' },
+  { label: '到港', value: 'port' },
+]
+
 // 表单字段配置
 const formFields = ref([
   {
-    key: 'labelPosition',
-    label: '标签位置',
+    key: 'polysilicon',
+    label: '多晶硅',
     type: 'input',
     rules: [
       {
         required: true,
-        message: '请输入标签位置',
+        message: '请输入多晶硅',
         trigger: ['blur', 'input'],
       },
     ],
     props: {
-      placeholder: '请输入标签位置',
+      autosize: true,
+      placeholder: '请输入多晶硅',
       clearable: true,
-      type: 'text',
+      type: 'textarea',
     },
     listenChange: true,
-    span: '3 m:3 l:3',
+    span: '3 m:1 l:1',
   },
   {
-    key: 'labelTags',
-    label: '产品标签',
-    listenChange: true,
-    span: '3 m:3 l:3',
+    key: 'backTreatment',
+    label: '背面处理方式',
+    type: 'input',
+    rules: [
+      {
+        required: true,
+        message: '请输入背面处理方式',
+        trigger: ['blur', 'input'],
+      },
+    ],
     props: {
-      tagsList: [
-        {
-          type: 'success',
-          label: '客户名称',
-        },
-        {
-          type: 'info',
-          label: '订单号',
-        },
-        {
-          type: 'warning',
-          label: '供应商编号',
-        },
-        {
-          type: 'error',
-          label: '生产商全称',
-        },
-        {
-          type: 'success',
-          label: '产品名称',
-        },
-        {
-          type: 'info',
-          label: '料号',
-        },
-        {
-          type: 'warning',
-          label: '生产日期',
-        },
-        {
-          type: 'error',
-          label: '数量',
-        },
-        {
-          type: 'success',
-          label: '产品批次号',
-        },
-        {
-          type: 'info',
-          label: '产品有效日期',
-        },
-        {
-          type: 'warning',
-          label: '发票号',
-        },
-        {
-          type: 'error',
-          label: '生产商名称',
-        },
-        {
-          type: 'success',
-          label: '硅片ID标记',
-        },
-        {
-          type: 'info',
-          label: '供应商号码',
-        },
-      ],
+      autosize: true,
+      placeholder: '请输入背面处理方式',
+      clearable: true,
+      type: 'textarea',
     },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'oxideSealing',
+    label: '氧化物密封',
+    type: 'input',
+    rules: [
+      {
+        required: true,
+        message: '请输入氧化物密封',
+        trigger: ['blur', 'input'],
+      },
+    ],
+    props: {
+      autosize: true,
+      placeholder: '请输入氧化物密封',
+      clearable: true,
+      type: 'textarea',
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
   },
 ])
 

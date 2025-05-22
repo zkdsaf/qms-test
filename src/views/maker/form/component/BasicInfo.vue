@@ -10,7 +10,11 @@
       <n-space vertical class="w-full">
         <n-data-table v-bind="field.props"> </n-data-table>
         <div class="flex justify-end mt-2">
-          <n-button type="primary" @click="handleAddRow" v-if="!readonly">
+          <n-button
+            type="primary"
+            @click="handleAddRow"
+            v-if="!readonly || route.query.formType === 'add'"
+          >
             添加
           </n-button>
         </div>
@@ -35,7 +39,7 @@ const props = defineProps({
   },
 })
 const message = useMessage()
-
+const route = useRoute()
 // 表单数据
 const formData = ref({
   tableData: [
@@ -455,6 +459,7 @@ const handleFieldChange = ({ key, value }) => {
 const handleAddRow = () => {
   formData.value.tableData.push({
     id: Date.now(),
+    supplierAttribute: '属性1',
     sequenceNo: formData.value.tableData.length + 1,
     materialType: 'type1',
     materialDesc: '默认物料描述',

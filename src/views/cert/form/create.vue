@@ -12,11 +12,7 @@
                 {{ item.title }}
               </h2>
               <p class="text-gray-600 my-2">{{ item.description }}</p>
-              <n-button
-                type="primary"
-                size="small"
-                @click="goToForm(item.path)"
-              >
+              <n-button type="primary" size="small" @click="goToForm(item)">
                 创建表单
               </n-button>
             </div>
@@ -24,11 +20,31 @@
         </n-gi>
       </n-grid>
     </div>
+
+    <n-modal
+      v-model:show="showCertModal"
+      @positive-click="handleCertConfirm"
+      @negative-click="showCertModal = false"
+      v-bind="modalProps"
+    >
+      <CertInfoModal ref="certModalRef" />
+    </n-modal>
+
+    <n-modal
+      v-model:show="showMaterialModal"
+      @positive-click="handleMaterialConfirm"
+      @negative-click="showMaterialModal = false"
+      v-bind="modalProps"
+    >
+      <MaterialModal ref="materialModalRef" />
+    </n-modal>
   </n-card>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+import CertInfoModal from '../component/CertInfoModal.vue'
+import MaterialModal from '../component/MaterialModal.vue'
 import {
   CreateOutline,
   CloudUploadOutline,
@@ -36,7 +52,64 @@ import {
 } from '@vicons/ionicons5'
 import { EditOutlined, DeleteOutlined } from '@vicons/antd'
 import { useMessage } from 'naive-ui'
+import { ref } from 'vue'
 const message = useMessage()
+
+const modalProps = {
+  title: '请选择',
+  draggable: true,
+  positiveText: '确认',
+  negativeText: '算了',
+  preset: 'dialog',
+  style: { width: '1200px' },
+}
+
+const router = useRouter()
+const currentTitle = ref('')
+
+const showCertModal = ref(false)
+const showMaterialModal = ref(false)
+
+const certModalRef = ref(null)
+const materialModalRef = ref(null)
+
+const handleCertConfirm = () => {
+  const selected = certModalRef.value?.getSelectedRows?.() || []
+  if (!selected.length) {
+    message.warning('请至少选择一条数据')
+    return false
+  }
+
+  showCertModal.value = false
+
+  if (currentTitle.value === '修订证书信息') {
+    showMaterialModal.value = true
+  } else {
+    router.push({
+      path: '/pages/cert/form',
+      query: {
+        id: Math.random(),
+        formType: 'edit',
+      },
+    })
+  }
+}
+
+const handleMaterialConfirm = () => {
+  const selected = materialModalRef.value?.getSelectedRows?.() || []
+  if (!selected.length) {
+    message.warning('请至少选择一条数据')
+    return false
+  }
+  router.push({
+    path: '/pages/cert/form',
+    query: {
+      id: Math.random(),
+      formType: 'edit',
+    },
+  })
+}
+
 // 列表数据
 const list = shallowRef([
   {
@@ -56,13 +129,18 @@ const list = shallowRef([
 ])
 
 // 路由跳转
-const router = useRouter()
-const goToForm = (path) => {
-  if (!path) {
+const goToForm = (item) => {
+  currentTitle.value = item.title
+  if (item.title === '修订证书信息' || item.title === '修订证书信息(无料号)') {
+    showCertModal.value = true
+    return
+  }
+
+  if (!item.path) {
     message.info('暂未开发，敬请期待')
     return
   }
-  router.push(path)
+  router.push(item.path)
 }
 </script>
 

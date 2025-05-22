@@ -24,7 +24,9 @@
           "
         >
           <n-divider title-placement="left">
-            {{ field.divider.title }}
+            <span class="text-gray-400">
+              {{ field.divider.title }}
+            </span>
           </n-divider>
         </n-grid-item>
 

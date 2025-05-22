@@ -257,6 +257,20 @@
             </n-collapse-item>
           </n-collapse>
 
+          <n-collapse :default-expanded-names="['10']">
+            <n-collapse-item name="10">
+              <template #header>
+                <h2 class="text-lg font-bold">作废原因</h2>
+              </template>
+
+              <ReasonInfo
+                ref="reasonRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
+            </n-collapse-item>
+          </n-collapse>
+
           <n-collapse :default-expanded-names="['3']" v-if="readonly">
             <n-collapse-item name="3">
               <template #header>
@@ -274,7 +288,7 @@
     </template>
 
     <!-- 自定义按钮 -->
-    <template #buttons v-if="!id">
+    <template #buttons v-if="!id || route.query.formType === 'cancel'">
       <n-popconfirm
         positive-text="确定"
         negative-text="取消"
@@ -331,13 +345,14 @@ import {
   SteelInfo,
   TrasportAsk,
   OtherFile,
+  ReasonInfo,
 } from './component/index.'
 import { useMessage } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
 
 // 表单信息
 const formHeaderInfo = {
-  title: '新建规格书(无引用)',
+  title: '作废规格书',
   applicationId: 'APP-2025-001',
   applicationTime: '2025-04-30 10:00',
   applicant: '张三',
@@ -546,6 +561,7 @@ const backInfoRef = ref(null)
 const steelInfoRef = ref(null)
 const trasportAskRef = ref(null)
 const otherFileRef = ref(null)
+const reasonRef = ref(null)
 // 消息提示
 const message = useMessage()
 
@@ -568,6 +584,7 @@ const onSubmit = async () => {
     steelInfoRef,
     trasportAskRef,
     otherFileRef,
+    reasonRef,
   }
 
   // 保存所有验证结果
@@ -625,6 +642,7 @@ const onSubmit = async () => {
       steelInfoRef: '钢瓶建议更换点',
       trasportAskRef: '运输温度计品质监控要求',
       otherFileRef: '其他文件',
+      reasonRef: '作废原因',
     }
 
     // 找出验证失败的表单并转换为对应的标题

@@ -11,6 +11,16 @@
           <n-collapse :default-expanded-names="['1']">
             <n-collapse-item name="1">
               <template #header>
+                <h2 class="text-lg font-bold">被调用文档信息</h2>
+              </template>
+
+              <ReferDocInfo />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['1']">
+            <n-collapse-item name="1">
+              <template #header>
                 <h2 class="text-lg font-bold">文档信息</h2>
               </template>
 
@@ -19,6 +29,16 @@
                 :readonly="readonly"
                 ref="docInfoRef"
               />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['2']">
+            <n-collapse-item name="2">
+              <template #header>
+                <h2 class="text-lg font-bold">被调用物料信息</h2>
+              </template>
+
+              <ReferMaterial />
             </n-collapse-item>
           </n-collapse>
 
@@ -257,6 +277,16 @@
             </n-collapse-item>
           </n-collapse>
 
+          <n-collapse :default-expanded-names="['10']">
+            <n-collapse-item name="10">
+              <template #header>
+                <h2 class="text-lg font-bold">文件修订记录</h2>
+              </template>
+
+              <EditList :form-data="formData" :readonly="readonly" />
+            </n-collapse-item>
+          </n-collapse>
+
           <n-collapse :default-expanded-names="['3']" v-if="readonly">
             <n-collapse-item name="3">
               <template #header>
@@ -274,7 +304,7 @@
     </template>
 
     <!-- 自定义按钮 -->
-    <template #buttons v-if="!id">
+    <template #buttons v-if="!id || route.query.formType === 'edit'">
       <n-popconfirm
         positive-text="确定"
         negative-text="取消"
@@ -331,13 +361,17 @@ import {
   SteelInfo,
   TrasportAsk,
   OtherFile,
+  ReasonInfo,
+  EditList,
+  ReferDocInfo,
+  ReferMaterial,
 } from './component/index.'
 import { useMessage } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
 
 // 表单信息
 const formHeaderInfo = {
-  title: '新建规格书(无引用)',
+  title: '新建规格书(有引用)',
   applicationId: 'APP-2025-001',
   applicationTime: '2025-04-30 10:00',
   applicant: '张三',
@@ -353,7 +387,7 @@ const router = useRouter()
 // 表单数据
 const id = route.query.id
 
-const readonly = ref(id ? true : false)
+const readonly = ref(false)
 // 表单数据
 const formDataValue = {
   polysilicon: '标准多晶硅', // 多晶硅
@@ -372,7 +406,7 @@ const formDataValue = {
   materialType: 'SG', // 物料类型
   eQualNo: 'EQ-2024-001', // 物料编号
   materialNo: 'M-2024-001', // 物料编号
-  scope: ['G1', 'G2'], // 适用范围
+  scope: ['G1'], // 适用范围
   materialDescription: '标准物料描述', // 物料描述
   technicalSpec: '技术规格说明', // 技术规格
   materialName: '标准物料', // 物料名称
@@ -522,9 +556,9 @@ const formDataValue = {
 }
 
 // 表单数据
-const formData = ref(id ? { ...formDataValue } : null)
+const formData = ref(id ? { ...formDataValue } : { ...formDataValue })
 
-const materialType = ref(id ? formDataValue.materialType : null)
+const materialType = ref(formDataValue.materialType)
 const handleMaterialTypeChange = (value) => {
   materialType.value = value
 }

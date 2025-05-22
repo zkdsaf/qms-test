@@ -56,6 +56,19 @@ export default [
         },
       },
       {
+        path: 'uploadPreview',
+        name: 'COA信息预览',
+        component: () => import('@/views/coa/form/uploadForm.vue'),
+        meta: {
+          title: 'COA信息预览',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'COA',
+          activeMenu: '/pages/coa/create',
+        },
+      },
+      {
         path: 'infoDownload',
         name: 'COA信息下载',
         component: () => import('@/views/coa/form/downLoad.vue'),

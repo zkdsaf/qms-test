@@ -1,69 +1,88 @@
 <template>
-  <n-card title="COA信息上传" class="min-h-[calc(100vh-72px)]">
+  <n-card title="Maker Code导入" class="min-h-[calc(100vh-72px)]">
     <template #header-extra>
       <n-space justify="end">
-        <n-button type="primary" @click="handleSubmit">提交</n-button>
+        <n-button color="#18a058" @click="message.info('下载导入模版')">
+          <template #icon>
+            <n-icon>
+              <CloudDownloadOutline />
+            </n-icon>
+          </template>
+          下载导入模版
+        </n-button>
+        <n-button color="#18a058" @click="message.info('下载校验结果')">
+          <template #icon>
+            <n-icon>
+              <CloudDownloadOutline />
+            </n-icon>
+          </template>
+          下载校验结果
+        </n-button>
+        <n-button type="primary" @click="handleSubmit">下一步</n-button>
         <n-button @click="router.go(-1)">返回</n-button>
       </n-space>
     </template>
-    <n-form
-      label-placement="left"
-      :model="formData"
-      :rules="rules"
-      ref="formRef"
-    >
-      <n-form-item path="uploadType">
-        <n-radio-group v-model:value="formData.uploadType">
-          <n-radio value="batch">按批次上传COA信息</n-radio>
-          <n-radio value="sample">按检测样本上传COA信息</n-radio>
-        </n-radio-group>
-      </n-form-item>
-      <n-form-item label="ECOA创建方式" path="ecoaType">
-        <n-radio-group v-model:value="formData.ecoaType">
-          <n-radio value="manual">人工</n-radio>
-          <n-radio value="system">系统</n-radio>
-        </n-radio-group>
-      </n-form-item>
-
+    <n-form label-placement="left" :model="formData" ref="formRef">
       <n-data-table :columns="columns" :data="formData.tableData" bordered />
     </n-form>
+    <n-divider title-placement="left"> 导入操作记录 </n-divider>
+    <n-data-table
+      :columns="historyColumns"
+      :data="formData.historyData"
+      bordered
+    />
   </n-card>
 </template>
 
 <script setup lang="jsx">
 import { ref } from 'vue'
 import { DeleteOutlined } from '@vicons/antd'
+import { CloudDownloadOutline } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui'
 const message = useMessage()
 const router = useRouter()
 const formRef = ref(null)
 
+const historyColumns = [
+  { title: '序号', key: 'index', align: 'center', width: 80 },
+  { title: '导入时间', key: 'importTime', align: 'center', width: 180 },
+  { title: '操作人', key: 'operator', align: 'center', width: 120 },
+  { title: '文件名称', key: 'fileName', align: 'center', width: 200 },
+  { title: '导数数量', key: 'importCount', align: 'center', width: 100 },
+  { title: '导入状态', key: 'importStatus', align: 'center', width: 100 },
+  { title: '导入单号编号/状态', key: 'importId', align: 'center', width: 180 },
+]
+
 const formData = ref({
-  uploadType: null,
-  ecoaType: null,
   tableData: [
     {
-      format: '.txt或.xsl或.csv或.xml',
+      format: '.xls',
       status: '',
       document: [],
       version: '1.0',
     },
-    { format: '供应商COA', status: '', document: [], version: '1.0' },
+  ],
+  historyData: [
+    {
+      index: 1,
+      importTime: '2023-10-01 10:00:00',
+      operator: '张三',
+      fileName: 'example.xls',
+      importCount: 100,
+      importStatus: '成功',
+      importId: 'IMPORT-001',
+    },
+    {
+      index: 2,
+      importTime: '2023-10-02 11:00:00',
+      operator: '李四',
+      fileName: 'sample.xls',
+      importCount: 200,
+      importStatus: '失败',
+      importId: 'IMPORT-002',
+    },
   ],
 })
-
-const rules = {
-  uploadType: {
-    required: true,
-    message: '请选择上传COA的信息',
-    trigger: 'change',
-  },
-  ecoaType: {
-    required: true,
-    message: '请选择ECOA创建方式',
-    trigger: 'change',
-  },
-}
 
 const columns = [
   { title: '文档格式', key: 'format', align: 'center', width: 180 },
@@ -110,38 +129,6 @@ const columns = [
             </div>
           ))}
         </div>
-      )
-    },
-  },
-  {
-    title: 'COA版本',
-    key: 'version',
-    align: 'center',
-    width: 190,
-    render: (row, index) => {
-      return (
-        index === 0 && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <NButton
-              size="small"
-              type="primary"
-              onClick={() => {
-                message.info('版本选择')
-              }}
-            >
-              版本选择
-            </NButton>
-            <span class="text-gray-500 mt-2">
-              如不选择版本,系统默认最新生效版本
-            </span>
-          </div>
-        )
       )
     },
   },
@@ -197,12 +184,11 @@ const handleSubmit = () => {
       console.error(errors)
       return
     }
-    message.success('提交成功')
     router.push({
-      path: '/pages/coa/uploadPreview',
+      path: '/pages/maker/form',
       query: {
-        uploadType: formData.value.uploadType,
-        ecoaType: formData.value.ecoaType,
+        formType: 'import',
+        id: Math.random(),
       },
     })
   })

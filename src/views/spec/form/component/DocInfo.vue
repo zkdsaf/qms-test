@@ -179,7 +179,7 @@ const formFields = ref([
       clearable: true,
     },
     listenChange: true,
-    span: '3 m:1 l:1',
+    span: '3 m:3 l:3',
   },
 ])
 

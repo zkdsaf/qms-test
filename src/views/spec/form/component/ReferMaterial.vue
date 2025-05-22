@@ -3,7 +3,7 @@
     ref="formRef"
     :fields="formFields"
     :form-data="formData"
-    :readonly="readonly"
+    :readonly="true"
     @field-change="handleFieldChange"
     :label-width="165"
   >
@@ -20,55 +20,35 @@ const props = defineProps({
     type: Object,
     default: () => null,
   },
-  readonly: {
-    type: Boolean,
-    default: false,
-  },
 })
 const message = useMessage()
 
 // 表单数据
 const formData = ref({
-  materialType: null,
-  eQualNo: null,
-  materialNo: null,
-  scope: [],
-  materialDescription: null,
-  technicalSpec: null,
-  materialName: null,
-  vendorCode: null,
-  vendorName: null,
-  manufacturerCode: null,
-  manufacturerName: null,
-  manufacturerNameAbbr: null,
-  manufacturerCountry: null,
-  g1CrossModule: null,
-  g1MainDeptManager: null,
-  g1MainDeptDirector: null,
-  g1OtherDeptManager: null,
-  g1OtherDeptDirector: null,
-  g2CrossModule: null,
-  g2MainDeptManager: null,
-  g2MainDeptDirector: null,
-  g2OtherDeptManager: null,
-  g2OtherDeptDirector: null,
+  materialType: 'WF',
+  eQualNo: 'EQ001',
+  materialNo: 'MN001',
+  scope: ['G2'],
+  materialDescription: '默认物料描述',
+  technicalSpec: '默认技术规格',
+  materialName: '默认物料名称',
+  vendorCode: 'VC001',
+  vendorName: '默认供应商名称',
+  manufacturerCode: 'MC001',
+  manufacturerName: '默认生产商名称',
+  manufacturerNameAbbr: '默认生产商缩写',
+  manufacturerCountry: '默认生产商国家/地区',
+  g1CrossModule: 'N',
+  g1MainDeptManager: '默认磐石主要使用部门科长',
+  g1MainDeptDirector: '默认磐石主要使用部门部长',
+  g1OtherDeptManager: '默认磐石其他使用部门科长',
+  g1OtherDeptDirector: '默认磐石其他使用部门部长',
+  g2CrossModule: 'N',
+  g2MainDeptManager: '默认司南主要使用部门科长',
+  g2MainDeptDirector: '默认司南主要使用部门部长',
+  g2OtherDeptManager: '默认司南其他使用部门科长',
+  g2OtherDeptDirector: '默认司南其他使用部门部长',
 })
-
-watch(
-  () => props.formData,
-  (newVal) => {
-    if (newVal) {
-      // 遍历 formData 的所有字段
-      Object.keys(formData.value).forEach((key) => {
-        // 如果 props.formData 中对应的字段有值，则更新
-        if (newVal[key] !== undefined && newVal[key] !== null) {
-          formData.value[key] = newVal[key]
-        }
-      })
-    }
-  },
-  { deep: true, immediate: true }
-)
 
 // 下拉框选项
 const materialTypeOptions = [

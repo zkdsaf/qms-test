@@ -7,19 +7,6 @@
     @field-change="handleFieldChange"
     :label-width="155"
   >
-    <template #labelTags="{ field }">
-      <n-space>
-        <n-tag
-          :closable="!readonly"
-          v-for="tag in field.props.tagsList"
-          :key="tag"
-          :type="tag.type"
-          @close="message.warning('删除标签')"
-        >
-          {{ tag.label }}
-        </n-tag>
-      </n-space>
-    </template>
   </custom-form>
 </template>
 
@@ -37,12 +24,17 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  materialType: {
+    type: String,
+    default: '',
+  },
 })
 const message = useMessage()
 
 // 表单数据
 const formData = ref({
-  labelPosition: null, // 用途
+  conductiveType: null, // 导电类型
+  doping: null, // 掺杂
 })
 
 watch(
@@ -64,89 +56,44 @@ watch(
 // 表单字段配置
 const formFields = ref([
   {
-    key: 'labelPosition',
-    label: '标签位置',
+    key: 'conductiveType',
+    label: '导电类型',
     type: 'input',
     rules: [
       {
         required: true,
-        message: '请输入标签位置',
+        message: '请输入导电类型',
         trigger: ['blur', 'input'],
       },
     ],
     props: {
-      placeholder: '请输入标签位置',
+      autosize: true,
+      placeholder: '请输入导电类型',
       clearable: true,
-      type: 'text',
+      type: 'textarea',
     },
     listenChange: true,
-    span: '3 m:3 l:3',
+    span: '3 m:1 l:1',
   },
   {
-    key: 'labelTags',
-    label: '产品标签',
-    listenChange: true,
-    span: '3 m:3 l:3',
+    key: 'doping',
+    label: '掺杂',
+    type: 'input',
+    rules: [
+      {
+        required: true,
+        message: '请输入掺杂',
+        trigger: ['blur', 'input'],
+      },
+    ],
     props: {
-      tagsList: [
-        {
-          type: 'success',
-          label: '客户名称',
-        },
-        {
-          type: 'info',
-          label: '订单号',
-        },
-        {
-          type: 'warning',
-          label: '供应商编号',
-        },
-        {
-          type: 'error',
-          label: '生产商全称',
-        },
-        {
-          type: 'success',
-          label: '产品名称',
-        },
-        {
-          type: 'info',
-          label: '料号',
-        },
-        {
-          type: 'warning',
-          label: '生产日期',
-        },
-        {
-          type: 'error',
-          label: '数量',
-        },
-        {
-          type: 'success',
-          label: '产品批次号',
-        },
-        {
-          type: 'info',
-          label: '产品有效日期',
-        },
-        {
-          type: 'warning',
-          label: '发票号',
-        },
-        {
-          type: 'error',
-          label: '生产商名称',
-        },
-        {
-          type: 'success',
-          label: '硅片ID标记',
-        },
-        {
-          type: 'info',
-          label: '供应商号码',
-        },
-      ],
+      autosize: true,
+      placeholder: '请输入掺杂',
+      clearable: true,
+      type: 'textarea',
     },
+    listenChange: true,
+    span: '3 m:1 l:1',
   },
 ])
 

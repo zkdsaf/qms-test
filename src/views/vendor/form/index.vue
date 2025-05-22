@@ -63,6 +63,16 @@
           <n-collapse :default-expanded-names="['4']">
             <n-collapse-item name="4">
               <template #header>
+                <h2 class="text-lg font-bold">修订理由</h2>
+              </template>
+
+              <ReasonInfo :form-data="formData" :readonly="readonly" />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['4']">
+            <n-collapse-item name="4">
+              <template #header>
                 <h2 class="text-lg font-bold">联系信息修订履历</h2>
               </template>
 
@@ -87,7 +97,7 @@
     </template>
 
     <!-- 自定义按钮 -->
-    <template #buttons v-if="!id">
+    <template #buttons v-if="!id || route.query.formType === 'edit'">
       <n-popconfirm
         positive-text="确定"
         negative-text="取消"
@@ -127,7 +137,13 @@
 <script setup>
 import FormPage from '@/components/FormPage.vue'
 import HistoryList from '@/components/HistoryList.vue'
-import { BasicInfo, VendorInfo, MakerInfo, EditList } from './component/index.'
+import {
+  BasicInfo,
+  VendorInfo,
+  MakerInfo,
+  EditList,
+  ReasonInfo,
+} from './component/index.'
 import { useMessage } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
@@ -153,7 +169,7 @@ const id = route.query.id
 const readonly = ref(id ? true : false)
 // 表单数据
 const formDataValue = {
-  certSource: 'Maker Code修订流程',
+  certSource: '修订供应商流程',
   supplierNo: '100002',
   supplierName: '北京某某某科技有限公司',
   isCollaborativeSupplier: '否',
@@ -361,6 +377,7 @@ const formDataValue = {
     },
   ],
   makerName: '制造商名称',
+  remark: '修订理由',
 }
 
 // 表单数据

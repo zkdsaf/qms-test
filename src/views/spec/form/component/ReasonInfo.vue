@@ -3,23 +3,9 @@
     ref="formRef"
     :fields="formFields"
     :form-data="formData"
-    :readonly="readonly"
     @field-change="handleFieldChange"
     :label-width="155"
   >
-    <template #labelTags="{ field }">
-      <n-space>
-        <n-tag
-          :closable="!readonly"
-          v-for="tag in field.props.tagsList"
-          :key="tag"
-          :type="tag.type"
-          @close="message.warning('删除标签')"
-        >
-          {{ tag.label }}
-        </n-tag>
-      </n-space>
-    </template>
   </custom-form>
 </template>
 
@@ -37,12 +23,16 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  materialType: {
+    type: String,
+    default: '',
+  },
 })
 const message = useMessage()
 
 // 表单数据
 const formData = ref({
-  labelPosition: null, // 用途
+  remark: null,
 })
 
 watch(
@@ -64,89 +54,23 @@ watch(
 // 表单字段配置
 const formFields = ref([
   {
-    key: 'labelPosition',
-    label: '标签位置',
+    key: 'remark',
+    label: '原因',
     type: 'input',
     rules: [
       {
         required: true,
-        message: '请输入标签位置',
+        message: '请输入原因',
         trigger: ['blur', 'input'],
       },
     ],
     props: {
-      placeholder: '请输入标签位置',
+      placeholder: '请输入原因',
       clearable: true,
-      type: 'text',
+      type: 'textarea',
     },
     listenChange: true,
     span: '3 m:3 l:3',
-  },
-  {
-    key: 'labelTags',
-    label: '产品标签',
-    listenChange: true,
-    span: '3 m:3 l:3',
-    props: {
-      tagsList: [
-        {
-          type: 'success',
-          label: '客户名称',
-        },
-        {
-          type: 'info',
-          label: '订单号',
-        },
-        {
-          type: 'warning',
-          label: '供应商编号',
-        },
-        {
-          type: 'error',
-          label: '生产商全称',
-        },
-        {
-          type: 'success',
-          label: '产品名称',
-        },
-        {
-          type: 'info',
-          label: '料号',
-        },
-        {
-          type: 'warning',
-          label: '生产日期',
-        },
-        {
-          type: 'error',
-          label: '数量',
-        },
-        {
-          type: 'success',
-          label: '产品批次号',
-        },
-        {
-          type: 'info',
-          label: '产品有效日期',
-        },
-        {
-          type: 'warning',
-          label: '发票号',
-        },
-        {
-          type: 'error',
-          label: '生产商名称',
-        },
-        {
-          type: 'success',
-          label: '硅片ID标记',
-        },
-        {
-          type: 'info',
-          label: '供应商号码',
-        },
-      ],
-    },
   },
 ])
 

@@ -24,18 +24,25 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  materialType: {
+    type: String,
+    default: '',
+  },
 })
 const message = useMessage()
 
 // 表单数据
 const formData = ref({
   purpisesion: null, // 用途
+  drawingNo: null, // 图纸号
   materialFormula: null, // 物料分子式
   purityLevel: null, // 纯度等级
   validityPeriod: null, // 有效期(月)
   remainingValidityPeriod: null, // 剩余有效期(月)
   arrivalType: null, // 到厂/到港
   storageRequirements: null, // 存储要求
+  transportSafetyRequirement: null, // 厂内运输防坠落安全要求
+  msdsCslVersionRequirement: null, // MSDS及CSL版本要求
 })
 
 watch(
@@ -83,6 +90,26 @@ const formFields = ref([
     span: '3 m:3 l:3',
   },
   {
+    key: 'drawingNo',
+    label: '图纸号',
+    type: 'input',
+    rules: [
+      {
+        required: true,
+        message: '请输入目的',
+        trigger: ['blur', 'input'],
+      },
+    ],
+    props: {
+      placeholder: '请输入图纸号',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+    visibleWhen: () =>
+      props.materialType && ['TC'].includes(props.materialType),
+  },
+  {
     key: 'materialFormula',
     label: '物料分子式',
     type: 'input',
@@ -99,6 +126,8 @@ const formFields = ref([
     },
     listenChange: true,
     span: '3 m:1 l:1',
+    visibleWhen: () =>
+      props.materialType && !['WF', 'NP'].includes(props.materialType),
   },
   {
     key: 'purityLevel',
@@ -117,6 +146,8 @@ const formFields = ref([
     },
     listenChange: true,
     span: '3 m:1 l:1',
+    visibleWhen: () =>
+      props.materialType && !['WF', 'NP'].includes(props.materialType),
   },
   {
     key: 'validityPeriod',
@@ -177,7 +208,12 @@ const formFields = ref([
   },
   {
     key: 'storageRequirements',
-    label: '存储要求',
+    label: computed(() => {
+      return props.materialType &&
+        !['WF', 'NP', 'TC', 'PD', 'DK'].includes(props.materialType)
+        ? '存储要求(详见MSDS)'
+        : '存储要求'
+    }),
     type: 'input',
     rules: [
       {
@@ -194,6 +230,52 @@ const formFields = ref([
     },
     listenChange: true,
     span: '3 m:3 l:3',
+  },
+  {
+    key: 'transportSafetyRequirement',
+    label: '厂内运输防坠落安全要求(其他运输要求应严格遵守MSDS)',
+    type: 'input',
+    rules: [
+      {
+        required: true,
+        message: '请输入厂内运输防坠落安全要求',
+        trigger: ['blur', 'input'],
+      },
+    ],
+    props: {
+      placeholder: '请输入厂内运输防坠落安全要求',
+      clearable: true,
+      type: 'textarea',
+      autosize: true,
+    },
+    listenChange: true,
+    span: '3 m:3 l:3',
+    visibleWhen: () =>
+      props.materialType &&
+      !['WF', 'NP', 'TC', 'PD', 'DK'].includes(props.materialType),
+  },
+  {
+    key: 'msdsCslVersionRequirement',
+    label: 'MSDS及CSL版本要求(MSDS及CSL版本要求应严格遵守MSDS)',
+    type: 'input',
+    rules: [
+      {
+        required: true,
+        message: '请输入MSDS及CSL版本要求',
+        trigger: ['blur', 'input'],
+      },
+    ],
+    props: {
+      placeholder: '请输入MSDS及CSL版本要求',
+      clearable: true,
+      type: 'textarea',
+      autosize: true,
+    },
+    listenChange: true,
+    span: '3 m:3 l:3',
+    visibleWhen: () =>
+      props.materialType &&
+      !['WF', 'NP', 'TC', 'PD', 'DK'].includes(props.materialType),
   },
 ])
 

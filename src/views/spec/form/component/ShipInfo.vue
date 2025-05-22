@@ -8,7 +8,6 @@
   >
     <template #shipTableData="{ field }">
       <n-space vertical class="w-full">
-        <n-divider title-placement="left"> 运输温度要求 </n-divider>
         <n-button type="primary" @click="handleAddRow" v-if="!readonly"
           >增加</n-button
         >
@@ -32,6 +31,10 @@ const props = defineProps({
   readonly: {
     type: Boolean,
     default: false,
+  },
+  materialType: {
+    type: String,
+    default: '',
   },
 })
 const message = useMessage()
@@ -57,6 +60,7 @@ const formData = ref({
   valveVacuum: null,
   other: null,
   shipContainer: null,
+  remark: null,
 })
 
 watch(
@@ -424,6 +428,26 @@ const formFields = ref([
     span: '3 m:3 l:3',
   },
   {
+    key: 'remark',
+    label: '备注',
+    type: 'input',
+    rules: [
+      {
+        required: false,
+        message: '请输入备注',
+        trigger: ['blur', 'input'],
+      },
+    ],
+    props: {
+      type: 'textarea',
+      placeholder: '请输入备注',
+      clearable: true,
+      autosize: true,
+    },
+    listenChange: true,
+    span: '3 m:3 l:3',
+  },
+  {
     key: 'shipTableData',
     label: '',
     type: 'table',
@@ -438,7 +462,13 @@ const formFields = ref([
       rowKey: (row) => row.id, // 表格行主键
     },
     listenChange: true,
+    divider: {
+      title: '运输温度要求',
+      'title-placement': 'left',
+    },
     span: '3 m:3 l:3 xl:3',
+    visibleWhen: () =>
+      props.materialType && !['WF', 'NP', 'TC'].includes(props.materialType),
   },
   {
     key: 'avoidLight',
@@ -462,6 +492,8 @@ const formFields = ref([
     },
     listenChange: true,
     span: '3 m:1 l:1',
+    visibleWhen: () =>
+      props.materialType && !['WF', 'NP', 'TC'].includes(props.materialType),
   },
   {
     key: 'transportTemp',
@@ -481,6 +513,9 @@ const formFields = ref([
     },
     listenChange: true,
     span: '3 m:1 l:1',
+
+    visibleWhen: () =>
+      props.materialType && !['WF', 'NP', 'TC'].includes(props.materialType),
   },
   {
     key: 'valveVacuum',
@@ -500,6 +535,8 @@ const formFields = ref([
     },
     listenChange: true,
     span: '3 m:1 l:1',
+    visibleWhen: () =>
+      props.materialType && !['WF', 'NP', 'TC'].includes(props.materialType),
   },
   {
     key: 'other',
@@ -519,6 +556,8 @@ const formFields = ref([
     },
     listenChange: true,
     span: '3 m:1 l:1',
+    visibleWhen: () =>
+      props.materialType && !['WF', 'NP', 'TC'].includes(props.materialType),
   },
 ])
 

@@ -43,6 +43,19 @@ export default [
         },
       },
       {
+        path: 'uploadInfo',
+        name: 'MAKER导入',
+        component: () => import('@/views/maker/component/uploadInfo.vue'),
+        meta: {
+          title: 'MAKER导入',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'MAKER',
+          activeMenu: '/pages/maker/create',
+        },
+      },
+      {
         path: 'todo',
         name: 'MAKER审批列表',
         component: () => import('@/views/approval/todo.vue'),

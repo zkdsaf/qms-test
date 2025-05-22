@@ -49,6 +49,20 @@
           <n-collapse :default-expanded-names="['3']">
             <n-collapse-item name="3">
               <template #header>
+                <h2 class="text-lg font-bold">修订理由</h2>
+              </template>
+
+              <ReasonInfo
+                ref="reasonRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['3']">
+            <n-collapse-item name="3">
+              <template #header>
                 <h2 class="text-lg font-bold">证书信息修订履历</h2>
               </template>
 
@@ -73,7 +87,7 @@
     </template>
 
     <!-- 自定义按钮 -->
-    <template #buttons v-if="!id">
+    <template #buttons v-if="!id || route.query.formType === 'edit'">
       <n-popconfirm
         positive-text="确定"
         negative-text="取消"
@@ -113,7 +127,7 @@
 <script setup>
 import FormPage from '@/components/FormPage.vue'
 import HistoryList from '@/components/HistoryList.vue'
-import { BasicInfo, CertInfo, EditList } from './component/index.'
+import { BasicInfo, CertInfo, EditList, ReasonInfo } from './component/index.'
 import { useMessage } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
@@ -143,6 +157,7 @@ const formDataValue = {
   supplierNo: '100002',
   supplierName: '北京某某某科技有限公司',
   isCollaborativeSupplier: '否',
+  remark: '无',
   tableData: [
     {
       id: 1,
@@ -244,6 +259,7 @@ const formDataValue = {
 const formData = ref(id ? { ...formDataValue } : null)
 
 const basicInfoRef = ref(null)
+const reasonRef = ref(null)
 
 // 消息提示
 const message = useMessage()
@@ -252,6 +268,7 @@ const onSubmit = async () => {
   // 收集所有表单引用
   const formRefs = {
     basicInfoRef,
+    reasonRef,
   }
 
   // 保存所有验证结果
@@ -294,6 +311,7 @@ const onSubmit = async () => {
     // ref名称到标题的映射
     const refToTitleMap = {
       basicInfoRef: '基本信息',
+      reasonRef: '修订理由',
     }
 
     // 找出验证失败的表单并转换为对应的标题

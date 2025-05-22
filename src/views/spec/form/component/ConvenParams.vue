@@ -5,6 +5,7 @@
     :form-data="formData"
     :readonly="readonly"
     @field-change="handleFieldChange"
+    :label-width="155"
   >
   </custom-form>
 </template>
@@ -13,7 +14,6 @@
 import { computed, ref, defineExpose, reactive, watch } from 'vue'
 import { useMessage } from 'naive-ui'
 import CustomForm from '@/components/CustomForm.vue'
-import { CloudUploadOutline } from '@vicons/ionicons5'
 
 const props = defineProps({
   formData: {
@@ -33,16 +33,17 @@ const message = useMessage()
 
 // 表单数据
 const formData = ref({
-  roomTemp: null,
-  tempUpperLimit: null,
-  tempLowerLimit: null,
-  storageTempRequirementUnit: null,
-  humidityUpperLimit: null,
-  humidityLowerLimit: null,
-  humidityUnit: null,
-  avoidLight: null,
-  humidityRequirement: null,
-  other: null,
+  crystalMethod: null, // 长晶方式
+  crystalOrientation: null, // 晶向
+  conductiveType: null, // 导电类型
+  doping: null, // 掺杂
+  edgeInvalidArea: null, // 边缘无效区域
+  waferIdMark: null, // 硅片ID标记
+  waferIdMarkSurface: null, // 硅片ID标记面
+  annealing: null, // 退火
+  slotDirection: null, // 开槽方向
+  edgeShape: null, // 边缘形状
+  edgeSurfaceTreatment: null, // 边缘表面处理方式
 })
 
 watch(
@@ -61,226 +62,220 @@ watch(
   { deep: true, immediate: true }
 )
 
+// 到厂/到港选项
+const arrivalTypeOptions = [
+  { label: '到厂', value: 'factory' },
+  { label: '到港', value: 'port' },
+]
+
 // 表单字段配置
 const formFields = ref([
   {
-    key: 'roomTemp',
-    label: '室温',
+    key: 'crystalMethod',
+    label: '长晶方式',
     type: 'input',
     rules: [
       {
         required: true,
-        message: '请输入室温',
+        message: '请输入长晶方式',
         trigger: ['blur', 'input'],
       },
     ],
     props: {
-      placeholder: '请输入室温',
+      placeholder: '请输入长晶方式',
       clearable: true,
-      type: 'text',
     },
+    listenChange: true,
+    span: '3 m:1 l:1',
     divider: {
-      title: '存储温度要求',
+      title: '常规特性',
       'title-placement': 'left',
     },
-    listenChange: true,
-    span: '3 m:1 l:1',
-    visibleWhen: () =>
-      props.materialType && !['WF', 'NP'].includes(props.materialType),
   },
   {
-    key: 'tempUpperLimit',
-    label: '温度规格上限',
+    key: 'crystalOrientation',
+    label: '晶向',
     type: 'input',
     rules: [
       {
         required: true,
-        message: '请输入温度规格上限',
+        message: '请输入晶向',
         trigger: ['blur', 'input'],
       },
     ],
     props: {
-      placeholder: '请输入温度规格上限',
+      placeholder: '请输入晶向',
       clearable: true,
-      type: 'text',
     },
     listenChange: true,
     span: '3 m:1 l:1',
-    visibleWhen: () =>
-      props.materialType && !['WF', 'NP'].includes(props.materialType),
   },
   {
-    key: 'tempLowerLimit',
-    label: '温度规格下限',
+    key: 'conductiveType',
+    label: '导电类型',
     type: 'input',
     rules: [
       {
         required: true,
-        message: '请输入温度规格下限',
+        message: '请输入导电类型',
         trigger: ['blur', 'input'],
       },
     ],
     props: {
-      placeholder: '请输入温度规格下限',
+      placeholder: '请输入导电类型',
       clearable: true,
-      type: 'text',
     },
     listenChange: true,
     span: '3 m:1 l:1',
-    visibleWhen: () =>
-      props.materialType && !['WF', 'NP'].includes(props.materialType),
   },
   {
-    key: 'storageTempRequirementUnit',
-    label: '存储温度单位',
+    key: 'doping',
+    label: '掺杂',
     type: 'input',
     rules: [
       {
         required: true,
-        message: '请输入存储温度单位',
+        message: '请输入掺杂',
         trigger: ['blur', 'input'],
       },
     ],
     props: {
-      placeholder: '请输入存储温度单位',
+      placeholder: '请输入掺杂',
       clearable: true,
-      type: 'text',
     },
     listenChange: true,
     span: '3 m:1 l:1',
-    visibleWhen: () =>
-      props.materialType && !['WF', 'NP'].includes(props.materialType),
   },
   {
-    key: 'humidityUpperLimit',
-    label: '湿度规格上限',
+    key: 'edgeInvalidArea',
+    label: '边缘无效区域',
     type: 'input',
     rules: [
       {
         required: true,
-        message: '请输入湿度规格上限',
+        message: '请输入边缘无效区域',
         trigger: ['blur', 'input'],
       },
     ],
     props: {
-      placeholder: '请输入湿度规格上限',
+      placeholder: '请输入边缘无效区域',
       clearable: true,
-      type: 'text',
     },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'waferIdMark',
+    label: '硅片ID标记',
+    type: 'input',
+    rules: [
+      {
+        required: true,
+        message: '请输入硅片ID标记',
+        trigger: ['blur', 'input'],
+      },
+    ],
+    props: {
+      placeholder: '请输入硅片ID标记',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
     divider: {
-      title: '存储湿度要求',
+      title: '制备特性',
       'title-placement': 'left',
     },
-    listenChange: true,
-    span: '3 m:1 l:1',
-    visibleWhen: () =>
-      props.materialType && !['WF', 'NP'].includes(props.materialType),
   },
   {
-    key: 'humidityLowerLimit',
-    label: '湿度规格下限',
+    key: 'waferIdMarkSurface',
+    label: '硅片ID标记面',
     type: 'input',
     rules: [
       {
         required: true,
-        message: '请输入湿度规格下限',
+        message: '请输入硅片ID标记面',
         trigger: ['blur', 'input'],
       },
     ],
     props: {
-      placeholder: '请输入湿度规格下限',
+      placeholder: '请输入硅片ID标记面',
       clearable: true,
-      type: 'text',
-    },
-    listenChange: true,
-    span: '3 m:1 l:1',
-    visibleWhen: () =>
-      props.materialType && !['WF', 'NP'].includes(props.materialType),
-  },
-  {
-    key: 'humidityUnit',
-    label: '湿度单位',
-    type: 'select',
-    rules: [
-      {
-        required: true,
-        message: '请选择湿度单位',
-        trigger: ['blur', 'change'],
-      },
-    ],
-    props: {
-      options: [
-        { label: '%RH', value: '%RH' },
-        { label: 'ppm', value: 'ppm' },
-      ],
-      placeholder: '请选择湿度单位',
-    },
-    listenChange: true,
-    span: '3 m:1 l:1',
-    visibleWhen: () =>
-      props.materialType && !['WF', 'NP'].includes(props.materialType),
-  },
-  {
-    key: 'avoidLight',
-    label: '避免光照',
-    type: 'input',
-    rules: [
-      {
-        required: true,
-        message: '请输入避免光照',
-        trigger: ['blur', 'input'],
-      },
-    ],
-    props: {
-      placeholder: '请输入避免光照',
-      clearable: true,
-      type: 'text',
-    },
-    divider: computed(() => {
-      return props.materialType && !['WF', 'NP'].includes(props.materialType)
-        ? {
-            title: '其它',
-            'title-placement': 'left',
-          }
-        : null
-    }),
-    listenChange: true,
-    span: '3 m:1 l:1',
-  },
-  {
-    key: 'humidityRequirement',
-    label: '湿度要求',
-    type: 'input',
-    rules: [
-      {
-        required: true,
-        message: '请输入湿度要求',
-        trigger: ['blur', 'input'],
-      },
-    ],
-    props: {
-      placeholder: '请输入湿度要求',
-      clearable: true,
-      type: 'text',
     },
     listenChange: true,
     span: '3 m:1 l:1',
   },
   {
-    key: 'other',
-    label: '其它',
+    key: 'annealing',
+    label: '退火',
     type: 'input',
     rules: [
       {
         required: true,
-        message: '请输入其它',
+        message: '请输入退火',
         trigger: ['blur', 'input'],
       },
     ],
     props: {
-      placeholder: '请输入其它',
+      placeholder: '请输入退火',
       clearable: true,
-      type: 'text',
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'slotDirection',
+    label: '开槽方向',
+    type: 'input',
+    rules: [
+      {
+        required: true,
+        message: '请输入开槽方向',
+        trigger: ['blur', 'input'],
+      },
+    ],
+    props: {
+      placeholder: '请输入开槽方向',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+    divider: {
+      title: '机械特性',
+      'title-placement': 'left',
+    },
+  },
+  {
+    key: 'edgeShape',
+    label: '边缘形状',
+    type: 'input',
+    rules: [
+      {
+        required: true,
+        message: '请输入边缘形状',
+        trigger: ['blur', 'input'],
+      },
+    ],
+    props: {
+      placeholder: '请输入边缘形状',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:1 l:1',
+  },
+  {
+    key: 'edgeSurfaceTreatment',
+    label: '边缘表面处理方式',
+    type: 'input',
+    rules: [
+      {
+        required: true,
+        message: '请输入边缘表面处理方式',
+        trigger: ['blur', 'input'],
+      },
+    ],
+    props: {
+      placeholder: '请输入边缘表面处理方式',
+      clearable: true,
     },
     listenChange: true,
     span: '3 m:1 l:1',

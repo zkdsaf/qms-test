@@ -1,5 +1,5 @@
 <template>
-  <n-card title="COA信息上传" class="min-h-[calc(100vh-72px)]">
+  <n-card title="导入规格书" class="min-h-[calc(100vh-72px)]">
     <template #header-extra>
       <n-space justify="end">
         <n-button type="primary" @click="handleSubmit">提交</n-button>
@@ -12,16 +12,10 @@
       :rules="rules"
       ref="formRef"
     >
-      <n-form-item path="uploadType">
-        <n-radio-group v-model:value="formData.uploadType">
-          <n-radio value="batch">按批次上传COA信息</n-radio>
-          <n-radio value="sample">按检测样本上传COA信息</n-radio>
-        </n-radio-group>
-      </n-form-item>
-      <n-form-item label="ECOA创建方式" path="ecoaType">
-        <n-radio-group v-model:value="formData.ecoaType">
-          <n-radio value="manual">人工</n-radio>
-          <n-radio value="system">系统</n-radio>
+      <n-form-item label="适用范围" path="scope">
+        <n-radio-group v-model:value="formData.scope">
+          <n-radio value="G1">磐石</n-radio>
+          <n-radio value="G2">司南</n-radio>
         </n-radio-group>
       </n-form-item>
 
@@ -39,28 +33,21 @@ const router = useRouter()
 const formRef = ref(null)
 
 const formData = ref({
-  uploadType: null,
-  ecoaType: null,
+  scope: null,
   tableData: [
     {
-      format: '.txt或.xsl或.csv或.xml',
+      format: '.xls',
       status: '',
       document: [],
       version: '1.0',
     },
-    { format: '供应商COA', status: '', document: [], version: '1.0' },
   ],
 })
 
 const rules = {
-  uploadType: {
+  scope: {
     required: true,
-    message: '请选择上传COA的信息',
-    trigger: 'change',
-  },
-  ecoaType: {
-    required: true,
-    message: '请选择ECOA创建方式',
+    message: '请选择适用范围',
     trigger: 'change',
   },
 }
@@ -110,38 +97,6 @@ const columns = [
             </div>
           ))}
         </div>
-      )
-    },
-  },
-  {
-    title: 'COA版本',
-    key: 'version',
-    align: 'center',
-    width: 190,
-    render: (row, index) => {
-      return (
-        index === 0 && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <NButton
-              size="small"
-              type="primary"
-              onClick={() => {
-                message.info('版本选择')
-              }}
-            >
-              版本选择
-            </NButton>
-            <span class="text-gray-500 mt-2">
-              如不选择版本,系统默认最新生效版本
-            </span>
-          </div>
-        )
       )
     },
   },
@@ -199,10 +154,11 @@ const handleSubmit = () => {
     }
     message.success('提交成功')
     router.push({
-      path: '/pages/coa/uploadPreview',
+      path: '/pages/spec/importForm',
       query: {
-        uploadType: formData.value.uploadType,
-        ecoaType: formData.value.ecoaType,
+        scope: formData.value.scope,
+        formType: 'import',
+        id: Math.random(),
       },
     })
   })
