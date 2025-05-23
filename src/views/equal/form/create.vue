@@ -48,6 +48,7 @@ const list = shallowRef([
     icon: CreateOutline,
     description: '(Create Material Qualification Form)',
     bgColor: 'bg-green-100',
+    path: '/pages/equal/materialForm',
   },
 ])
 

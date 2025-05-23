@@ -14,7 +14,7 @@
                 <h2 class="text-lg font-bold">基本信息</h2>
               </template>
 
-              <BasicInfo
+              <FourBasicInfo
                 ref="basicInfoRef"
                 :form-data="formData"
                 :readonly="readonly"
@@ -22,136 +22,14 @@
             </n-collapse-item>
           </n-collapse>
 
-          <n-collapse :default-expanded-names="['2']">
-            <n-collapse-item name="2">
-              <template #header>
-                <h2 class="text-lg font-bold">流程后续审批人</h2>
-              </template>
-
-              <ProcessUser
-                ref="processUserRef"
-                :form-data="formData"
-                :readonly="readonly"
-              />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['3']">
-            <n-collapse-item name="3">
-              <template #header>
-                <h2 class="text-lg font-bold">库存风险</h2>
-              </template>
-
-              <McInfo
-                ref="mcInfoRef"
-                :form-data="formData"
-                :readonly="readonly"
-              />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['4']">
-            <n-collapse-item name="4">
-              <template #header>
-                <h2 class="text-lg font-bold">安全环境科信息</h2>
-              </template>
-
-              <SafeInfo
-                ref="safeInfoRef"
-                :form-data="formData"
-                :readonly="readonly"
-              />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['5']">
-            <n-collapse-item name="5">
-              <template #header>
-                <h2 class="text-lg font-bold">气化科信息</h2>
-              </template>
-
-              <GasInfo
-                ref="gasInfoRef"
-                :form-data="formData"
-                :readonly="readonly"
-              />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['6']">
-            <n-collapse-item name="6">
-              <template #header>
-                <h2 class="text-lg font-bold">Pi-Run Infomation</h2>
-              </template>
-
-              <PiRunInfo
-                ref="piRunInfoRef"
-                :form-data="formData"
-                :readonly="readonly"
-              />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['7']">
-            <n-collapse-item name="7">
-              <template #header>
-                <h2 class="text-lg font-bold">使用风险</h2>
-              </template>
-
-              <ModuleInfo
-                ref="moduleInfoRef"
-                :form-data="formData"
-                :readonly="readonly"
-              />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['8']">
-            <n-collapse-item name="8">
-              <template #header>
-                <h2 class="text-lg font-bold">物料处置结论</h2>
-              </template>
-
-              <Result />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['9']">
-            <n-collapse-item name="9">
-              <template #header>
-                <h2 class="text-lg font-bold">采购物料处理</h2>
-              </template>
-
-              <PurchaseInfo
-                ref="purchaseInfoRef"
-                :form-data="formData"
-                :readonly="readonly"
-              />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['10']">
-            <n-collapse-item name="10">
-              <template #header>
-                <h2 class="text-lg font-bold">更换标签</h2>
-              </template>
-
-              <LabelInfo
-                ref="labelInfoRef"
-                :form-data="formData"
-                :readonly="readonly"
-              />
-            </n-collapse-item>
-          </n-collapse>
-
-          <n-collapse :default-expanded-names="['10']">
-            <n-collapse-item name="10">
+          <n-collapse :default-expanded-names="['1']">
+            <n-collapse-item name="1">
               <template #header>
                 <h2 class="text-lg font-bold">责任明确及追踪改善</h2>
               </template>
 
-              <DutyInfo
-                ref="dutyInfoRef"
+              <FourDutyInfo
+                ref="fourDutyInfoRef"
                 :form-data="formData"
                 :readonly="readonly"
               />
@@ -229,26 +107,14 @@
 <script setup>
 import FormPage from '@/components/FormPage.vue'
 import HistoryList from '@/components/HistoryList.vue'
-import {
-  BasicInfo,
-  ProcessUser,
-  McInfo,
-  SafeInfo,
-  GasInfo,
-  PiRunInfo,
-  ModuleInfo,
-  Result,
-  PurchaseInfo,
-  LabelInfo,
-  FileInfo,
-  DutyInfo,
-} from './component/index.'
+import { FourBasicInfo, FileInfo, FourDutyInfo } from './component/index.'
 import { useMessage } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue'
 
 // 表单信息
 const formHeaderInfo = {
-  title: 'IQND申请单',
+  title: 'IQND IV申请单',
   applicationId: 'APP-2025-001',
   applicationTime: '2025-04-30 10:00',
   applicant: '张三',
@@ -326,92 +192,14 @@ const formDataValue = {
       materialDescription: '3',
     },
   ],
-  principalTableData: [
-    {
-      id: 1,
-      module: '',
-      moduleName: '使用部门科长',
-      moduleManager: '',
-      moduleManagerName: '使用部门负责人',
-      location: 'G1',
-    },
-  ],
-  qeName: '质量工程科负责人',
-  qeManagerName: '质量工程科科长',
-  productName: '物料控制科负责人',
-  productManagerName: '物料控制科科长',
-  safeName: '安全环境科负责人',
-  safeManagerName: '安全环境科科长',
-  gasName: '气化科负责人',
-  gasManagerName: '气化科科长',
-  purchaseManagerName: '物料采购科科长',
-  purchaseName: '物料采购科负责人',
-  inventoryImpact: 'Y',
-  currentStock: 1,
-  unit: 'Y',
-  stockRemark: '备注',
-  isReceive: 'Y',
-  safeImpact: 'Y',
-  safeComment: '备注',
-  gasImpact: 'N',
-  gasComment: '备注',
-  piRunTableData: [
-    {
-      id: 1,
-      location: '',
-      moduleName: '',
-      isPiRun: '是',
-      result: 'Pass',
-      useCount: 1,
-      unit: '件',
-      batchNo: '3',
-      fileList: [
-        {
-          id: '9abe798b',
-          name: '前端开发规范.pdf',
-          percentage: 100,
-          status: 'finished',
-          url: null,
-          file: {},
-          thumbnailUrl: null,
-          type: 'application/pdf',
-          fullPath: '/前端开发规范.pdf',
-          batchId: '0fe23964',
-        },
-      ],
-    },
-  ],
-  moduleInfoTableData: [
-    {
-      id: 1,
-      location: '',
-      moduleName: '',
-      isImpact: 'Pass',
-      comment: '备注',
-    },
-  ],
-  materialDisposal: '退货',
-  purchaseRemark: '备注',
-  changeLabel: 'Y',
-  labelRemark: '备注',
-  isUploadReport: 'N',
-  reportRemark: '备注',
 }
 
 // 表单数据
 const formData = ref(id ? { ...formDataValue } : null)
 
 const basicInfoRef = ref(null)
-const processUserRef = ref(null)
-const mcInfoRef = ref(null)
-const safeInfoRef = ref(null)
-const gasInfoRef = ref(null)
-const piRunInfoRef = ref(null)
-const moduleInfoRef = ref(null)
-const purchaseInfoRef = ref(null)
-const labelInfoRef = ref(null)
 const fileInfoRef = ref(null)
-const dutyInfoRef = ref(null)
+const fourDutyInfoRef = ref(null)
 
 // 消息提示
 const message = useMessage()
@@ -420,16 +208,8 @@ const onSubmit = async () => {
   // 收集所有表单引用
   const formRefs = {
     basicInfoRef,
-    processUserRef,
-    mcInfoRef,
-    safeInfoRef,
-    gasInfoRef,
-    piRunInfoRef,
-    moduleInfoRef,
-    purchaseInfoRef,
-    labelInfoRef,
     fileInfoRef,
-    dutyInfoRef,
+    fourDutyInfoRef,
   }
 
   // 保存所有验证结果
@@ -472,16 +252,8 @@ const onSubmit = async () => {
     // ref名称到标题的映射
     const refToTitleMap = {
       basicInfoRef: '基本信息',
-      processUserRef: '流程后续审批人',
-      mcInfoRef: '库存风险',
-      safeInfoRef: '安全环境科信息',
-      gasInfoRef: '气化科信息',
-      piRunInfoRef: 'Pi-Run Infomation',
-      moduleInfoRef: '使用风险',
-      purchaseInfoRef: '采购物料处理',
-      labelInfoRef: '更换标签',
       fileInfoRef: '附件信息',
-      dutyInfoRef: '责任明确及追踪改善',
+      fourDutyInfoRef: '责任明确及追踪改善',
     }
 
     // 找出验证失败的表单并转换为对应的标题

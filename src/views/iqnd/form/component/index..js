@@ -1,5 +1,9 @@
 export { default as BasicInfo } from './BasicInfo.vue'
 
+export { default as FourBasicInfo } from './FourBasicInfo.vue'
+
+export { default as FourDutyInfo } from './FourDutyInfo.vue'
+
 export { default as ProcessUser } from './ProcessUser.vue'
 
 export { default as McInfo } from './McInfo.vue'

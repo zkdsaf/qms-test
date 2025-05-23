@@ -43,6 +43,19 @@ export default [
         },
       },
       {
+        path: 'fourForm',
+        name: 'IQND IV表单创建',
+        component: () => import('@/views/iqnd/form/fourForm.vue'),
+        meta: {
+          title: 'IQND IV表单创建',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'IQND',
+          activeMenu: '/pages/iqnd/create',
+        },
+      },
+      {
         path: 'todo',
         name: 'IQND审批列表',
         component: () => import('@/views/approval/todo.vue'),

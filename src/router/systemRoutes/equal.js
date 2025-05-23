@@ -43,6 +43,19 @@ export default [
         },
       },
       {
+        path: 'materialForm',
+        name: 'EQUAL Material Form',
+        component: () => import('@/views/equal/materialForm/index.vue'),
+        meta: {
+          title: 'EQUAL Material Form',
+          show: false,
+          role: ['admin', 'user'],
+          icon: '',
+          system: 'EQUAL',
+          activeMenu: '/pages/equal/create',
+        },
+      },
+      {
         path: 'todo',
         name: 'EQUAL审批列表',
         component: () => import('@/views/approval/todo.vue'),

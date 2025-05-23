@@ -45,8 +45,7 @@ const message = useMessage()
 
 // 表单数据
 const formData = ref({
-  isUploadReport: null,
-  reportRemark: null,
+  firmInfo: null,
   file: [],
 })
 
@@ -69,22 +68,35 @@ watch(
 // 表单字段配置
 const formFields = ref([
   {
+    key: 'firmInfo',
+    label: '公司介绍/组织架构',
+    type: 'input',
+    rules: [{ required: true, message: '请输入', trigger: ['blur', 'input'] }],
+    props: {
+      type: 'textarea',
+      placeholder: '请输入',
+      clearable: true,
+    },
+    listenChange: true,
+    span: '3 m:3 l:3',
+  },
+  {
     key: 'file',
     label: '附件',
     type: 'input',
-    rules: [
-      {
-        key: 'file',
-        required: false,
-        validator: (rule, value) => {
-          if (!value || value.length === 0) {
-            return new Error('请至少上传一个文件')
-          }
-          return true
-        },
-        trigger: ['change'],
-      },
-    ],
+    // rules: [
+    //   {
+    //     key: 'file',
+    //     required: false,
+    //     validator: (rule, value) => {
+    //       if (!value || value.length === 0) {
+    //         return new Error('请至少上传一个文件')
+    //       }
+    //       return true
+    //     },
+    //     trigger: ['change'],
+    //   },
+    // ],
     props: {
       action: '/api/upload',
       accept: '.jpg,.png,.pdf',

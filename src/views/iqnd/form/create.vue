@@ -40,6 +40,14 @@ const list = shallowRef([
     description: '创建IQND表单',
     bgColor: 'bg-blue-100',
   },
+  {
+    id: 1,
+    title: 'Create IQND IV Form',
+    icon: CreateOutline,
+    path: '/pages/iqnd/fourForm',
+    description: '创建IQND IV表单',
+    bgColor: 'bg-orange-100',
+  },
 ])
 
 // 路由跳转

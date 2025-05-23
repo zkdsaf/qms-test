@@ -28,9 +28,66 @@
               class="w-full h-[240px] object-cover mb-3"
               autoplay
             >
-              <div class="w-full h-[240px] object-cover bg-blue-500 rounded" />
-              <div class="w-full h-[240px] object-cover bg-red-500 rounded" />
-              <div class="w-full h-[240px] object-cover bg-green-500 rounded" />
+              <div class="w-full h-[240px] relative overflow-hidden rounded-lg">
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400 opacity-90"
+                ></div>
+                <div
+                  class="absolute inset-0 flex items-center justify-between px-8"
+                >
+                  <div class="text-white">
+                    <h2 class="text-2xl font-bold mb-2">质量管理系统</h2>
+                    <p class="text-lg opacity-90">提升产品质量，优化管理流程</p>
+                  </div>
+                  <div
+                    class="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center"
+                  >
+                    <n-icon size="48" class="text-white">
+                      <CheckCircleOutlined />
+                    </n-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="w-full h-[240px] relative overflow-hidden rounded-lg">
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-green-600 to-green-400 opacity-90"
+                ></div>
+                <div
+                  class="absolute inset-0 flex items-center justify-between px-8"
+                >
+                  <div class="text-white">
+                    <h2 class="text-2xl font-bold mb-2">数据分析中心</h2>
+                    <p class="text-lg opacity-90">实时监控，智能分析</p>
+                  </div>
+                  <div
+                    class="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center"
+                  >
+                    <n-icon size="48" class="text-white">
+                      <LineChartOutlined />
+                    </n-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="w-full h-[240px] relative overflow-hidden rounded-lg">
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-400 opacity-90"
+                ></div>
+                <div
+                  class="absolute inset-0 flex items-center justify-between px-8"
+                >
+                  <div class="text-white">
+                    <h2 class="text-2xl font-bold mb-2">供应商管理</h2>
+                    <p class="text-lg opacity-90">全方位供应商评估与管理</p>
+                  </div>
+                  <div
+                    class="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center"
+                  >
+                    <n-icon size="48" class="text-white">
+                      <TeamOutlined />
+                    </n-icon>
+                  </div>
+                </div>
+              </div>
             </n-carousel>
 
             <!-- 轮播图下方的三个子div -->
@@ -117,6 +174,7 @@
                 :bordered="false"
                 :max-height="250"
                 striped
+                :scroll-x="1200"
               />
             </n-card>
 
@@ -263,7 +321,20 @@
 <script setup lang="jsx">
 import { useRouter } from 'vue-router'
 import { useMessage } from 'naive-ui'
-import { UserOutlined } from '@vicons/antd'
+import {
+  UserOutlined,
+  FileTextOutlined,
+  CheckCircleOutlined,
+  SafetyCertificateOutlined,
+  CodeOutlined,
+  TeamOutlined,
+  ExperimentOutlined,
+  AlertOutlined,
+  SwapOutlined,
+  LineChartOutlined,
+  WarningOutlined,
+  FileSearchOutlined,
+} from '@vicons/antd'
 import { onMounted, ref, shallowRef } from 'vue'
 import * as echarts from 'echarts'
 import Header from '@/layout/Header.vue'
@@ -289,7 +360,7 @@ const tableData = Array.from({ length: 20 }).map((_, index) => ({
   applyTime: new Date(
     Date.now() + Math.random() * 1000 * 60 * 60 * 24
   ).toLocaleString(),
-  status: '待办',
+  status: Math.floor(Math.random() * 5) % 2 ? '流程中' : '已完成',
   arriveTime: new Date(
     Date.now() + Math.random() * 1000 * 60 * 60 * 24
   ).toLocaleString(),
@@ -355,6 +426,7 @@ const tableColumns = ref([
         </div>
       )
     },
+    sorter: (row1, row2) => row1.applySn - row2.applySn,
   },
   {
     title: '主题',
@@ -379,6 +451,19 @@ const tableColumns = ref([
     title: '状态',
     key: 'status',
     align: 'center',
+    filterOptions: [
+      {
+        label: '流程中',
+        value: '流程中',
+      },
+      {
+        label: '已完成',
+        value: '已完成',
+      },
+    ],
+    filter(value, row) {
+      return ~row.status.indexOf(value)
+    },
   },
   {
     title: '到达时间',
@@ -397,57 +482,57 @@ const actionList = shallowRef([
   {
     title: 'COA',
     systemCode: 'COA',
-    icon: UserOutlined,
+    icon: FileTextOutlined,
   },
   {
     title: 'SPEC',
     systemCode: 'SPEC',
-    icon: UserOutlined,
+    icon: CheckCircleOutlined,
   },
   {
     title: 'AVL',
     systemCode: 'AVL',
-    icon: UserOutlined,
+    icon: SafetyCertificateOutlined,
   },
   {
     title: 'CERT',
     systemCode: 'CERT',
-    icon: UserOutlined,
+    icon: CodeOutlined,
   },
   {
     title: 'MAKER CODE',
     systemCode: 'MAKER',
-    icon: UserOutlined,
+    icon: TeamOutlined,
   },
   {
     title: 'VENDORINFO',
     systemCode: 'VENDOR',
-    icon: UserOutlined,
+    icon: ExperimentOutlined,
   },
   {
     title: 'EIQA',
     systemCode: 'EIQA',
-    icon: UserOutlined,
+    icon: AlertOutlined,
   },
   {
     title: 'IQND',
     systemCode: 'IQND',
-    icon: UserOutlined,
+    icon: SwapOutlined,
   },
   {
     title: 'EQUAL',
     systemCode: 'EQUAL',
-    icon: UserOutlined,
+    icon: LineChartOutlined,
   },
   {
     title: 'SPC',
     systemCode: 'SPC',
-    icon: UserOutlined,
+    icon: WarningOutlined,
   },
   {
     title: 'OOW',
     systemCode: 'OOW',
-    icon: UserOutlined,
+    icon: FileSearchOutlined,
   },
   {
     title: 'SLED',
@@ -530,10 +615,17 @@ const placardList = shallowRef([
   },
 ])
 
-// 待办统计图标
-const initBarChart = (chartRef, data, color) => {
+// 待办事项图表
+const initTodoChart = (chartRef) => {
   const chart = echarts.init(chartRef)
+  const data = [90, 92, 91, 93, 94]
   const option = {
+    grid: {
+      top: '15%',
+      right: '5%',
+      bottom: '15%',
+      left: '10%',
+    },
     xAxis: {
       type: 'category',
       data: ['周一', '周二', '周三', '周四', '周五'],
@@ -550,19 +642,209 @@ const initBarChart = (chartRef, data, color) => {
     },
     series: [
       {
-        data: data,
+        data: data.map((value, index) => ({
+          value,
+          itemStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [
+                {
+                  offset: 0,
+                  color: '#10B981',
+                },
+                {
+                  offset: 1,
+                  color: '#34D399',
+                },
+              ],
+            },
+          },
+        })),
         type: 'bar',
-        itemStyle: { color: color },
         barWidth: '40%',
+        itemStyle: {
+          borderRadius: [4, 4, 0, 0],
+        },
+        label: {
+          show: false,
+          position: 'top',
+          formatter: '{c}',
+          fontSize: 12,
+          color: '#6B7280',
+          offset: [0, 5],
+        },
+        emphasis: {
+          itemStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [
+                {
+                  offset: 0,
+                  color: '#059669',
+                },
+                {
+                  offset: 1,
+                  color: '#10B981',
+                },
+              ],
+            },
+          },
+        },
       },
     ],
-    grid: {
-      left: '10%',
-      right: '5%',
-      top: '10%',
-      bottom: '15%',
+    tooltip: {
+      trigger: 'axis',
+      formatter: function (params) {
+        const param = params[0]
+        return `${param.name}<br/>待办事项：${param.value}件`
+      },
     },
-    tooltip: { trigger: 'axis' },
+  }
+  chart.setOption(option)
+  window.addEventListener('resize', () => chart.resize())
+}
+
+// 超期7天待办图表
+const initOverdueChart = (chartRef) => {
+  const chart = echarts.init(chartRef)
+  const data = [80, 85, 90, 88, 86]
+  const option = {
+    grid: {
+      top: '15%',
+      right: '5%',
+      bottom: '15%',
+      left: '10%',
+    },
+    xAxis: {
+      type: 'category',
+      data: ['周一', '周二', '周三', '周四', '周五'],
+      axisLabel: {
+        show: false,
+      },
+      axisTick: { show: false },
+      axisLine: { show: false },
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: { show: false },
+      splitLine: { show: false },
+    },
+    series: [
+      {
+        data: data.map((value, index) => ({
+          value,
+          itemStyle: {
+            color: index === data.length - 1 ? '#EF4444' : '#3B82F6',
+          },
+        })),
+        type: 'bar',
+        barWidth: '40%',
+        itemStyle: {
+          borderRadius: [4, 4, 0, 0],
+        },
+        label: {
+          show: false,
+          position: 'top',
+          formatter: '{c}',
+          fontSize: 12,
+          color: '#6B7280',
+        },
+      },
+    ],
+    tooltip: {
+      trigger: 'axis',
+      formatter: function (params) {
+        const param = params[0]
+        const isToday = param.dataIndex === data.length - 1
+        return `${param.name}<br/>${isToday ? '今日' : '历史'}超期待办：${
+          param.value
+        }件`
+      },
+    },
+  }
+  chart.setOption(option)
+  window.addEventListener('resize', () => chart.resize())
+}
+
+// 今日完成事项环形图
+const initRingChart = (chartRef) => {
+  const chart = echarts.init(chartRef)
+  const total = 1000
+  const completed = 500
+  const option = {
+    tooltip: {
+      trigger: 'item',
+      formatter: function (params) {
+        if (params.seriesName === '完成情况') {
+          return `总待办：${total}<br/>今日完成：${completed}<br/>完成率：${(
+            (completed / total) *
+            100
+          ).toFixed(1)}%`
+        }
+        return params.name + ': ' + params.value
+      },
+    },
+    series: [
+      {
+        name: '完成情况',
+        type: 'pie',
+        radius: ['60%', '80%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 10,
+          borderColor: '#fff',
+          borderWidth: 2,
+        },
+        label: {
+          show: false,
+        },
+        emphasis: {
+          label: {
+            show: false,
+          },
+        },
+        data: [
+          {
+            value: completed,
+            name: '已完成',
+            itemStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: '#EF4444',
+                  },
+                  {
+                    offset: 1,
+                    color: '#F87171',
+                  },
+                ],
+              },
+            },
+          },
+          {
+            value: total - completed,
+            name: '未完成',
+            itemStyle: {
+              color: '#E5E7EB',
+            },
+          },
+        ],
+      },
+    ],
   }
   chart.setOption(option)
   window.addEventListener('resize', () => chart.resize())
@@ -660,11 +942,11 @@ const initPieChart = (chartRef) => {
 // 初始化图表
 onMounted(() => {
   // 图表 1：超期七天待办
-  initBarChart(chart1.value, [80, 85, 90, 88, 86], '#3B82F6')
+  initOverdueChart(chart1.value)
   // 图表 2：待办事项
-  initBarChart(chart2.value, [90, 92, 91, 93, 94], '#10B981')
+  initTodoChart(chart2.value)
   // 图表 3：今日完成事项
-  initBarChart(chart3.value, [5, 3, 4, 2, 3], '#EF4444')
+  initRingChart(chart3.value)
   // 图表 4：超期未处理case
   initLineChart(chart4.value)
   // 图表 5：新增case
