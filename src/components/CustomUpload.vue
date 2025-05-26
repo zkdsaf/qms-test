@@ -4,9 +4,9 @@
     v-bind="uploadProps"
     :file-list="localFileList"
     :custom-request="customRequest"
-    :disabled="disabled"
     @update:file-list="handleFileListUpdate"
     @remove="handleRemove"
+    :disabled="disabled"
   >
     <slot name="default">
       <n-button type="primary">选择文件</n-button>

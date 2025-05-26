@@ -11,17 +11,25 @@ export const useAuthStore = defineStore(
     const systemName = ref('')
     const language = ref('zh')
     const collapsed = ref(false)
+    const selectedSystem = ref('')
+    const selectedMaterial = ref('')
 
     // 登录方法
-    const login = async (username, password) => {
+    const login = async (username, password, options = {}) => {
       // 校验用户名和密码
       if (
         (username === 'admin' && password === 'admin') ||
         (username === 'user' && password === 'user')
       ) {
         // 登录成功
-        user.value = { username }
+        user.value = {
+          username,
+          system: options.system,
+          material: options.material,
+        }
         isLoggedIn.value = true
+        selectedSystem.value = options.system
+        selectedMaterial.value = options.material
 
         return Promise.resolve()
       } else {
@@ -37,6 +45,8 @@ export const useAuthStore = defineStore(
       collapsed.value = false
       language.value = 'zh'
       systemName.value = ''
+      selectedSystem.value = ''
+      selectedMaterial.value = ''
       // 重置路由
       resetRouter()
     }
@@ -78,6 +88,8 @@ export const useAuthStore = defineStore(
       resetRouter,
       collapsed,
       setCollapsed,
+      selectedSystem,
+      selectedMaterial,
     }
   },
   {
@@ -87,7 +99,15 @@ export const useAuthStore = defineStore(
       key: 'auth-store',
       // 使用 localStorage 存储
       storage: localStorage,
-      paths: ['isLoggedIn', 'user', 'systemName', 'language', 'collapsed'],
+      paths: [
+        'isLoggedIn',
+        'user',
+        'systemName',
+        'language',
+        'collapsed',
+        'selectedSystem',
+        'selectedMaterial',
+      ],
     },
   }
 )

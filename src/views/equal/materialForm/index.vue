@@ -111,11 +111,97 @@
           <n-collapse :default-expanded-names="['1']">
             <n-collapse-item name="1">
               <template #header>
+                <h2 class="text-lg font-bold">SPEC</h2>
+              </template>
+
+              <SpecInfo
+                ref="specInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+                :importTypeValue="importTypeValue"
+              />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['1']">
+            <n-collapse-item name="1">
+              <template #header>
+                <h2 class="text-lg font-bold">Performance比对</h2>
+              </template>
+
+              <Performance
+                ref="performanceRef"
+                :form-data="formData"
+                :readonly="readonly"
+                :importTypeValue="importTypeValue"
+              />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['1']">
+            <n-collapse-item name="1">
+              <template #header>
+                <h2 class="text-lg font-bold">SPEC合理性</h2>
+              </template>
+
+              <SpecWise
+                ref="specWiseRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['1']">
+            <n-collapse-item name="1">
+              <template #header>
                 <h2 class="text-lg font-bold">物料评估数据</h2>
               </template>
 
               <MaterialInfo
                 ref="materialInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['1']">
+            <n-collapse-item name="1">
+              <template #header>
+                <h2 class="text-lg font-bold">COA质检能力</h2>
+              </template>
+
+              <CoaInfo
+                ref="coaInfoRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['1']">
+            <n-collapse-item name="1">
+              <template #header>
+                <h2 class="text-lg font-bold">评估数据风险确认</h2>
+              </template>
+
+              <RiskConfirm
+                ref="riskConfirmRef"
+                :form-data="formData"
+                :readonly="readonly"
+              />
+            </n-collapse-item>
+          </n-collapse>
+
+          <n-collapse :default-expanded-names="['1']">
+            <n-collapse-item name="1">
+              <template #header>
+                <h2 class="text-lg font-bold">制程评估信息</h2>
+              </template>
+
+              <ProcessInfo
+                ref="processInfoRef"
                 :form-data="formData"
                 :readonly="readonly"
               />
@@ -188,6 +274,12 @@ import {
   Industry,
   Demand,
   MaterialInfo,
+  SpecInfo,
+  Performance,
+  SpecWise,
+  CoaInfo,
+  RiskConfirm,
+  ProcessInfo,
 } from './component/index.'
 import { useMessage } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
@@ -245,6 +337,12 @@ const resumeInfoRef = ref(null)
 const industryRef = ref(null)
 const demandRef = ref(null)
 const materialInfoRef = ref(null)
+const specInfoRef = ref(null)
+const performanceRef = ref(null)
+const specWiseRef = ref(null)
+const coaInfoRef = ref(null)
+const riskConfirmRef = ref(null)
+const processInfoRef = ref(null)
 // 消息提示
 const message = useMessage()
 
@@ -259,6 +357,12 @@ const onSubmit = async () => {
     industryRef,
     demandRef,
     materialInfoRef,
+    specInfoRef,
+    performanceRef,
+    specWiseRef,
+    coaInfoRef,
+    riskConfirmRef,
+    processInfoRef,
   }
 
   // 保存所有验证结果
@@ -308,6 +412,12 @@ const onSubmit = async () => {
       industryRef: '行业经验',
       demandRef: '验证需求信息',
       materialInfoRef: '物料评估数据',
+      specInfoRef: 'SPEC',
+      performanceRef: 'Performance比对',
+      specWiseRef: 'SPEC合理性',
+      coaInfoRef: 'COA质检能力',
+      riskConfirmRef: '评估数据风险确认',
+      processInfoRef: '制程评估信息',
     }
 
     // 找出验证失败的表单并转换为对应的标题

@@ -333,7 +333,7 @@ const formData = reactive({
   manufacturerCountry: '',
 
   // 生产商质量证书信息
-  iso: [],
+  iso: ['ISO9001', 'IAFT16949'],
   certificateCreateNo: '',
   iso9001Status: null,
   iso9001Expiry: '',
