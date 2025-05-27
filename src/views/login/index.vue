@@ -47,7 +47,7 @@
           ref="formRef"
           :model="formState"
           class="login-form"
-          @keydown.enter="onFinish"
+          @keydown.enter.prevent="onFinish"
         >
           <n-form-item
             label="用户名"
