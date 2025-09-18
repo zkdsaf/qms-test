@@ -84,7 +84,7 @@ export default [
       {
         path: 'uploadInfo',
         name: 'SPEC导入规格书',
-        component: () => import('@/views/spec/component/uploadInfo.vue'),
+        component: () => import('@/views/spec/component/UploadInfo.vue'),
         meta: {
           title: '导入规格书',
           show: false,
