@@ -45,7 +45,7 @@ export default [
       {
         path: 'uploadInfo',
         name: 'MAKER导入',
-        component: () => import('@/views/maker/component/uploadInfo.vue'),
+        component: () => import('@/views/maker/component/UploadInfo.vue'),
         meta: {
           title: 'MAKER导入',
           show: false,

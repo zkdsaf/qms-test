@@ -5,6 +5,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import AutoImport from 'unplugin-auto-import/vite'
 
 export default defineConfig({
+  base: '/qms-test/',
   plugins: [
     vue(),
     vueJsx(),

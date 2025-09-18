@@ -28,7 +28,7 @@ const baseRoutes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/qms-test/'),
   routes: baseRoutes,
 })
 
